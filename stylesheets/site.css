@@ -68,3 +68,21 @@ div.notice {
 .menu li {
      margin: 0 .5em;
 }
+
+h4 { 
+     font-weight: bold;
+}
+
+.scope.section {
+     border-left: 1px dotted #999;
+     margin-left: 4px;
+     padding-left: 8px;
+}
+
+ul.without_dots li {
+     list-style: none;
+}
+
+.block { 
+     display: block;
+}

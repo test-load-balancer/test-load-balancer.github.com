@@ -7,43 +7,101 @@ description: Starting-up page of 'Test Load Balancer(TLB)' project(s).
 
 <hr/>
 <div>
-  <h3>Using TLB</h3>
-  TLB has 2 main components
-  
-  <ul>
-  <li>TLB Balancer</li>
-  <li>TLB Server</li>
+  <h3>Starting-up with TLB</h3>
+  <div>
+    {% include components_of_tlb %}
+    <div class="notice warning">
+      While the documentation is good for geting a high level picture of what TLB is all about, we believe the {% include sample_projects_link %} is the best way to cover the details, as it gives you a example-project to play around with. You can tune the variables and observe its effect on balancing firsthand.
+    </div>
+    <hr/>
+    <div>
+      <label id="server">
+        <h4>Server:</h4>
+      </label>
+      <div class="scope section">
+        Tlb Server is a repository of the test run data. Balancer obtains historical data from the server and also posts new data for runs it performs(so the updated data is available for future builds).
+        <p class="clob_end"/>
+        Setting up Server talks about the how a server instance can be chosen & configured. <!--You may also want to, take a look at some Typical Server Example Setups.-->
+        <p class="clob_end"/>
+        In order for the splitter and orderer to work, historical data of test runs is used. TLB server or Go server can act as the repository that stores historical test run data (test times, test result etc) that can be populated while running tests, and fetched later(during the next build) to figure out what tests to run on a partition and what way to order them etc.
+        <p class="clob_end"/>
+        TLB supports two kinds of server configurations out of the box. This means Balancer can run against two different kinds of servers. One of them is a comes packaged in TLB distribution called "TLB Server" and the other is a Continious-Integration/Release-Management server called "{% include go_link %} Server".
+        <hr/>
+        <h5>TLB server[ {% include tlb_repo_link_link %}
+          ]:</h5>
+        <div class="scope section">
+          TLB server comes packaged as an all-jar(a java archive that carries all dependencies that tlb requires). In order to start the server, you can use
+          <code class="block">
+            $ java -jar tlb-all-gXXXX.jar
+          </code>(XXXX here needs to be substituted with the corresponding version/revision of jar used). 
+          <p class="clob_end"/>
+          When started this way, TLB server binds to port<sup><a href="#1">[1]</a></sup> 7019. Once the server is up, partitions that are to be balanced(clients/balancer instances), can be pointed to it by setting url on balancer side<sup><a href="#2">[2]</a></sup> to the base url of the tlb server. Balancer works using an abstraction called TalkToService, and TalkToTlbServer<sup><a href="#3">[3]</a></sup> is just an implementation of this contract that comes packaged in TLB.
+          <p class="clob_end"/>
+          At this point, we have a TLB server all set to be consumed by Balancer partitions.
+        </div>
+        <hr/>
+        <h5>Go™ server[ {% include go_link_link %}
+          ]:</h5>
+        <div class="scope section">
+          TLB has inbuilt support for Go, which means TLB can balance against Go just like it balances against the TLB-Server. Running against Go obviously means the tests are run as part of a Go-Task, which will run on a Go-Agent. Additionally, because TLB is environment aware, it can implicit a few things while running against Go server. It deduces equivallent of things like job-name<sup><a href="#4">[4]</a></sup>, version<sup><a href="#5">[5]</a></sup> and total partitions<sup><a href="#6">[6]</a></sup> etc from the way jobs are configured under stage and pipeline etc. To make TLB work with Go, TalkToService needs to use TalkToGoServer<sup><a href="#3">[3]</a></sup>. 
+          <p class="clob_end"/>
+          However, since the other side of balancing(server) in this case is not TLB, 'smoothened time balancing' for instance, would not be available in Go based setup. <!-- remove after versioning for gem -->
+          <p class="clob_end"/>
+          In this case, you do not need to run a seperate process(TLB Server) to act as server, because Go-server plays that role. This does not need any change in the go-server or go-configuration apart from the naming convension your go-job-names need to follow, which is, they need to be of the form "&lt;my-job-name&gt;-X"(where X is a natural number 1..n, when you want to make n partitions), or "&lt;my-job-name&gt;-&lt;UUID&gt;"(where each such job will be made to execute only one partition).
+          <p class="clob_end"/>
+        </div>
+      </div>
+    </div>
+    <hr/>
+    <div>
+      <label id="balancer">
+        <h4>Balancer:</h4>
+      </label>
+      <div class="section scope">
+        This is where the real action is.The balancer sits in your build script and build-related libraries and knows spliting and re-ordering tests and hooks up a listener with test-runner so it can publish test data as tests complete.
+        <p class="clob_end"/>
+        <strong>Balancer contains:</strong>
+        <ul class="scope section without_dots">
+          <li><strong><i>Splitter:</i></strong> Which takes care of splitting(making subsets of) the given list of tests using given criteria[{% include balancer_configuration_link %}
+].</li>
+          <li><strong><i>Orderer:</i></strong> Which takes care of re-ordering the tests based on a given criteria[{% include orderer_configuration_link %}
+].</li>
+        </ul>
+        <p class="clob_end"/>
+        For example, the Ant JUnit support is done using Ant FileSets for the JUnit task. This task obtains the historical test data from the TLB Server and uses it to split and order the tests.
+        <p class="clob_end"/>
+        For all the configurable environment variables and discription of possible values, please refer {% include config_vars_link %}
+        .
+        Please take a look at {% include balancer_configuration_link %} 
+        and {% include orderer_configuration_link %} 
+        to understand how Splitters and Orderers can be chosen and configured.
+      </div>
+    </div>
 </div>
+
 <hr/>
-<!--TLB Balancer
-The balancer sits in the build script and knows how to split and re-order tests and publish test data.
-
-Balancer contains:
-
-Splitter: Which takes care of splitting the given list of tests using given criteria.
-Orderer: Which takes care of re-ordering the tests based on a given criteria.
-For example, the Ant JUnit support is done using Ant FileSets for the JUnit task. This task obtains the historical test data from the TLB Server and uses it to split and order the tests.
-
-In order for the balancer to work, the following environment variables need to be set:
-
-TLB_URL
-TALK_TO_SERVICE
-TLB_CRITERIA
-CRITERIA_DEFAULTING_ORDER (required when a specific type of criteria is used, called DefaultingTestSplitterCriteria)
-TLB_ORDERER
-TOTAL_PARTITIONS
-PARTITION_NUMBER
-TLB_JOB_NAME
-JOB_VERSION
-Given TLB_URL and TALK_TO_SERVICE, the balancer knows how to talk to the Tlb/Go Server. Based on TLB_CRITERIA and CRITERIA_DEFAULTING_ORDER it figures out what information to fetch from the Tlb Server for given TLB_JOB_NAME and JOB_VERSION. TOTAL_PARTITIONS and PARTITION_NUMBER indicate which partition the current process is, and how many splits there are, in sum total, hence allows for actual splitting and selection of the split that the process itself need to execute. As tests in a partition are executed, TLB_JOB_NAME is used to post the test data back to the Tlb Server(so that it can be used for future runs). JOB_VERSION ensures all partitions see the same snapshot of data, hence ensures no test is run on more than one partition, and more importantly, no tests are ignored while partitioning.
-
-For all the configurable environment variables and discription of possible values, please refer Configuration Variables.
-
-Take a look at Splitter/Balancer Criteria Configuration and Orderer Configuration to understand how to configure Splitters and Orderers.
-Also, take a look at some Typical Balancer Example Setups
-
-TLB Server
-Tlb Server is the repository of the test run data. Tlb Balancer uses the server to obtain historical data and it also posts new data for runs it performs.
-
-Setting up Server talks about the how to configure a server instance. Also, take a look at some Typical Server Example Setups-->
-<hr/>
+<ul class="footnotes scope section without_dots">
+  <li>
+    <sup><label id="1">1</label></sup> can be overridden, read TLB_PORT in {% include config_vars_link %}
+  </li>
+  <li>
+    <sup><label id="2">2</label></sup> read TLB_URL in {% include config_vars_link %}
+  </li>
+  <li>
+    <sup><label id="3">3</label></sup> read TALK_TO_SERVICE in 
+    {% include config_vars_link %} 
+    should be set to the fully qualified name of the implementation
+  </li>
+  <li>
+    <sup><label id="4">4</label></sup> read TLB_JOB_NAME in {% include config_vars_link %}
+  </li>
+  <li>
+    <sup><label id="5">5</label></sup> read JOB_VERSION in {% include config_vars_link %}
+  </li>
+  <li>
+    <sup><label id="6">6</label></sup> read TOTAL_PARTITIONS in {% include config_vars_link %}
+  </li>
+  <li>
+    <sup><label id="7">7</label></sup> read PARTITION_NUMBER in {% include config_vars_link %}
+  </li>
+</ul>

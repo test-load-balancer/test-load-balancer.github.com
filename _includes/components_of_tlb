@@ -1,0 +1,7 @@
+      TLB has two primary components.
+      <ul>
+        <li>A {% include startup_server_link %}
+          : that can stores and allows querying of test data(test times/test results etc)</li>
+        <li>A {% include startup_balancer_link %}
+          : that partitions and re-orders suite of tests, given a server url</li>
+      </ul>      
