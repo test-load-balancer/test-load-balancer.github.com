@@ -1,0 +1,8 @@
+<div class="notice error" id="no_javascript_warning">
+    Please use a javascript enabled browser to read this documentation(some of the documentation pages use controls that need javascript support to render)
+</div>
+<script type='text/javascript'>
+    var elem = document.getElementById('no_javascript_warning');
+    var parent_node = elem.parentNode;
+    parent_node.removeChild(elem);
+</script>

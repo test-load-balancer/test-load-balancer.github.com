@@ -1,0 +1,3 @@
+<p class="clob_end">
+    <strong>Type:</strong> Fully qualified Java class name (for instance foo.bar.Baz). When a variable points to class-name, it can also be used to plug-in a user written custom class(that is not bundled with TLB), provided its available in the classpath, and implements the corresponding/relevant interface.
+</p>

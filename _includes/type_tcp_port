@@ -1,0 +1,1 @@
+<strong>Type: </strong> TCP port (should preferably be greater than 1024 so unpriviledged user can get a bind too)

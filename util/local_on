@@ -1,0 +1,6 @@
+#!/bin/bash
+
+source util/shared.sh
+
+cdn_in $LOCAL_CDN $LOCAL_CDN_END
+cdn_out $GOOGLE_CDN $GOOGLE_CDN_END

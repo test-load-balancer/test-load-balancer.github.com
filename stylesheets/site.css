@@ -1,9 +1,12 @@
 body { margin: 1em 0; }
 #site-menu { padding-left: 0; }
-#site-menu li { display: inline; }
+
+#site-menu li { 
+     display: inline;
+}
 
 .clob_end { 
-     margin-top: 1em;
+     margin: 1em 0 0 0;
 }
 
 li { 
@@ -85,4 +88,16 @@ ul.without_dots li {
 
 .block { 
      display: block;
+}
+
+.hidden { 
+     display: none;
+}
+
+.popup.ui-widget-content.ui-dialog-content { 
+     background-color: #fff;
+}
+
+hr { 
+     margin: 1.45em 0px 1.45em 0px;
 }

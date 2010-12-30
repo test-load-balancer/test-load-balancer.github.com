@@ -1,3 +1,5 @@
 _site
 server
 *.swp
+jquery
+tmp
