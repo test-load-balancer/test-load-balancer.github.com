@@ -1,0 +1,2 @@
+<p class="clob_end"/>
+For people balancing against GoServer: This variable is not required while balancing against GoServer because it is infered from the way jobs in your stage are named.

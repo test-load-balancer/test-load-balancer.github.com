@@ -101,3 +101,7 @@ ul.without_dots li {
 hr { 
      margin: 1.45em 0px 1.45em 0px;
 }
+
+table.with_row_deviders tr td {
+     border-bottom: 1px dotted #000;
+}

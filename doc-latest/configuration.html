@@ -17,7 +17,7 @@ js: hookup_details_popup();
       <p class="clob_end"/>
       TLB uses <i>Environment Variables</i> for every single configurable parameter it supports/exposes. Usually when configuring something thats an algorithm, we use fully-qualified-java-class-name of the class(which makes it easy for you to write alternate implementations, dump em in the classpath and have TLB load em with just an environment variable value flip).
       <p class="clob_end"/>
-      <table>
+      <table class="with_row_deviders">
         <thead>
           <tr>
             <th>Environment Variable</th>
@@ -43,7 +43,6 @@ js: hookup_details_popup();
             <td>{% include applicable-required %}</td>
             <td>{% include applicable-required %}</td>
             <td>{% include not-applicable %}</td>
-            <td></td>
           </tr>
           <tr>
             <td>
@@ -110,6 +109,9 @@ js: hookup_details_popup();
             <td>
               <a href="#" class="variable_desc_link">TLB_TMP_DIR</a>
               <div class="hidden popup">
+                <strong>if</strong>
+                <code>$TALK_TO_SERVICE == 'tlb.service.TalkToGoServer'</code>
+                <hr/>
                 Expects tmp directory name. Uses the default Java temp dir(system property <i>java.io.tmpdir</i>) if not given.
                 <p class="clob_end"/>
                 You almost never what to set this one. The default here always is the right thing to use. Except on.... any guesses? Hold your breath! Yes thats right, its Windows.
@@ -133,6 +135,10 @@ js: hookup_details_popup();
                 TlbServerInitializer(thats how <code> $ java -jar ... </code> always starts TLB Server and not Balancer.
                 <p class="clob_end"/>
                 Needs to be set only if you are implementing TLB-support in for a new language. TLB subprojects like TLB_rb set it internally, so this one doesn't need to set it explicitly.
+                <p class="clob_end"/>
+                It doesn't make sense to set it on the server side, because you are obviously trying to run the server there(which is the default anyway).
+                <p class="clob_end"/>
+                Is required only in the case of non-java frameworks, like Ruby etc.(defaults to TlbServerInitializer, can be set to BalancerInitializer for balancing server). This is only relavant for developers adding support for non-java language based frameworks(for instance, ruby-rspec or ruby-testunit libraries).
                 <hr/>
                 {% include type_class_name %}
                 <hr/>
@@ -193,6 +199,8 @@ js: hookup_details_popup();
                 Relevant only for the TLB Server process. This is the directory that TLB Server uses to persist the historical data so it survives restarts/upgrades. 
                 <p class="clob_end"/>
                 You want this directory to survive machine restarts, so using something like <i>/tmp</i> is usually a bad idea.
+                <p class="clob_end"/>
+                Defaults to a directory called <i>tlb_store</i> in the tlb-server's working directory.
                 <hr/>
                 <strong>Type: </strong> Path to a directory.
                 <hr/>
@@ -217,114 +225,198 @@ js: hookup_details_popup();
                 This must be significantly larger than the time test-load-balanced build is expected to take, because the snapshot will be taken when the very first partition queries the server with an unknown version, and must live untill last of balanced partitions is done fetching data.
                 <p class="clob_end"/>
                 You want this directory to survive machine restarts, so using something like <i>/tmp</i> is usually a bad idea.
+                <p class="clob_end"/>
+                Defaults to <i>1</i> day.
                 <hr/>
-                <strong>Type: </strong> Path to a directory.
+                <strong>Type: </strong> A whole number(number of days)
                 <hr/>
-                <strong>Example:</strong> <i>/var/lib/tlb-data</i> or <i>C:\tlb-data</i> etc.
+                <strong>Example:</strong> 3 (means three days)
               </div>
             </td>
             <td>{% include not-applicable %}</td>
             <td>{% include not-applicable %}</td>
             <td>{% include applicable %}</td>
           </tr>
+          <tr>
+            <td>
+              <a href="#" class="variable_desc_link">SMOOTHING_FACTOR</a>
+              <div class="hidden popup">
+                <strong>if</strong>
+                <code>not-set($TLB_APP) OR $TLB_APP == 'tlb.server.TlbServerInitializer'</code>
+                <hr/>
+                TLB server supports one smoothing factor value for all jobs that partition against it. This can be overridden using this environment variable. 
+                <p class="clob_end"/>
+                <a href="http://en.wikipedia.org/wiki/Exponential_smoothing"/>http://en.wikipedia.org/wiki/Exponential_smoothing</a> explains this smoothing algorithm.
+                <p class="clob_end"/>
+                Setting <i>SMOOTHING_FACTOR</i> does not mean all balancing instances running against the server will be smoothened. Weather to use smoothing or not is decided by another environment variable on the partitioning process side named <i>USE_SMOOTHING</i>.
+                <p class="clob_end"/>
+                TLB uses exponential smoothing and uses <i>1</i> as default value of <i>SMOOTHING_FACTOR(alpha)</i>. But <i>1</i> means NO-smoothing, so you almost always want to override this to some sensible value.
+                <hr/>
+                <strong>Type: </strong> A real number (0 < i <= 1) [Lower the value more is the weightage given to historical data]
+                <hr/>
+                <strong>Example:</strong> 0.5 (means equal weightage to historical data and newly-reported data)
+              </div>
+            </td>
+            <td>{% include not-applicable %}</td>
+            <td>{% include not-applicable %}</td>
+            <td>{% include applicable %}</td>
+          </tr>
+          <tr>
+            <td>
+              <a href="#" class="variable_desc_link">USE_SMOOTHING</a>
+              <div class="hidden popup">
+                {% include if_on_balancer_side %}                
+                Balancer instance(the process that actually runs the partitioned suite) can set this variable to indicate weather to use smoothing or not. 
+                <p class="clob_end"/>
+                It can choose to use smoothing or not, but can not dictate the smoothing factor(because it is set on the server side using <i>SMOOTHING_FACTOR</i>).
+                <p class="clob_end"/>
+                Defaults to <i>false</i>.
+                <hr/>
+                <strong>Type: </strong> Is interpreted as a boolean, must be “true” or “false”.
+                <hr/>
+                <strong>Example:</strong> true
+              </div>
+            </td>
+            <td>{% include applicable %}</td>
+            <td>{% include applicable %}</td>
+            <td>{% include not-applicable %}</td>
+          </tr>
+          <tr>
+            <td>
+              <a href="#" class="variable_desc_link">TOTAL_PARTITIONS</a>
+              <div class="hidden popup">
+                {% include if_on_balancer_side_against_tlb_server %}
+                Balancer instance, when running against TlbServer, needs to know how many total partitions have been made. 
+                <p class="clob_end"/>
+                For instance, if there are a total of 100 tests being partitioned across 5 test processes, value of this variable should be 5.
+                {% include not_required_for_go_server_based_balancing %}
+                <hr/>
+                <strong>Type: </strong> A natural number(number of partitions).
+                <hr/>
+                <strong>Example:</strong> 12
+              </div>
+            </td>
+            <td>{% include applicable-required %}</td>
+            <td>{% include not-applicable %}</td>
+            <td>{% include not-applicable %}</td>
+          </tr>
+          <tr>
+            <td>
+              <a href="#" class="variable_desc_link">PARTITION_NUMBER</a>
+              <div class="hidden popup">
+                {% include if_on_balancer_side_against_tlb_server %}
+                Balancer instance when running against TlbServer, needs to know which partition(of <i>TOTAL_PARTITIONS</i>) is it itself. 
+                <p class="clob_end"/>
+                Say while running 5 partitions first one would have this value set to ‘1’ whereas third one would have it set to ‘3’.
+                {% include not_required_for_go_server_based_balancing %}
+                <hr/>
+                <strong>Type: </strong> A natural number(which one of <i>TOTAL_PARTITIONS</i> is the current partition). 
+                <hr/>
+                <strong>Example:</strong> 4 <code>1 <= $PARTITION_NUMBER <= 7 if $TOTAL_PARTITIONS = 7</code>
+              </div>
+            </td>
+            <td>{% include applicable-required %}</td>
+            <td>{% include not-applicable %}</td>
+            <td>{% include not-applicable %}</td>
+          </tr>
+          <tr>
+            <td>
+              <a href="#" class="variable_desc_link">TLB_URL</a>
+              <div class="hidden popup">
+                {% include if_on_balancer_side_against_tlb_server %}
+                Balancer instance when running against TlbServer, needs to know what url it must use to talk to the TlbServer(which is an restful http service). 
+                <p class="clob_end"/>
+                This variable must point to the TlbServer base url(for instance if TlbServer is running on foo.bar.com on port 7019, this would be http://foo.bar.com:7019/.
+                {% include not_required_for_go_server_based_balancing %}
+                <hr/>
+                <strong>Type: </strong> Http server base url (url to the TLB server)
+                <hr/>
+                <strong>Example:</strong> http://192.168.1.100:7019/
+              </div>
+            </td>
+            <td>{% include applicable-required %}</td>
+            <td>{% include not-applicable %}</td>
+            <td>{% include not-applicable %}</td>
+          </tr>
+          <tr>
+            <td>
+              <a href="#" class="variable_desc_link">TLB_JOB_NAME</a>
+              <div class="hidden popup">
+                {% include if_on_balancer_side_against_tlb_server %}
+                Balancer instance when running against TlbServer, needs to know what namespace all partitions that are running splits of a test suite must use. A TlbServer instance can cater to several balancer instances(running different partitions of different test suites, which have nothing to do with each other). 
+                <p class="clob_end"/>
+                For instance, functional tests can run using namespace ‘func-tests’, smoke tests can use namespace ‘smoke’ and unit tests can use namespace ‘unit-tests’, however, all partitions of a suite must use the same namespace, which means assuming there are 5 partitions of unit tests(they must all use some namespace, say ‘unit-tests’ so that the TlbServer knows they belong to the same family). Similarly, assuming smoke tests are partitioned across 3 instances, they must all use ‘smoke-tests’(or something similar) as the value of this variable.
+                {% include not_required_for_go_server_based_balancing %}
+                <hr/>
+                <strong>Type: </strong> String(represents namespace for multiple partitions of a test-suite).
+                <hr/>
+                <strong>Example:</strong> project-foo-integration-tests or project-bar-unit-tests
+              </div>
+            </td>
+            <td>{% include applicable-required %}</td>
+            <td>{% include not-applicable %}</td>
+            <td>{% include not-applicable %}</td>
+          </tr>
+          <tr>
+            <td>
+              <a href="#" class="variable_desc_link">JOB_VERSION</a>
+              <div class="hidden popup">
+                {% include if_on_balancer_side_against_tlb_server %}
+                When a suite is balanced against TlbServer, the dataset(test time, result etc) is maintained as one mutating set on the server. In a real world balancing scenario, test runner instances(partitions) do not all start at the same time. 
+                <p class="clob_end"/>
+                This means out of 3 partitions for instance(lets call the partitions A, B and C), A may have started running tests and may have already reported result and time for a few tests by the time B and C start. However, B and C must balance based on the exact same version of data that A started out with(and not the updated data, which has feedback from A). To solve this problem, TLB has a concept of version-ing. When A starts running, it posts the TlbServer a version string(against which the server stores a snapshot of data thats relevant for the corresponding TLB_JOB_NAME. When B or C queries data using the same version, the frozen snapshot is returned(which ensures that all partitions see the same snapshot of data, in-spite of server receiving feedback continuously and the actual namespace dataset evolving. Usually this can be set such that it changes between suite-runs. For instance, when A, B and C trying to balance build number 10, build number can be used as JOB_VERSION. 
+                <p class="clob_end"/>
+                Using a unique version ensures the frozen(hence stale) data is not used for balancing/ordering the new run of the same test suite(when the next build is triggered all three partitions start with the corresponding build number, which may be 11, hence the frozen snapshot of data is not used. Recursive variable substitution can be used to make sensible and satisfactorily unique version strings.
+                {% include not_required_for_go_server_based_balancing %}
+                <p class="clob_end"/>
+                TLB allows environment variables interpolation, which means you can use a string that is composed of references to other environment variables(that change between builds, but remain the same for jobs in a build).
+                <p class="clob_end"/>
+                For instance, when balancing a Go stage, using TLB Server, <code> $JOB_VERSION = ${GO_PIPELINE_COUNTER}-${GO_STAGE_COUNTER} </code> can be a sensible value. TLB will resolve the refered values before using the variable.
+                <hr/>
+                <strong>Type: </strong> Any unique string(that changes across suite runs(and remains same across partitions for any given run)).
+                <hr/>
+                <strong>Example:</strong> 'foo-bar-&lt;build-number&gt;' (ie. foo-bar-10, foo-bar-11 etc)
+              </div>
+            </td>
+            <td>{% include applicable-required %}</td>
+            <td>{% include not-applicable %}</td>
+            <td>{% include not-applicable %}</td>
+          </tr>
+          <tr>
+            <td>
+              <a href="#" class="variable_desc_link">TLB_USERNAME</a>
+              <div class="hidden popup">
+                {% include if_on_balancer_side_against_go_server %}
+                Balancer instance, when running against Go server that has authentication enabled, needs credentials to access data from the last suite-run. This variables captures the username that partitioned instance should use to login to the Go server.
+                <p class="clob_end"/>
+                Is required only in the case of Go servers which have security turned on.
+                <hr/>
+                <strong>Type: </strong> String(username)
+                <hr/>
+                <strong>Example:</strong> tlb-user
+              </div>
+            </td>
+            <td>{% include not-applicable %}</td>
+            <td>{% include applicable %}</td>
+            <td>{% include not-applicable %}</td>
+          </tr>
+          <tr>
+            <td>
+              <a href="#" class="variable_desc_link">TLB_PASSWORD</a>
+              <div class="hidden popup">
+                {% include if_on_balancer_side_against_go_server %}
+                Balancer instance, when running against Go server that has authentication enabled, needs credentials to access data from the last suite-run. This variables captures the password that partitioned instance should use to login to the Go server.
+                <hr/>
+                <strong>Type: </strong> String(password)
+                <hr/>
+                <strong>Example:</strong> tlb-password
+              </div>
+            </td>
+            <td>{% include not-applicable %}</td>
+            <td>{% include applicable %}</td>
+            <td>{% include not-applicable %}</td>
+          </tr>
         </tbody>
       </table>
     </div>
   </div>
-  
-Environment Variables to Component
-AR = Applicable and Required
-AN = Applicable and Not mandatory
-- = Not Applicable
-
-The standard value can be used when a variable is mandatory. Tlb uses the default value in case of variables that are not mandatory.
-
-Environment Variable	Tlb Balancer	Tlb Server	Tlb Balancer against Go	Default/Standard Value
-TALK_TO_SERVICE	AR	-	AR	tlb.service.TalkToTlbServer or tlb.service.TalkToGoServer
-TLB_CRITERIA	AR	-	AR	tlb.splitter.DefaultingTestSplitterCriteria
-TLB_ORDERER	AR	-	AR	tlb.orderer.FailedFirstOrderer
-CRITERIA_DEFAULTING_ORDER#	AR	-	AR	tlb.splitter.TimeBasedTestSplitterCriteria:tlb.splitter.CountBasedTestSplitterCriteria
-TLB_TMP_DIR##	-	-	AR	Uses the default Java temp dir
-TLB_APP###	AN	-	AN	github.tlb.server.TlbServerInitializer
-TLB_BALANCER_PORT####	AR	-	-	A valid port value
-TLB_PORT	-	AN	-	7019
-tlb_store	-	AN	-	Server Process PWD
-VERSION_LIFE_IN_DAYS	-	AN	-	1 Day
-SMOOTHING_FACTOR	-	AN	-	1
-USE_SMOOTHING	AN	-	-	false
-TOTAL_PARTITIONS	AR	-	-	A Natural Number
-PARTITION_NUMBER	AR	-	-	A Natural Number
-TLB_URL	AR	-	-	http://hostname_or_ip:${TLB_PORT}
-TLB_JOB_NAME	AR	-	-	A String
-JOB_VERSION	AR	-	-	A String
-TLB_USERNAME#####	-	-	AN	A String
-TLB_PASSWORD#####	-	-	AN	A String
-#- Is relevant only when TLB_CRITERIA is set to DefaultingTestSplitterCriteria
-##- Is required only in the case of Balancing against Go(this is used to cache the test run feedback, before it can be pushed to the server as a batch update)
-###- Is required only in the case of non-java frameworks, like Ruby etc.(defaults to TlbServerInitializer, can be set to BalancerInitializer for balancing server). This is only relavant for developers adding support for non-java language based frameworks(for instance, rspec).
-####- Balancer application port. Is again required only when implementing support for non-java language based frameworks. Java based frameworks do not run a seperate balancer.
-#####- Is required only in the case of Go servers which have security turned on.
-
-Detailed Description
-The style this section follows is : .
-
-TALK_TO_SERVICE1: In order to split tests into subsets based on data(say based on test time) or order tests based on say the result last time(for instance running tests that failed in the last run first), the test times and test results need to be stored somewhere. While balancing TLB gets this historical data off the storage and decides how to balance and re-order tests based on it and post feedback to the storage(so it can be used to balance test suite next time). This variable controls what server should the balancing instance(the process running tests) talk to in order to get/publish data.
-
-TLB loads the class that TALK_TO_SERVICE points to, and uses an instance of that to talk to service. The contract for the class used here is enforced by a java interface called TalkToService
-
-TLB_CRITERIA1: This variable dictates the algorithm that TLB should use to balance the test set. The decision of how to split the test case(say based on time or count) is governed by the class that this variable points to.
-
-TLB_ORDERER1: This variable dictates the algorithm that TLB should use to reorder the test set.
-
-CRITERIA_DEFAULTING_ORDER1: This variable is relevant only in the scenario where DefaultingTestSplitterCriteria is used as TLB_CRITERIA. DefaultingTestSplitterCriteria tries multiple criterion in the order they appear in this value. If balancer fails to balance using the first criteria, it moves on to the second one and tries balancing again, and so on. The criteria names can be specified delimited by colon(:) character.
-
-TLB_TMP_DIR2: Path to the directory that TLB can use for caching data before it posts it to the server(data is batched up locally before being posted, this is done in order to avoid unnecessary load on server). As of now this is done only for TLB-Go setup, because TLB server setup is a lot faster hence doesn’t require such optimization. Once the process(partition run) is compete, this directory can be blown away. This is defaulted to the path pointed at by Java property “java.io.tmpdir”.
-
-TLB_APP1: This can be used to override what application TLB must run when java -jar tlb-all-XXX.jar is invoked. This defaults to TLB server class. This is useful only in scenarios when balancing on platforms other than Java, where the Balancer server must be run. Only people implementing support for other platforms like Ruby, Python etc care about setting this.
-
-TLB_BALANCER_PORT3: Relevant only when TLB_APP is overridden to point to tlb.balancer.BalancerInitializer. This, like TLB_APP is relevant to non-java platform support scenarios only. There is no defaulting done for this because this runs on the same machine that runs test subset, and its not really to seen like a server(unlike TLB server). Its just for a temporary process that is started before filtering tests that are to be run in the subset, and torn-down after posting the feedback.
-
-TLB_PORT3: Provides a way to override the default port for TLB Server(note that it does not have any effect for when running Balancer, which needs TLB_BALANCER_PORT).
-
-tlb_store2: Relevant only for the TLB Server process. This is the directory that TLB Server uses to persist the historical data so it survives restarts/upgrades.
-
-VERSION_LIFE_IN_DAYS4: TLB supports a notion of version for test times(and smoothened test times). This is important because while balancing every partition must see the exact same data(else the partition may not turn out to be mutually exclusive and collectively exhaustive, which means the same test suite may run twice(on two different partitions) or some test suites may not run at all. This variable is relevant on the TLB Server. This governs how long the version is going to stay in the server(after which server will purge it, and if queried, will create a new version from the latest data snapshot). This must be significantly larger than the time test-load-balanced build is expected to take, because the snapshot will be taken when the very first partition queries the server with an unknown version, and must live untill last of balanced partitions is done fetching data.
-
-SMOOTHING_FACTOR5: TLB server supports one smoothing factor value for all jobs that partition against it. This can be overridden using this environment variable. TLB uses exponential smoothing and uses 1 as default value of SMOOTHING_FACTOR(alpha). Setting SMOOTHING_FACTOR does not mean all balancing instances running against the server will be smoothened. Weather to use smoothing or not is decided by another environment variable on the partitioning process side named USE_SMOOTHING.
-
-USE_SMOOTHING6: Balancer instance(the process that actually runs the partitioned suite) can set this variable to indicate weather to use smoothing or not. It can choose to use smoothing or not, but can not dictate the smoothing factor(which is set on the server side using SMOOTHING_FACTOR.
-
-TOTAL_PARTITIONS7: Balancer instance, when running against TlbServer, needs to know how many total partitions have been made. For instance, if there are a total of 100 tests being partitioned across 5 test processes, value of this variable should be 5.
-
-PARTITION_NUMBER7: Balancer instance when running against TlbServer, needs to know which partition(of TOTAL_PARTITIONS) is it. Say while running 5 partitions first one would have this value set to ‘1’ whereas third one would have it set to ‘3’.
-
-TLB_URL8: Balancer instance when running against TlbServer, needs to know what url it should use to talk to the TlbServer(which is an http restful service). This variable must point to the TlbServer base url(for instance if TlbServer is running on foo.bar.com on port 7019, this would be http://foo.bar.com:7019/.
-
-TLB_JOB_NAME8: Balancer instance when running against TlbServer, needs to know what namespace all partitions that are running splits of a test suite must use. A TlbServer instance can cater to several balancer instances(running different partitions of different test suites, which have nothing to do with each other). For instance, functional tests can run using namespace ‘func-tests’, smoke tests can use namespace ‘smoke’ and unit tests can use namespace ‘unit-tests’, however, all partitions of a suite must use the same namespace, which means assuming there are 5 partitions of unit tests(they must all use namespace ‘unit-tests’ so that the TlbServer knows they belong to the same family). Similarly, assuming smoke tests are partitioned across 3 instances, they must all use ‘smoke’ as the value of this variable.
-
-JOB_VERSION9: When a suite is balanced against TlbServer, the dataset(test time, result etc) is maintained as one mutating set on the server. In a real world balancing scenario, test runner instances(partitions) do not all start at the same time. This means out of 3 partitions for instance(lets call the partitions A, B and C), A may have started running tests and may have already reported result and time for a few tests by the time B and C start. However, B and C must balance based on the exact same version of data that A started out with(and not the updated data, which has feedback from A). To solve this problem, TLB has a concept of version-ing. When A starts running, it posts the TlbServer a version string(against which the server stores a snapshot of data thats relevant for the corresponding TLB_JOB_NAME. When B or C queries data using the same version, the frozen snapshot is returned(which ensures that all partitions see the same snapshot of data, in-spite of server receiving feedback continuously and the actual namespace dataset evolving. Usually this can be set such that it changes between suite-runs. For instance, when A, B and C trying to balance build number 10, build number can be used as JOB_VERSION. Using a unique version ensures the frozen(hence stale) data is not used for balancing/ordering the new run of the same test suite(when the next build is triggered all three partitions start with the corresponding build number, which may be 11, hence the frozen snapshot of data is not used. Recursive variable substitution can be used to make sensible and satisfactorily unique version strings.
-
-TLB_USERNAME10: Balancer instance, when running against Go server that has authentication enabled, needs credentials to access data from the last suite-run. This variables captures the username that partitioned instance should use to login to the Go server.
-
-TLB_PASSWORD10: Balancer instance, when running against Go server that has authentication enabled, needs credentials to access data from the last suite-run. This variables captures the password that partition instance should use to login to the Go server.
-
-1 
-
-2 Path to a directory.
-
-3TCP port (if set, should preferably be greater than 1024)
-
-4 Number of days(Integer)
-
-5 Real number, such that (0 <= number <= 1)
-
-6 Is interpreted as a boolean, must be “true” or “false”.
-
-7 Integer
-
-8 Http url
-
-9 Any unique string(that changes across suite runs(and remains same across partitions for any given run).
-
-10 String
-

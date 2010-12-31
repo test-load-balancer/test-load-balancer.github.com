@@ -1,0 +1,3 @@
+<strong>if</strong> on balancer side, which means
+<code class="block">(using java-framework balancing support) OR ($TLB_APP == 'tlb.balancer.BalancerInitializer')</code>
+<hr/>

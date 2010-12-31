@@ -1,0 +1,3 @@
+<strong>if</strong> on 'balancer side' and 'balancing against TLB server', which means
+<code class="block">((using java-framework balancing support) OR ($TLB_APP == 'tlb.balancer.BalancerInitializer')) AND ($TALK_TO_SERVICE == 'tlb.service.TalkToTlbServer')</code>
+<hr/>
