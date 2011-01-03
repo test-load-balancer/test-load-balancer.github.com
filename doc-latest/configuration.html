@@ -416,6 +416,56 @@ js: hookup_details_popup();
             <td>{% include applicable %}</td>
             <td>{% include not-applicable %}</td>
           </tr>
+          <tr>
+            <td>
+              <a href="#" class="variable_desc_link">Other Go support variables</a>
+              <div class="hidden popup">
+                <div class="notice warn">If you are unfamilier with Go and do not intend to use Go support, please feel free ignore this text.</div>
+                <hr/>
+                {% include if_on_balancer_side_against_go_server %}
+                You do not need to set these variables. Go-agent sets these before spawning Go-task(s). So as long as you don't re-set these to some other value(s), you'll be fine.
+                <p class="clob_end"/>
+                <table class="with_row_deviders">
+                  <tr>
+                    <td>GO_SERVER_URL</td>
+                    <td>HTTPS url to the go server.</td>
+                  </tr>
+                  <tr>
+                    <td>GO_PIPELINE_NAME</td>
+                    <td>Name of the <i>Pipeline</i> the task that is running tests belongs to.</td>
+                  </tr>
+                  <tr>
+                    <td>GO_STAGE_NAME</td>
+                    <td>Name of the <i>Stage</i> the task that is running tests belongs to.</td>
+                  </tr>
+                  <tr>
+                    <td>GO_JOB_NAME</td>
+                    <td>Name of the <i>Job</i> the task that is running tests belongs to.</td>
+                  </tr>
+                  <tr>
+                    <td>GO_PIPELINE_COUNTER</td>
+                    <td>Counter(instance number) of the <i>Pipeline Instance</i> the task that is running tests belongs to.</td>
+                  </tr>
+                  <tr>
+                    <td>GO_STAGE_COUNTER</td>
+                    <td>Counter(instance number) of the <i>Stage Instance</i> the task that is running tests belongs to.</td>
+                  </tr>
+                  <tr>
+                    <td>GO_PIPELINE_LABEL</td>
+                    <td>Label(logical instance name) of the <i>Pipeline Instance</i> the task that is running tests belongs to.</td>
+                  </tr>
+                  </tr>
+                </table>
+                <p class="clob_end"/>
+                TLB needs these variables because while working against Go, it needs to download/upload test related data as artifact files, which go under the corresponding job-instance.
+                <hr/>
+                <strong>Type: </strong> Strings
+              </div>
+            </td>
+            <td>{% include not-applicable %}</td>
+            <td>{% include applicable %}</td>
+            <td>{% include not-applicable %}</td>
+          </tr>
         </tbody>
       </table>
     </div>
