@@ -105,3 +105,11 @@ hr {
 table.with_row_deviders tr td {
      border-bottom: 1px dotted #000;
 }
+
+.tiny_font { 
+     font-size: 8pt;
+}
+
+.margin { 
+     margin: .5em;
+}
