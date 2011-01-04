@@ -1,0 +1,33 @@
+---
+layout: default
+title: Adding support for new frameworks
+keywords: tlb, test-load-balancer, adding support, new frameworks, new languages, non-java setup, non-java tlb support
+description: Help for adding support for new testing frameworks in java or non-java languages
+---
+
+To load-balance tests across multiple processes, TLB needs to hook up with 2 kinds of frameworks.
+<p class="clob_end"/>
+<ul>
+  <li><strong>Testing framework:</strong> This is the framework that actually runs the tests (for instance junit or rspec etc)</li>
+  <li><strong>Build framework:</strong> This is the framework that calls out to the tests (command line invocation, Ant, Rake etc)</li>
+</ul>
+<hr/>
+
+<h3>Testing framework integration</h3>
+<div class="scope section">
+  TLB assumes that a test framework exposes a way to specify a list of file resources(test-classes, spec_files etc) that need to be executed. The list is passed to the criteria chain. Splitter criterion prunes the file resource list. After pruning, the list of the file resources is passed through the orderer, where it gets re-ordered. The contract is that the orderer nither duplicates, nor does it drop-existing/add-new tests.
+  <p class="clob_end"/>
+  The final(pruned and reordered) list of file resources is what is fed to the test framework for execution.
+  <p class="clob_end"/>
+  Once the tests are executed, TLB needs a way to capture the test result(success or failure) and the time each test took to execute in order to report back to the TLB Server. This feedback that is used for partitioning tests for future runs and allows TLB to partion and order tests accurately and sensibly.
+</div>
+<hr/>
+<h3>Build framework integration</h3>
+<div class="scope section">
+  Supporting build tools is a matter of implementing the end user interface(s) which delegate to the Splitter and Orderer. Build tool integration layer also does the plumbing work of attaching listeners to the test running framework so the feedback can be posted. For instance, Ant support hooks up at the fileset-filter level for partitioning and re-ordering and attaches a JUnitResultFormatter with the test task, so the feedback gets posted. Rake support hooks up SpecFormatter for RSpec or TestObserver for Test::Unit.
+</div>
+<hr/>
+<a href="http://github.com/test-load-balancer/tlb_rb">tlb_rb</a> can be used as spec-implementation of alien-environment(non-java language) integration. Obviously, code can not be treated as spec in all purity, but it should be give a good enough idea of various things that need to be done to get alien-environment working with TLB.
+<p class="clob_end"/>
+If you plan to implement TLB support for a new language or for a new framework in one of the supported languages, please get in touch with us(check: {% include contact_us_link %}
+) on the test-load-balancer mailing list or drop a mail to one of the developers.

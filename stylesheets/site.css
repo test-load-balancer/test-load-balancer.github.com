@@ -113,3 +113,8 @@ table.with_row_deviders tr td {
 .margin { 
      margin: .5em;
 }
+
+div.column { 
+     width: 49%;
+     float: left;
+}

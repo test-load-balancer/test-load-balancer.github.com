@@ -1,0 +1,42 @@
+---
+layout: default
+title: Recursive variable substitution
+keywords: tlb, test-load-balancer, variable substitution, variable interpolation, recursive substitution, recursive interpolation
+description: Recursive variable substitution in environment variables TLB uses
+---
+TLB supports environment variables that are actually templates that other environment variables can fill. When a variable refers to another environment variable, it is recursively interpolated until there are no more templates left to interpolate. The example below attempts to explain how this feature can be used.
+
+<hr/>
+<div class="column">
+<strong>For the following variable values:</strong>
+<code class="block">
+<pre>
+foo='bar'
+bar='oo'
+baz='baz-${foo}'
+quux='baz-${f${bar}}'
+complex='${quux}|${q${bang}}'
+bang='u${boom}'
+boom='u${axe}'
+axe='${X}'
+X='x'
+</pre>
+</code>
+</div>
+
+<div class="column">
+<strong>TLB will interpret the final values(that it uses) as:</strong>
+<code class="block">
+  <pre>
+foo='bar'
+bar='oo'
+baz='baz-bar'
+quux='baz-bar'
+complex='baz-bar|baz-bar'
+bang='uux'
+boom='ux'
+axe='x'
+X='x'
+</pre>
+</code>
+</div>
