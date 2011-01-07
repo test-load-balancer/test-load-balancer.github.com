@@ -1,0 +1,32 @@
+---
+layout: default
+title: Projects
+keywords: tlb, test-load-balancer, projects, subprojects, project list
+description: Projects under the TLB umbrella
+---
+  <div>
+    <h3>tlb</h3>
+    <div class="scope section">
+      {% include tlb_repo_name_link %}
+      is the core/base project that implements all the test-load-balancing logic and infrastructure. We chose Java to implement TLB core because it promises platform indipendence. This is what has enabled TLB to be easily used across architectures and operating systems as long as JVM is installed. 
+      <p class="clob_end"/>
+      All the features that TLB offers are implemented in this codebase. As far as the act of load balancing goes, other codebases like {% include tlb_rb_link %}
+      are only responsible for launching tlb subprocess(a java process, which is terminated once tests finish), and using HTTP-POST requests to publish test-results and test-times or to get list of tests to be run on current partition etc. 
+      <p class="clob_end"/>
+      In addition to the core logic, tlb-project also has glue-code to integrate with java build framework(like ant etc.) and java testing frameworks(for instance, junit). Please check 
+    </div>
+  </div>
+  <div>
+    <h3>tlb-ruby</h3>
+    <div class="scope section">
+      {% include tlb_rb_repo_link %}
+      is TLB Ruby support library. The distributables for this project are bundled as ruby-gems. There are three different gems(listed below) that are built(as distributables) out of this project. Each one bundles support for a specific ruby testing framework and a rake task that needs to be used to start the balancer server subprocess(a local java process).
+      <ul>
+        <li><strong>tlb-testunit:</strong> provides support for ruby test::unit.</li>
+        <li><strong>tlb-rspec1:</strong> provides support for RSpec-1.3.x(we have tested it with rspec-1.3.x, but it should work for rspec-1.2.x as well).</li>
+        <li><strong>tlb-rspec2:</strong> provides support for RSpec-2.x.x.</li>
+      </ul>
+      <p class="clob_end"/>
+      This project was the first alien-environment(non-java/non-jvm environment) support implementation, so can be treated as spec implementation for alien
+    </div>
+  </div>

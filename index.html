@@ -4,8 +4,6 @@ title: Home
 keywords: tlb, test-load-balancer
 description: Home page of 'Test Load Balancer(TLB)' project(s).
 ---
- 
-  <hr/>
   <div>
     <h3>What is Test Load Balancer (TLB)?</h3>
     <div class="scope section">
@@ -41,78 +39,51 @@ description: Home page of 'Test Load Balancer(TLB)' project(s).
   <div>
     <h3>What testing-tools/build-tools does TLB support?</h3>
     <div class="scope section">
-    <p/>
+      <div class="notice warning">
+        This list is updated as upstream evolves. Please check version specific documentation to find out what a particular version supports.
+      </div>
+      <p/>
       <h5>TLB supports:</h5>
-    <table>
-      <thead>
-        <tr>
-          <th>Testing Tool</th>
-          <th>Build Tool(s)</th>
-          <th>Programming Language(s) or Platform(s)</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>{% include junit_link %}</td>
-          <td>{% include ant_link %}, {% include buildr_link %}</td>
-          <td>{% include java_link %}</td>
-        </tr>
-        <tr>
-          <td>{% include twist_link %}</td>
-          <td>{% include ant_link %}, {% include buildr_link %}</td>
-          <td>{% include java_link %}</td>
-        </tr>
-        <tr>
-          <td>{% include rspec_1_link %} & {% include rspec_2_link %}</td>
-          <td>{% include rake_link %}</td>
-          <td>{% include mri_link %}</td>
-        </tr>
-        <tr>
-          <td>{% include testunit_link %}</td>
-          <td>{% include rake_link %}</td>
-          <td>{% include mri_link %}</td>
-        </tr>
-      </tbody>
-    </table>
-    <p class="clob_end"/>
-    <div class="with_desc">
-      <h5>Work in progress:</h5>
-      <span class="heading_desc">TLB team is working on adding support for the following tool combinations:</span>
-    </div>
-    <table>
-      <thead>
-        <tr>
-          <th>Testing Tool</th>
-          <th>Build Tool(s)</th>
-          <th>Programming Language(s) or Platform(s)</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>{% include rspec_1_link %} & {% include rspec_2_link %}</td>
-          <td>{% include rake_link %}</td>
-          <td>{% include jruby_link %}</td>
-        </tr>
-        <tr>
-          <td>{% include testunit_link %}</td>
-          <td>{% include rake_link %}</td>
-          <td>{% include jruby_link %}</td>
-        </tr>
-        <tr>
-          <td>{% include nunit_link %}</td>
-          <td>{% include nant_link %}</td>
-          <td>{% include dot_net_link %}</td>
-        </tr>
-      </tbody>
-    </table>
-    <p class="clob_end"/>
-    <div class="with_desc">
-      <h5>We plan to add support for:</h5>
-      <span class="heading_desc">We have not yet started work on adding suppport for tools mentioned in this section.</span>
-    </div>
-    Cucumber(Ruby), MSTest(.Net), MSBuild(.Net), Maven(Java), unittest(Python), FiveAM(CommonLisp), cppunit(C++) etc.
-    <p class="clob_end"/>
-    And of course, anything else you can mail us patches for... :-)
+      {% include upstream_supported_frameworks %}
+      <p class="clob_end"/>
+      <div class="with_desc">
+        <h5>Work in progress:</h5>
+        <span class="heading_desc">TLB team is working on adding support for the following tool combinations:</span>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Testing Tool</th>
+            <th>Build Tool(s)</th>
+            <th>Programming Language(s) or Platform(s)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{% include rspec_1_link %} & {% include rspec_2_link %}</td>
+            <td>{% include rake_link %}</td>
+            <td>{% include jruby_link %}</td>
+          </tr>
+          <tr>
+            <td>{% include testunit_link %}</td>
+            <td>{% include rake_link %}</td>
+            <td>{% include jruby_link %}</td>
+          </tr>
+          <tr>
+            <td>{% include nunit_link %}</td>
+            <td>{% include nant_link %}</td>
+            <td>{% include dot_net_link %}</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="clob_end"/>
+      <div class="with_desc">
+        <h5>We plan to add support for:</h5>
+        <span class="heading_desc">We have not yet started work on adding suppport for tools mentioned in this section.</span>
+      </div>
+      Cucumber(Ruby), MSTest(.Net), MSBuild(.Net), Maven(Java), unittest(Python), FiveAM(CommonLisp), cppunit(C++) etc.
+      <p class="clob_end"/>
+      And of course, anything else you can mail us patches for... :-)
     </div>
   </div>
   <hr/>
