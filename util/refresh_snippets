@@ -1,0 +1,16 @@
+#!/bin/bash
+
+snippet_dest_start="<!--TLB-DOC-TASK-START::rel_path-->"
+snippet_dest_end="<!--TLB-DOC-TASK-END::rel_path-->"
+
+for src_file in `grep -rlF 'TLB-DOC-TASK-START' $samples_dir`; do 
+    src_rel_path=`echo $src_file | sed -e s#$samples_dir/##g`
+    snippet=`cat $src_file | awk -f util/record_snippet.awk`
+    snip_start=`echo $snippet_dest_start | sed -e s#rel_path#$src_rel_path#g`
+    snip_end=`echo $snippet_dest_end | sed -e s#rel_path#$src_rel_path#g`
+    cp $snippets_file tmp/snippets_file
+    cat tmp/snippets_file | awk -v rel_path=$src_rel_path -v snippet="$snippet" -v start=$snip_start -v end=$snip_end -f util/embed_snippet.awk > $snippets_file
+done
+
+
+
