@@ -30,8 +30,6 @@ google_cdn:
 
 local_cdn: check_zip tmp/js sw_to_local
 
-embed_snippets: gen_snippets
-
-gen_snippets:
+embed_snippets: 
 	@echo Using ${samples_dir} as 'sample_projects' directory
-	util/refresh_snippets 
+	util/refresh_snippets
