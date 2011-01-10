@@ -4,85 +4,85 @@ title: Projects
 keywords: tlb, test-load-balancer, projects, subprojects, project list, project description
 description: Projects under the TLB umbrella
 ---
-  <div>
-    <h3>tlb (the core) [Java]</h3>
-    <div class="scope section">
-      {% include tlb_repo_name_link %}
-      is the core/base project that implements all the test-load-balancing logic and infrastructure. We chose Java to implement TLB core because it promises platform independence. This is what has enabled TLB to be easily used across architectures and operating systems as long as JVM is installed. 
-      <p class="clob_end"/>
-      All the features that TLB offers are implemented in this codebase. As far as the act of load balancing(and related things, like re-ordering) goes, other codebases like {% include tlb_rb_link %}
-      are only responsible for launching tlb sub-process(a java process, which is terminated once tests finish), and using HTTP-POST requests to publish test-results and test-times or to get list of tests to be run on current partition etc. 
-      <p class="clob_end"/>
-      In addition to the core logic, tlb-project also has glue-code to integrate with java build framework(like ant etc.) and java testing frameworks(for instance, junit). This means tlb jar can be used to hook TLB up in a java project(for instance, a project using ant and junit). Please check {% include sample_projects_link %}
-      for examples.
-    </div>
+<div>
+  <h3>{% include tlb_repo_name_link %} (the core) [Java]</h3>
+  <div class="scope section">
+    {% include tlb_repo_name_link %}
+    is the core/base project that implements all the test-load-balancing logic and infrastructure. We chose Java to implement TLB core because it promises platform independence. This is what has enabled TLB to be easily used across architectures and operating systems as long as JVM is installed. 
+    <p class="clob_end"/>
+    All the features that TLB offers are implemented in this codebase. As far as the act of load balancing(and related things, like re-ordering) goes, other codebases like {% include tlb_rb_link %}
+    are only responsible for launching tlb sub-process(a java process, which is terminated once tests finish), and using HTTP-POST requests to publish test-results and test-times or to get list of tests to be run on current partition etc. 
+    <p class="clob_end"/>
+    In addition to the core logic, tlb-project also has glue-code to integrate with java build framework(like ant etc.) and java testing frameworks(for instance, junit). This means tlb jar can be used to hook TLB up in a java project(for instance, a project using ant and junit). Please check {% include sample_projects_link %}
+    for examples.
   </div>
-  <hr/>
-  <div>
-    <h3>tlb_rb (ruby support) [Ruby]</h3>
-    <div class="scope section">
-      {% include tlb_rb_link %}
-      is TLB Ruby support library. The distributables for this project are bundled as ruby-gems. There are three different gems(listed below) that are built as distributables out of this project. Each one bundles support for a specific ruby testing framework and a rake task that needs to be used to start the balancer server sub-process(a local java process).
-      <ul>
-        <li><strong>tlb-testunit:</strong> provides support for ruby test::unit.</li>
-        <li><strong>tlb-rspec1:</strong> provides support for RSpec-1.3.x(we have tested it with rspec-1.3.x, but it should work for rspec-1.2.x as well).</li>
-        <li><strong>tlb-rspec2:</strong> provides support for RSpec-2.x.x.</li>
-      </ul>
-      <p class="clob_end"/>
-      This project was the first alien-environment(non-java/non-jvm environment) support implementation, so can be treated as reference implementation for adding support for other non-java/non-jvm environments and testing/build frameworks. Please check {% include sample_projects_link %}
-      for examples.
-    </div>
+</div>
+<hr/>
+<div>
+  <h3>{% include tlb_rb_link %} (ruby support) [Ruby]</h3>
+  <div class="scope section">
+    {% include tlb_rb_link %}
+    is TLB Ruby support library. The distributables for this project are bundled as ruby-gems. There are three different gems(listed below) that are built as distributables out of this project. Each one bundles support for a specific ruby testing framework and a rake task that needs to be used to start the balancer server sub-process(a local java process).
+    <ul>
+      <li><strong>tlb-testunit:</strong> provides support for ruby test::unit.</li>
+      <li><strong>tlb-rspec1:</strong> provides support for RSpec-1.3.x(we have tested it with rspec-1.3.x, but it should work for rspec-1.2.x as well).</li>
+      <li><strong>tlb-rspec2:</strong> provides support for RSpec-2.x.x.</li>
+    </ul>
+    <p class="clob_end"/>
+    This project was the first alien-environment(non-java/non-jvm environment) support implementation, so can be treated as reference implementation for adding support for other non-java/non-jvm environments and testing/build frameworks. Please check {% include sample_projects_link %}
+    for examples.
   </div>
-  <hr/>
-  <div>
-    <h3>sample_projects (demo tlb setup) [soup, has all kinds of projects]</h3>
-    <div class="scope section">
-      {% include sample_projects_link %}
-      is a repository of dummy projects, that use supported testing frameworks and build tools to bring it all together, and demonstrate how TLB can be used on a typical project. Its meant to highlight the hookup points and allow users to play with environment variables even before they hook-up TLB with their project's build.
-      Usually there is one top-level shell-script in these codebases. This shell-script sets necessary environment variables to instruct TLB process to partition tests into <i>N</i>-partitions(most if not all projects use 2 partitions, but you can tweak it to see how it behaves with different numbers), and runs those partitions one after another(serially). 
-      <p class="clob_end"/>
-      Obviously this is not what would happen on a real build, it is only meant to demonstrate how tests are partitioned and reordered. On a real build/CI setup, all partitions would start at the same time, run on(well, ideally) different machines, and finish almost at the same time. 
-      <p class="clob_end"/>
-      Its usually a good idea to run the top level script a few times just to see how the balancing during the very first build is suboptimal(as it is forced to use count-balancing, because of lack of historical data) and how it starts balancing really well next time onwards(once it has test times populated as feedback from the first build, it used time balancing).
-      <p class="clob_end"/>
-      A very useful repository to get a first hand feel of how TLB works, and to borrow environment variable configuration from.
-    </div>
+</div>
+<hr/>
+<div>
+  <h3>{% include sample_projects_link %} (demo tlb setup) [soup, has all kinds of projects]</h3>
+  <div class="scope section">
+    {% include sample_projects_link %}
+    is a repository of dummy projects, that use supported testing frameworks and build tools to bring it all together, and demonstrate how TLB can be used on a typical project. Its meant to highlight the hookup points and allow users to play with environment variables even before they hook-up TLB with their project's build.
+    Usually there is one top-level shell-script in these codebases. This shell-script sets necessary environment variables to instruct TLB process to partition tests into <i>N</i>-partitions(most if not all projects use 2 partitions, but you can tweak it to see how it behaves with different numbers), and runs those partitions one after another(serially). 
+    <p class="clob_end"/>
+    Obviously this is not what would happen on a real build, it is only meant to demonstrate how tests are partitioned and reordered. On a real build/CI setup, all partitions would start at the same time, run on(well, ideally) different machines, and finish almost at the same time. 
+    <p class="clob_end"/>
+    Its usually a good idea to run the top level script a few times just to see how the balancing during the very first build is suboptimal(as it is forced to use count-balancing, because of lack of historical data) and how it starts balancing really well next time onwards(once it has test times populated as feedback from the first build, it used time balancing).
+    <p class="clob_end"/>
+    A very useful repository to get a first hand feel of how TLB works, and to borrow environment variable configuration from.
   </div>
-  <hr/>
-  <div>
-    <h3>set-part (proving grounds) [Common Lisp]</h3>
-    <div class="scope section">
-      {% include set_part_link %}
-      is a spike(proof of concept) repository. Set-partitioning is a computationally difficult problem. Since it is an NP-hard problem, approximation algorithms are often used to solve it satisfactorily in polynomial time.
-      <p class="clob_end"/>
-      This repository is our kitchen-sink. We experiment with new ideas(generally algorithmic in nature), and try to solve interesting problems related to TLB.
-      <p class="clob_end"/>
-      Its written in lisp to make faster-development possible(so we can do quick do->test->tweak cycles).
-      <p class="clob_end"/>
-      Once something seems mature enough, it gets pulled in the TLB core, or where-ever it belongs, and is re-written in corresponding language.
-    </div>
+</div>
+<hr/>
+<div>
+  <h3>{% include set_part_link %} (proving grounds) [Common Lisp]</h3>
+  <div class="scope section">
+    {% include set_part_link %}
+    is a spike(proof of concept) repository. Set-partitioning is a computationally difficult problem. Since it is an NP-hard problem, approximation algorithms are often used to solve it satisfactorily in polynomial time.
+    <p class="clob_end"/>
+    This repository is our kitchen-sink. We experiment with new ideas(generally algorithmic in nature), and try to solve interesting problems related to TLB.
+    <p class="clob_end"/>
+    Its written in lisp to make faster-development possible(so we can do quick do->test->tweak cycles).
+    <p class="clob_end"/>
+    Once something seems mature enough, it gets pulled in the TLB core, or where-ever it belongs, and is re-written in corresponding language.
   </div>
-  <hr/>
-  <div>
-    <h3>tlb.net (.Net support) [C#]</h3>
-    <div class="scope section">
-      {% include tlb_dot_net_link %}
-      is TLB .Net support library. Its under development, still in very nascent stage.
-    </div>
+</div>
+<hr/>
+<div>
+  <h3>{% include tlb_dot_net_link %} (.Net support) [C#]</h3>
+  <div class="scope section">
+    {% include tlb_dot_net_link %}
+    is TLB .Net support library. Its under development, still in very nascent stage.
   </div>
-  <hr/>
-  <div>
-    <h3>tlb-misc (latex, text, images... etc) [soup, has various things]</h3>
-    <div class="scope section">
-      {% include tlb_misc_link %}
-      is used to version .tex files for presentation, images used in tlb-site, text related to tlb and other related things that are not directly related to code.
-    </div>
+</div>
+<hr/>
+<div>
+  <h3>{% include tlb_misc_link %} (latex, text, images... etc) [soup, has various things]</h3>
+  <div class="scope section">
+    {% include tlb_misc_link %}
+    is used to version .tex files for presentation, images used in tlb-site, text related to tlb and other related things that are not directly related to code.
   </div>
-  <hr/>
-  <div>
-    <h3>test-load-balancer.github.com (this website) [html/javascript/css]</h3>
-    <div class="scope section">
-      {% include tlb_site_link %}
-      is used to version the tlb-site content(documentation, details about the projects etc).
-    </div>
+</div>
+<hr/>
+<div>
+  <h3>{% include tlb_site_link %} (this website) [html/javascript/css]</h3>
+  <div class="scope section">
+    {% include tlb_site_link %}
+    is used to version the tlb-site content(documentation, details about the projects etc).
   </div>
+</div>
