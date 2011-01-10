@@ -7,7 +7,7 @@ description: Home page of 'Test Load Balancer(TLB)' project(s).
 <div>
   <h3>What is Test Load Balancer (TLB)?</h3>
   <div class="scope section">
-    Test Load Balancer is a tool that can automatically partition tests among multiple sets, each one of which can run on different physical machine. This can significantly improve the speed of a test stage in a pipeline, and significantly shorten the feedback loops for large or slow running test suites such as functional or UI tests.
+    Test Load Balancer(TLB) is a tool that can automatically partition tests among multiple sets, each one of which can run in parallel like on different physical/virtual machine at the same time. This can significantly improve the speed of a test stage in a build pipeline, and significantly shorten the feedback loop for large or slow running test suites such as functional or UI tests.
     <p class="clob_end"/>
     In addition to balancing, it also allows you to do other interesting things like re-order your tests-subset, before it executes. For instance, run tests that failed in the last run, first.
   </div>
@@ -20,7 +20,7 @@ description: Home page of 'Test Load Balancer(TLB)' project(s).
     {% include components_of_tlb %}
     Balancer hooks-up with your build-framework and testing-framework to do the actual work, whereas Server is primarily a data-repository that balancer talks to. 
     <image src="images/tlb-cycle.png" class="center-468"/>
-    Data from previous run(s) is used by balancer to partition/re-order the current run, and data from the current run is posted back so it can be used for future runs.
+    Data from previous run(s) is used by the balancer to partition/re-order the current run, and data from the current run is posted back so that it can be used for future runs.
     <p class="clob_end"/>
   </div>
 </div>

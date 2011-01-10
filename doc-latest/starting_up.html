@@ -27,7 +27,7 @@ description: Starting-up page of 'Test Load Balancer(TLB)' project(s).
         <p class="clob_end"/>
         In order for the splitter and orderer to work, historical data of test runs is used. TLB server or Go server can act as the repository that stores historical test run data (test times, test result etc) that can be populated while running tests, and fetched later(during the next build) to figure out what tests to run on a partition and what way to order them etc.
         <p class="clob_end"/>
-        TLB supports two kinds of server configurations out of the box. This means Balancer can run against two different kinds of servers. One of them is a comes packaged in TLB distribution called "TLB Server" and the other is a Continious-Integration/Release-Management server called "{% include go_link %} Server".
+        TLB supports two kinds of server configurations out of the box. This means Balancer can run against two different kinds of servers. One of them comes packaged in TLB distribution which is called "TLB Server" and the other is a Continious-Integration/Release-Management server called "{% include go_link %} Server".
         <hr/>
         <h5>TLB server[ {% include tlb_repo_link_link %}
           ]:</h5>
@@ -45,11 +45,11 @@ description: Starting-up page of 'Test Load Balancer(TLB)' project(s).
         <h5>Go™ server[ {% include go_link_link %}
           ]:</h5>
         <div class="scope section">
-          TLB has inbuilt support for Go, which means TLB can balance against Go just like it balances against the TLB-Server. Running against Go obviously means the tests are run as part of a Go-Task, which will run on a Go-Agent. Additionally, because TLB is environment aware, it can implicit a few things while running against Go server. It deduces equivallent of things like job-name<sup><a href="#4">[4]</a></sup>, version<sup><a href="#5">[5]</a></sup> and total partitions<sup><a href="#6">[6]</a></sup> etc from the way jobs are configured under stage and pipeline etc. To make TLB work with Go, TalkToService needs to use TalkToGoServer<sup><a href="#3">[3]</a></sup>. 
+          TLB has inbuilt support for Go, which means TLB can balance against Go just like it balances against the TLB-Server. Running against Go obviously means the tests are run as part of a Go-Task, which will run on a Go-Agent. Additionally, because TLB is environment aware, it can implicit a few things while running against Go server. It deduces equivallent of things like job-name<sup><a href="#4">[4]</a></sup>, version<sup><a href="#5">[5]</a></sup> and total partitions<sup><a href="#6">[6]</a></sup> etc from the way jobs are configured under stage and pipeline. To make TLB work with Go, TalkToService needs to use TalkToGoServer<sup><a href="#3">[3]</a></sup>. 
           <p class="clob_end"/>
           However, since the other side of balancing(server) in this case is not TLB, 'smoothened time balancing' for instance, would not be available in Go based setup. <!-- remove after versioning for gem -->
           <p class="clob_end"/>
-          In this case, you do not need to run a seperate process(TLB Server) to act as server, because Go-server plays that role. This does not need any change in the go-server or go-configuration apart from the naming convension your go-job-names need to follow, which is, they need to be of the form "&lt;my-job-name&gt;-X"(where X is a natural number 1..n, when you want to make n partitions), or "&lt;my-job-name&gt;-&lt;UUID&gt;"(where each such job will be made to execute only one partition).
+          In this case, you do not need to run a seperate process(TLB Server) to act as server, because Go-server plays that role. This does not need any change in the go-server or go-configuration apart from the naming convension your Go job-names need to follow. The convention is that they need to be of the form "&lt;my-job-name&gt;-X"(where X is a natural number 1..n, when you want to make n partitions), or "&lt;my-job-name&gt;-&lt;UUID&gt;"(where each such job will be made to execute only one partition).
           <p class="clob_end"/>
         </div>
       </div>
@@ -60,7 +60,7 @@ description: Starting-up page of 'Test Load Balancer(TLB)' project(s).
         <h4>Balancer:</h4>
       </label>
       <div class="section scope">
-        This is where the real action is.The balancer sits in your build script and build-related libraries and knows spliting and re-ordering tests and hooks up a listener with test-runner so it can publish test data as tests complete.
+        This is where the real action happens. The balancer sits in your build script and build-related libraries and knows spliting and re-ordering tests and hooks up a listener with test-runner so it can publish test data as tests complete.
         <p class="clob_end"/>
         <strong>Balancer contains:</strong>
         <ul class="scope section without_dots">
