@@ -1,0 +1,4 @@
+<ul class="scope section without_dots">
+   <li><strong><i>Splitter:</i></strong> Which takes care of splitting(making subsets of) the given list of tests using given criteria[ {% include balancer_configuration_link %} ].</li>
+   <li><strong><i>Orderer:</i></strong> Which takes care of re-ordering the tests based on a given criteria[ {% include orderer_configuration_link %} ].</li>
+</ul>

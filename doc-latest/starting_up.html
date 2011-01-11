@@ -29,8 +29,7 @@ description: Starting-up page of 'Test Load Balancer(TLB)' project(s).
         <p class="clob_end"/>
         TLB supports two kinds of server configurations out of the box. This means Balancer can run against two different kinds of servers. One of them comes packaged in TLB distribution which is called "TLB Server" and the other is a Continious-Integration/Release-Management server called "{% include go_link %} Server".
         <hr/>
-        <h5>TLB server[ {% include tlb_repo_link_link %}
-          ]:</h5>
+        <h5>TLB server[ {% include tlb_repo_link_link %} ]:</h5>
         <div class="scope section">
           TLB server comes packaged as an all-jar(a java archive that carries all dependencies that tlb requires). In order to start the server, you can use
           <code class="block">
@@ -42,8 +41,7 @@ description: Starting-up page of 'Test Load Balancer(TLB)' project(s).
           At this point, we have a TLB server all set to be consumed by Balancer partitions.
         </div>
         <hr/>
-        <h5>Go™ server[ {% include go_link_link %}
-          ]:</h5>
+        <h5>Go™ server[ {% include go_link_link %} ]:</h5>
         <div class="scope section">
           TLB has inbuilt support for Go, which means TLB can balance against Go just like it balances against the TLB-Server. Running against Go obviously means the tests are run as part of a Go-Task, which will run on a Go-Agent. Additionally, because TLB is environment aware, it can implicit a few things while running against Go server. It deduces equivallent of things like job-name<sup><a href="#4">[4]</a></sup>, version<sup><a href="#5">[5]</a></sup> and total partitions<sup><a href="#6">[6]</a></sup> etc from the way jobs are configured under stage and pipeline. To make TLB work with Go, TalkToService needs to use TalkToGoServer<sup><a href="#3">[3]</a></sup>. 
           <p class="clob_end"/>
@@ -63,12 +61,8 @@ description: Starting-up page of 'Test Load Balancer(TLB)' project(s).
         This is where the real action happens. The balancer sits in your build script and build-related libraries and knows spliting and re-ordering tests and hooks up a listener with test-runner so it can publish test data as tests complete.
         <p class="clob_end"/>
         <strong>Balancer contains:</strong>
-        <ul class="scope section without_dots">
-          <li><strong><i>Splitter:</i></strong> Which takes care of splitting(making subsets of) the given list of tests using given criteria[{% include balancer_configuration_link %}
-].</li>
-          <li><strong><i>Orderer:</i></strong> Which takes care of re-ordering the tests based on a given criteria[{% include orderer_configuration_link %}
-].</li>
-        </ul>
+        {% include tlb_components_description %} 
+        TLB exposes all of its configuration parameters (knobs to tweek its behaviour) through environment variables. 
         <p class="clob_end"/>
         For example, the Ant JUnit support is done using Ant FileSets for the JUnit task. This task obtains the historical test data from the TLB Server and uses it to split and order the tests.
         <p class="clob_end"/>
