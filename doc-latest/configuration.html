@@ -244,37 +244,22 @@ js: hookup_details_popup();
                 <strong>if</strong>
                 <code>not-set($TLB_APP) OR $TLB_APP == 'tlb.server.TlbServerInitializer'</code>
                 <hr/>
-                TLB server supports one smoothing factor value for all jobs that partition against it. This can be overridden using this environment variable. 
+                Smoothing in <i>TLB</i> context is the act of using computed test-run-times for balancing, which is the some weighted average of last reported test-run-time and historical test-run-time, so that balancing.
+                <p class="clob_end"/>
+                This prevents balancing in future run getting skewed because of a machine being slower than usual in the current run. <i>TLB</i> uses a well known algorithm called <i>Exponential Smoothing</i>.
                 <p class="clob_end"/>
                 <a href="http://en.wikipedia.org/wiki/Exponential_smoothing"/>http://en.wikipedia.org/wiki/Exponential_smoothing</a> explains this smoothing algorithm.
                 <p class="clob_end"/>
-                Setting <i>SMOOTHING_FACTOR</i> does not mean all balancing instances running against the server will be smoothened. Weather to use smoothing or not is decided by another environment variable on the partitioning process side named <i>USE_SMOOTHING</i>.
+                Setting <i>SMOOTHING_FACTOR</i> for a partition ensures data for the subject partition is posted after smoothing it with respect to historical data. This does not, in any way affect other partitions for the same run.
+                This means, partitions in the same run have the freedom to choose different smoothing factor values. 
                 <p class="clob_end"/>
-                TLB uses exponential smoothing and uses <i>1</i> as default value of <i>SMOOTHING_FACTOR(alpha)</i>. But <i>1</i> means NO-smoothing, so you almost always want to override this to some sensible value.
+                The way we see it being used is, if a machine is known to be slow intermitently, you set a low smoothing factor on that partitcular machine. Whenever one of load-balanced partitions is run on that slow machine, it will get the locally assigned value of smoothing factor, hence will smoothen more aggresively compared to others.
+                <p class="clob_end"/>
+                TLB uses <i>1</i> as default value of <i>SMOOTHING_FACTOR(alpha)</i>. But <i>1</i> means NO-smoothing, so you almost always want to override this to some sensible value. We have chosen <i>i</i> as default because we want <i>TLB</i> to have as non-intrusive defaults as possible.
                 <hr/>
-                <strong>Type: </strong> A real number (0 < i <= 1) [Lower the value more is the weightage given to historical data]
+                <strong>Type: </strong> A real number (0 < i <= 1) [Lower the value, more is the weightage given to historical data, hence more aggresive the smoothing is]
                 <hr/>
                 <strong>Example:</strong> 0.5 (means equal weightage to historical data and newly-reported data)
-              </div>
-            </td>
-            <td>{% include not-applicable %}</td>
-            <td>{% include not-applicable %}</td>
-            <td>{% include applicable %}</td>
-          </tr>
-          <tr>
-            <td>
-              <a href="#" class="variable_desc_link">USE_SMOOTHING</a>
-              <div class="hidden popup">
-                {% include if_on_balancer_side %}                
-                Balancer instance(the process that actually runs the partitioned suite) can set this variable to indicate weather to use smoothing or not. 
-                <p class="clob_end"/>
-                It can choose to use smoothing or not, but can not dictate the smoothing factor(because it is set on the server side using <i>SMOOTHING_FACTOR</i>).
-                <p class="clob_end"/>
-                Defaults to <i>false</i>.
-                <hr/>
-                <strong>Type: </strong> Is interpreted as a boolean, must be “true” or “false”.
-                <hr/>
-                <strong>Example:</strong> true
               </div>
             </td>
             <td>{% include applicable %}</td>
