@@ -11,6 +11,8 @@ function replace_@name@ {
 start_matcher=`replace_name $embedding_start_tag '(.+)'`
 end_matcher=`replace_name $embedding_end_tag '(.+)'`
 tmp_snippet_file=tmp/snippet
+tmp_snippet_body=tmp/snippet_body
+body_raw=tmp/snippet_body_raw
 
 existence_matcher=`replace_@name@ $embedding_start_tag ''`
 
@@ -19,11 +21,18 @@ for src_file in `grep -rlF $existence_matcher $samples_dir`; do
         cat $src_file | awk -v nth=$i -v start="$start_matcher" -v end="$end_matcher" -f util/record_snippet.awk > $tmp_snippet_file
         if [ -s $tmp_snippet_file ]; then
             name=`cat $tmp_snippet_file | awk 'NR < 2'`
-            text=`cat $tmp_snippet_file | awk 'NR > 1'`
+            text=`cat $tmp_snippet_file | awk 'NR > 1' > $body_raw`
+	    echo $snip_pre > $tmp_snippet_body
+	    if [ $escape_xml -eq 1 ]; then
+		cat $body_raw | sed -e 's#<#\&lt;#g' | sed -e 's#>#\&gt;#g' >> $tmp_snippet_body
+	    else
+		cat $body_raw >> $tmp_snippet_body
+	    fi
+	    echo $snip_post >> $tmp_snippet_body
             snip_start=`replace_name $embedding_start_tag $name`
             snip_end=`replace_name $embedding_end_tag $name`
             cp $snippets_file tmp/snippets_file
-            cat tmp/snippets_file | awk -v "snippet=`cat $tmp_snippet_file`" -v "start=$snip_start" -v "end=$snip_end" -f util/embed_snippet.awk > $snippets_file
+            cat tmp/snippets_file | awk -v "snippet=`cat $tmp_snippet_body`" -v "start=$snip_start" -v "end=$snip_end" -f util/embed_snippet.awk > $snippets_file
         else
             break
         fi

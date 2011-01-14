@@ -4,16 +4,94 @@ title: Usage examples
 keywords: tlb, test-load-balancer, how to use, usage examples, snippets, tlb examples
 description: Example snippets demonstrating how to tlb-enable your project
 ---
-<h3>Examples:</h3> 
-<div class="scope section"> 
-  <div>we need to think about how to structure this</div>
+<h3>Quick Start</h3>
+<div class="scope section">
+  In order to start using TLB in your code base, here are the steps that you need to follow.
   <p class="clob_end"/>
-  <div class="snippet">
-    <code>
-      <!--TLB-DOC-START@rspec1-rake-task@-->
-      this will be replaced by actual content
-      <!--TLB-DOC-END@rspec1-rake-task@-->
-    </code>
-  </div>
-  <p class="clob_end"/>
-</div> 
+  <ol>
+    <li>Download TLB from our <a href="#">Download page</a> on Google code
+    </li>
+    <li>Start the TLB server using the following command
+      <div class="snippet">
+	<code>$${TLB_FOLDER}/start_server.sh</code>
+      </div>
+      Skip this step if you are using the Go server as your test data repository. You can read more about the {% include config_link %} involved to get Go server to be a TLB server.
+    </li>
+    <li>Copy the build task into your build script based on what platform/framework you are using.
+      <ul>
+	<li>Junit on Ant
+	  <div class="snippet">
+	    <!--TLB-DOC-START@junit-ant-task@-->
+<pre>
+    &lt;!-- Change the 'load.balanced.classpath' so that it is your test classpath along with the TLB jar and its dependencies.
+         You can change the fileset's includes pattern to include your tests. --&gt;
+    &lt;target name="test.balanced" depends="init-tlb, compile, compile-tests"&gt;
+        &lt;typedef name="load-balanced-fileset" classname="com.github.tlb.ant.LoadBalancedFileSet" classpathref="load.balanced.classpath"/&gt;
+        &lt;junit failureproperty="test.failure" printsummary="yes" haltonfailure="true" haltonerror="true"
+               showoutput="true" fork="true"&gt;
+            &lt;classpath refid="load.balanced.classpath"/&gt;
+            &lt;batchtest todir="${reports.dir}"&gt;
+                &lt;load-balanced-fileset dir="${test-classes.dir}" includes="**/*Test.class"/&gt;
+                &lt;formatter classname="com.github.tlb.ant.JunitDataRecorder"/&gt;
+                &lt;formatter type="plain"/&gt;
+            &lt;/batchtest&gt;
+        &lt;/junit&gt;
+    &lt;/target&gt;
+</pre>
+	    <!--TLB-DOC-END@junit-ant-task@-->
+	  </div>
+	</li>
+        <li>RSpec 1.x on Rake
+	  <div class="snippet">
+	    <!--TLB-DOC-START@rspec1-rake-task@-->
+<pre>
+#Use the task :bal to run balanced test suite. You can change the FileSet to match whatever tests you need to run.
+require 'rubygems'
+gem 'tlb-rspec1'
+require 'tlb'
+require File.join('tlb/spec_task')
+
+Tlb::SpecTask.new(:balanced_specs) do |t|
+  t.spec_files = FileList['spec/**/*_spec.rb']
+  t.spec_opts &lt;&lt; "--format progress"
+end
+
+load 'tasks/tlb.rake'
+desc "run specs load-balanced(based on environment variables)"
+task :bal =&gt; ['tlb:start', :balanced_specs]
+</pre>
+	    <!--TLB-DOC-END@rspec1-rake-task@-->
+	  </div>
+	</li>
+<li>RSpec 2.x on Rake
+<div class="snippet">
+	    <!--TLB-DOC-START@rspec2-rake-task@-->
+<pre>
+#Use the task :bal to run balanced test suite. You can change the t.pattern to match whatever tests you need to run.
+require 'rake'
+require 'rspec/core/rake_task'
+
+RSpec::Core::RakeTask.new(:spec) do |t|
+  t.pattern = 'spec/**/*_spec.rb'
+end
+
+require 'rubygems'
+gem 'tlb-rspec2'
+require 'tlb'
+require 'tlb/rspec/spec_task'
+
+Tlb::RSpec::SpecTask.new(:run_balanced) do |t|
+  t.pattern = 'spec/**/*_spec.rb'
+end
+
+load 'tasks/tlb.rake'
+
+task :bal =&gt; ['tlb:start', :run_balanced]
+</pre>
+	    <!--TLB-DOC-END@rspec2-rake-task@-->
+</div>
+</li>
+      </ul>
+    </li>
+  </ol>
+</div>

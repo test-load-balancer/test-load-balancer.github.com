@@ -1,6 +1,5 @@
 BEGIN { 
     verbatim = 1
-    embedded = 0
 }
 
 $0 ~ end { 
@@ -10,14 +9,12 @@ $0 ~ end {
 {
     if ( verbatim == 1 ) { 
         print $LINE 
-    } else if ( embedded == 0 ) {
-        print snippet
-        embedded = 1
-    }
+    } 
 }
 
 $0 ~ start { 
     verbatim = 0
+    print snippet
 }
 
 END {

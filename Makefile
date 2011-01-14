@@ -10,6 +10,10 @@ export max_snippets_per_source_file=10
 export embedding_start_tag=TLB-DOC-START@_name_@
 export embedding_end_tag=TLB-DOC-END@_name_@
 
+export snip_pre=<pre>
+export snip_post=</pre>
+export escape_xml=1
+
 server:
 	jekyll --server
 
