@@ -1,63 +1,62 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
-<head>
-  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-
-  <meta name="description" content="{% if page.description %}{{ page.description }}{% else %}{{ site.description }}{% endif %}" />
-  <meta name="keywords" content="{% if page.keywords %}{{ page.keywords }}{% else %}{{ site.keywords }}{% endif %}" />
-  <meta name="robots" content="noodp,noydir" />
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
   
-  <title>{{ page.title }} - TLB</title>
-
-  <link href="{{ site.url }}/atom.xml" rel="alternate" title="{{ site.title }}" type="application/atom+xml" />
-  <!-- Framework CSS -->
-  <link rel="stylesheet" href="/stylesheets/blueprint/screen.css" type="text/css" media="screen, projection"/>
-  <link rel="stylesheet" href="/stylesheets/blueprint/print.css" type="text/css" media="print"/>
-  <!--[if lt IE 8]><link rel="stylesheet" href="/stylesheets/blueprint/ie.css" type="text/css" media="screen, projection"><![endif]-->
-
-  <!-- Import fancy-type plugin for the sample page.
-  <link rel="stylesheet" href="/stylesheets/blueprint/plugins/fancy-type/screen.css" type="text/css" media="screen, projection">
-  -->
-
-  <!-- -->
-  <link rel="stylesheet" href="/stylesheets/site.css" type="text/css" media="screen, projection"/>
-  <link rel="stylesheet" href="/stylesheets/diQuery-collapsiblePanel.css" type="text/css" media="screen, projection"/>
-  <!--GOOGLE-CDN-->
-  <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.7/themes/overcast/jquery-ui.css" type="text/css" media="screen"/>
-  <!--GOOGLE-CDN-END-->
-  <!--LOCAL-DEV--><!--
-  <link rel="stylesheet" href="/tmp/css/overcast/jquery-ui-1.8.7.custom.css" type="text/css" media="screen"/>
-  --><!--LOCAL-DEV-END-->
-</head>
-<body>
-  <div class="container">  
-    {% include header %}
-    <hr/>
-    <div class="notice error">
-      <strong>Work in progress:</strong> We are moving our wiki to this website and adding/restructuring documentation text. Don't worry about the broken links as the website is not complete yet. Please visit this page again in a few days to see the finished version.
+    <meta name="description" content="{% if page.description %}{{ page.description }}{% else %}{{ site.description }}{% endif %}" />
+    <meta name="keywords" content="{% if page.keywords %}{{ page.keywords }}{% else %}{{ site.keywords }}{% endif %}" />
+    <meta name="robots" content="noodp,noydir" />
+    
+    <title>{{ page.title }} - TLB</title>
+  
+    <!-- Framework CSS -->
+    <link rel="stylesheet" href="/stylesheets/blueprint/screen.css" type="text/css" media="screen, projection"/>
+    <link rel="stylesheet" href="/stylesheets/blueprint/print.css" type="text/css" media="print"/>
+    <!--[if lt IE 8]><link rel="stylesheet" href="/stylesheets/blueprint/ie.css" type="text/css" media="screen, projection"><![endif]-->
+  
+    <!-- Import fancy-type plugin for the sample page.
+    <link rel="stylesheet" href="/stylesheets/blueprint/plugins/fancy-type/screen.css" type="text/css" media="screen, projection">
+    -->
+  
+    <!-- -->
+    <link rel="stylesheet" href="/stylesheets/site.css" type="text/css" media="screen, projection"/>
+    <link rel="stylesheet" href="/stylesheets/diQuery-collapsiblePanel.css" type="text/css" media="screen, projection"/>
+    <!--GOOGLE-CDN-->
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.7/themes/overcast/jquery-ui.css" type="text/css" media="screen"/>
+    <!--GOOGLE-CDN-END-->
+    <!--LOCAL-DEV--><!--
+    <link rel="stylesheet" href="/tmp/css/overcast/jquery-ui-1.8.7.custom.css" type="text/css" media="screen"/>
+    --><!--LOCAL-DEV-END-->
+  </head>
+  <body>
+    <div class="container">  
+      {% include header %}
+      <hr/>
+      <div class="notice error">
+        <strong>Work in progress:</strong> We are moving our wiki to this website and adding/restructuring documentation text. Don't worry about the broken links as the website is not complete yet. Please visit this page again in a few days to see the finished version.
+      </div>
+      {% include no_javascript_warning %}
+  
+      {{ content }}
+  
+      {% include footer %}
     </div>
-    {% include no_javascript_warning %}
-
-    {{ content }}
-
-    {% include footer %}
-  </div>
-
-  {% include analytics %}
-</body>
-<!--GOOGLE-CDN-->
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js" type="text/javascript"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.7/jquery-ui.min.js" type="text/javascript"></script>
-<!--GOOGLE-CDN-END-->
-<!--LOCAL-DEV--><!--
-<script src="/tmp/js/jquery-1.4.4.min.js" type="text/javascript"></script>
-<script src="/tmp/js/jquery-ui-1.8.7.custom.min.js" type="text/javascript"></script>
---><!--LOCAL-DEV-END-->
-<script src="/javascripts/application.js" type="text/javascript"></script>
-<script src="/javascripts/diQuery-collapsiblePanel.js" type="text/javascript"></script>
-<script type="text/javascript">
-  jQuery(function() {
-    {{ page.js }}
-  });
-</script>
+  
+    {% include analytics %}
+    <!--GOOGLE-CDN-->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js" type="text/javascript"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.7/jquery-ui.min.js" type="text/javascript"></script>
+    <!--GOOGLE-CDN-END-->
+    <!--LOCAL-DEV--><!--
+    <script src="/tmp/js/jquery-1.4.4.min.js" type="text/javascript"></script>
+    <script src="/tmp/js/jquery-ui-1.8.7.custom.min.js" type="text/javascript"></script>
+    --><!--LOCAL-DEV-END-->
+    <script src="/javascripts/application.js" type="text/javascript"></script>
+    <script src="/javascripts/diQuery-collapsiblePanel.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      jQuery(function() {
+        {{ page.js }}
+      });
+    </script>
+  </body>
 </html>
