@@ -122,3 +122,7 @@ div.column {
 .team_member {
      float: left;
 }
+
+ul.wide-items li { 
+    margin: .3em 0;
+}

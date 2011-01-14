@@ -1,0 +1,103 @@
+---
+layout: default
+title: Starting-up with TLB
+keywords: tlb, test-load-balancer, kick-start, starting-up, setup
+description: Starting-up page of 'Test Load Balancer(TLB)' project(s).
+---
+
+<hr/>
+<div>
+  <h3>Starting-up with TLB</h3>
+  <div>
+    <div class="scope section">
+    {% include components_of_tlb %}
+    <div class="notice warning">
+      While the documentation is good for geting a high level picture of what TLB is all about, we believe the {% include sample_projects_link %} is the best way to cover the details, as it gives you a example-project to play around with. You can tune the variables and observe its effect on balancing firsthand.
+    </div>
+    </div>
+    <hr/>
+    <div>
+      <label id="server">
+        <h4>Server:</h4>
+      </label>
+      <div class="scope section">
+        Tlb Server is a repository of the test run data. Balancer obtains historical data from the server and also posts new data for runs it performs(so the updated data is available for future builds).
+        <p class="clob_end"/>
+        Setting up Server talks about the how a server instance can be chosen & configured. <!--You may also want to, take a look at some Typical Server Example Setups.-->
+        <p class="clob_end"/>
+        In order for the splitter and orderer to work, historical data of test runs is used. TLB server or Go server can act as the repository that stores historical test run data (test times, test result etc) that can be populated while running tests, and fetched later(during the next build) to figure out what tests to run on a partition and what way to order them etc.
+        <p class="clob_end"/>
+        TLB supports two kinds of server configurations out of the box. This means Balancer can run against two different kinds of servers. One of them comes packaged in TLB distribution which is called "TLB Server" and the other is a Continious-Integration/Release-Management server called "{% include go_link %} Server".
+        <hr/>
+        <h5>TLB server[ {% include tlb_repo_link_link %} ]:</h5>
+        <div class="scope section">
+          TLB server comes packaged as an all-jar(a java archive that carries all dependencies that tlb requires). In order to start the server, you can use
+          <code class="block">
+            $ java -jar tlb-all-gXXXX.jar
+          </code>(XXXX here needs to be substituted with the corresponding version/revision of jar used). 
+          <p class="clob_end"/>
+          When started this way, TLB server binds to port<sup><a href="#1">[1]</a></sup> 7019. Once the server is up, partitions that are to be balanced(clients/balancer instances), can be pointed to it by setting url on balancer side<sup><a href="#2">[2]</a></sup> to the base url of the tlb server. Balancer works using an abstraction called TalkToService, and TalkToTlbServer<sup><a href="#3">[3]</a></sup> is just an implementation of this contract that comes packaged in TLB.
+          <p class="clob_end"/>
+          At this point, we have a TLB server all set to be consumed by Balancer partitions.
+        </div>
+        <hr/>
+        <h5>Go™ server[ {% include go_link_link %} ]:</h5>
+        <div class="scope section">
+          TLB has inbuilt support for Go, which means TLB can balance against Go just like it balances against the TLB-Server. Running against Go obviously means the tests are run as part of a Go-Task, which will run on a Go-Agent. Additionally, because TLB is environment aware, it can implicit a few things while running against Go server. It deduces equivallent of things like job-name<sup><a href="#4">[4]</a></sup>, version<sup><a href="#5">[5]</a></sup> and total partitions<sup><a href="#6">[6]</a></sup> etc from the way jobs are configured under stage and pipeline. To make TLB work with Go, TalkToService needs to use TalkToGoServer<sup><a href="#3">[3]</a></sup>. 
+          <p class="clob_end"/>
+          However, since the other side of balancing(server) in this case is not TLB, 'smoothened time balancing' for instance, would not be available in Go based setup. <!-- remove after versioning for gem -->
+          <p class="clob_end"/>
+          In this case, you do not need to run a seperate process(TLB Server) to act as server, because Go-server plays that role. This does not need any change in the go-server or go-configuration apart from the naming convension your Go job-names need to follow. The convention is that they need to be of the form "&lt;my-job-name&gt;-X"(where X is a natural number 1..n, when you want to make n partitions), or "&lt;my-job-name&gt;-&lt;UUID&gt;"(where each such job will be made to execute only one partition).
+          <p class="clob_end"/>
+        </div>
+      </div>
+    </div>
+    <hr/>
+    <div>
+      <label id="balancer">
+        <h4>Balancer:</h4>
+      </label>
+      <div class="section scope">
+        This is where the real action happens. The balancer sits in your build script and build-related libraries and knows spliting and re-ordering tests and hooks up a listener with test-runner so it can publish test data as tests complete.
+        <p class="clob_end"/>
+        <strong>Balancer contains:</strong>
+        {% include tlb_components_description %} 
+        TLB exposes all of its configuration parameters (knobs to tweek its behaviour) through environment variables. 
+        <p class="clob_end"/>
+        For example, the Ant JUnit support is done using Ant FileSets for the JUnit task. This task obtains the historical test data from the TLB Server and uses it to split and order the tests.
+        <p class="clob_end"/>
+        For all the configurable environment variables and discription of possible values, please refer {% include config_vars_link %}
+        .
+        Please take a look at {% include balancer_configuration_link %} 
+        and {% include orderer_configuration_link %} 
+        to understand how Splitters and Orderers can be chosen and configured.
+      </div>
+    </div>
+</div>
+
+<hr/>
+<ul class="footnotes scope section without_dots">
+  <li>
+    <sup><label id="1">1</label></sup> can be overridden, read TLB_PORT in {% include config_vars_link %}
+  </li>
+  <li>
+    <sup><label id="2">2</label></sup> read TLB_URL in {% include config_vars_link %}
+  </li>
+  <li>
+    <sup><label id="3">3</label></sup> read TALK_TO_SERVICE in 
+    {% include config_vars_link %} 
+    should be set to the fully qualified name of the implementation
+  </li>
+  <li>
+    <sup><label id="4">4</label></sup> read TLB_JOB_NAME in {% include config_vars_link %}
+  </li>
+  <li>
+    <sup><label id="5">5</label></sup> read JOB_VERSION in {% include config_vars_link %}
+  </li>
+  <li>
+    <sup><label id="6">6</label></sup> read TOTAL_PARTITIONS in {% include config_vars_link %}
+  </li>
+  <li>
+    <sup><label id="7">7</label></sup> read PARTITION_NUMBER in {% include config_vars_link %}
+  </li>
+</ul>
