@@ -3,6 +3,7 @@ layout: default
 title: Usage examples
 keywords: tlb, test-load-balancer, how to use, usage examples, snippets, tlb examples
 description: Example snippets demonstrating how to tlb-enable your project
+js: hookup_collapsible_pane();
 ---
 <h3>Quick Start</h3>
 <div class="scope section">
@@ -18,9 +19,7 @@ description: Example snippets demonstrating how to tlb-enable your project
       Skip this step if you are using the Go server as your test data repository. You can read more about the {% include config_link %} involved to get Go server to be a TLB server.
     </li>
     <li>Copy the build task into your build script based on what platform/framework you are using.
-      <ul>
-	<li>Junit on Ant
-	  <div class="snippet">
+	<div class="collapsibleContainer" title="Junit on Ant">
 	    <!--TLB-DOC-START@junit-ant-task@-->
 <pre>
     &lt;!-- Change the 'load.balanced.classpath' so that it is your test classpath along with the TLB jar and its dependencies.
@@ -39,10 +38,8 @@ description: Example snippets demonstrating how to tlb-enable your project
     &lt;/target&gt;
 </pre>
 	    <!--TLB-DOC-END@junit-ant-task@-->
-	  </div>
-	</li>
-        <li>RSpec 1.x on Rake
-	  <div class="snippet">
+	</div>
+        <div class="collapsibleContainer" title="RSpec 1.x on Rake">
 	    <!--TLB-DOC-START@rspec1-rake-task@-->
 <pre>
 #Use the task :bal to run balanced test suite. You can change the FileSet to match whatever tests you need to run.
@@ -61,10 +58,8 @@ desc "run specs load-balanced(based on environment variables)"
 task :bal =&gt; ['tlb:start', :balanced_specs]
 </pre>
 	    <!--TLB-DOC-END@rspec1-rake-task@-->
-	  </div>
-	</li>
-<li>RSpec 2.x on Rake
-<div class="snippet">
+	</div>
+	<div class="collapsibleContainer" title="RSpec 2.x on Rake">
 	    <!--TLB-DOC-START@rspec2-rake-task@-->
 <pre>
 #Use the task :bal to run balanced test suite. You can change the t.pattern to match whatever tests you need to run.
@@ -90,8 +85,9 @@ task :bal =&gt; ['tlb:start', :run_balanced]
 </pre>
 	    <!--TLB-DOC-END@rspec2-rake-task@-->
 </div>
-</li>
-      </ul>
     </li>
+    <li>Run the build task that you just added with the TLB environment variables already populated. You can also use the run_* script which suits your tool/platform that is bundled in the TLB distribution.
+    </li>
+    <li>Kick back and relax as your build time starts going down! :)</li>
   </ol>
 </div>

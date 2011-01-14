@@ -9,3 +9,8 @@ function hookup_details_popup() {
     });
 }
 
+function hookup_collapsible_pane() {
+  jQuery(document).ready(function() {
+    jQuery(".collapsibleContainer").collapsiblePanel();
+  });
+}
