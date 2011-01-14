@@ -126,3 +126,7 @@ div.column {
 ul.wide-items li { 
     margin: .3em 0;
 }
+
+.snippet {
+    padding: .3em;
+}

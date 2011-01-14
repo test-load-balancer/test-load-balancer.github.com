@@ -10,22 +10,24 @@ js: hookup_collapsible_pane();
   In order to start using TLB in your code base, here are the steps that you need to follow.
   <p class="clob_end"/>
   <ol>
-    <li>Download TLB from our <a href="#">Download page</a> on Google code
+    <li>Download TLB from our <a href="http://code.google.com/p/tlb/downloads/list" target="blank">Download page</a> on Google code
     </li>
-    <li>Start the TLB server using the following command
+    <li>Start the TLB server using the start-server script present in the TLB distribution. Something like:
       <div class="snippet">
-	<code>$${TLB_FOLDER}/start_server.sh</code>
+	<code class="block">$ ${TLB_FOLDER}/start_server.sh</code>
       </div>
-      Skip this step if you are using the Go server as your test data repository. You can read more about the {% include config_link %} involved to get Go server to be a TLB server.
+      If you wish to use the {% include go_link %} support, please go through the {% include startup_server_link %} documentation to see how it can be done.
     </li>
     <li>Copy the build task into your build script based on what platform/framework you are using.
 	<div class="collapsibleContainer" title="Junit on Ant">
 	    <!--TLB-DOC-START@junit-ant-task@-->
 <pre>
-    &lt;!-- Change the 'load.balanced.classpath' so that it is your test classpath along with the TLB jar and its dependencies.
-         You can change the fileset's includes pattern to include your tests. --&gt;
-    &lt;target name="test.balanced" depends="init-tlb, compile, compile-tests"&gt;
-        &lt;typedef name="load-balanced-fileset" classname="com.github.tlb.ant.LoadBalancedFileSet" classpathref="load.balanced.classpath"/&gt;
+    &lt;!-- Change the 'load.balanced.classpath' so that it is your test classpath along with the TLB jar and
+    its dependencies. You can also tweak the 'depends' to fix the task dependencies of your build.
+     You can change the fileset's includes pattern to include your tests. --&gt;
+    &lt;target name="test.balanced" depends="compile, compile-tests"&gt;
+        &lt;typedef name="load-balanced-fileset" classname="com.github.tlb.ant.LoadBalancedFileSet"
+                 classpathref="load.balanced.classpath"/&gt;
         &lt;junit failureproperty="test.failure" printsummary="yes" haltonfailure="true" haltonerror="true"
                showoutput="true" fork="true"&gt;
             &lt;classpath refid="load.balanced.classpath"/&gt;
@@ -42,7 +44,8 @@ js: hookup_collapsible_pane();
         <div class="collapsibleContainer" title="RSpec 1.x on Rake">
 	    <!--TLB-DOC-START@rspec1-rake-task@-->
 <pre>
-#Use the task :bal to run balanced test suite. You can change the FileSet to match whatever tests you need to run.
+#Use the task :bal to run balanced test suite. You can change the FileSet to match whatever tests you need
+#to run.
 require 'rubygems'
 gem 'tlb-rspec1'
 require 'tlb'
@@ -62,7 +65,8 @@ task :bal =&gt; ['tlb:start', :balanced_specs]
 	<div class="collapsibleContainer" title="RSpec 2.x on Rake">
 	    <!--TLB-DOC-START@rspec2-rake-task@-->
 <pre>
-#Use the task :bal to run balanced test suite. You can change the t.pattern to match whatever tests you need to run.
+#Use the task :bal to run balanced test suite. You can change the t.pattern to match whatever tests you need
+#to run.
 require 'rake'
 require 'rspec/core/rake_task'
 
@@ -86,8 +90,10 @@ task :bal =&gt; ['tlb:start', :run_balanced]
 	    <!--TLB-DOC-END@rspec2-rake-task@-->
 </div>
     </li>
-    <li>Run the build task that you just added with the TLB environment variables already populated. You can also use the run_* script which suits your tool/platform that is bundled in the TLB distribution.
+    <li>Use the "run_*" script present in the TLB distribution that is appropriate for your tool/platform. 
+      That starts runs the above task with all the environment variables set with the right defaults. You can refer to {% include config_link %} for 
+      a list of all the variables that you can configure and tweak in TLB.
     </li>
-    <li>Kick back and relax as your build time starts going down! :)</li>
+    <li>Sit back and relax as your build time starts going down! :)</li>
   </ol>
 </div>
