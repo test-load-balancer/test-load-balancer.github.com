@@ -130,3 +130,7 @@ ul.wide-items li {
 .snippet {
     padding: .3em;
 }
+
+div.collapsibleContainer {
+    margin: 1.5em;
+}
