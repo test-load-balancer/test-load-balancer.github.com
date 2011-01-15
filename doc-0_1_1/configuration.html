@@ -1,9 +1,9 @@
 ---
 layout: default
-title: Home
+title: Configuration
 keywords: tlb, test-load-balancer
 description: Home page of 'Test Load Balancer(TLB)' project(s).
-js: hookup_details_popup();
+js: Popup.hookup_envvar_details_popup(); Popup.hookup_titled_popup('a.variable_interpolation', 'Variable Interpolation');
 ---
  
   <hr/>
@@ -16,6 +16,8 @@ js: hookup_details_popup();
       TLB is a completely non-gui/non-cli/no-config-file kinda tool. Its very configurable(lots of knobs to turn) and makes it very easy for you to write your own implementations and plug-em-in if you want to. 
       <p class="clob_end"/>
       TLB uses <i>Environment Variables</i> for every single configurable parameter it supports/exposes. Usually when configuring something thats an algorithm, we use fully-qualified-java-class-name of the class(which makes it easy for you to write alternate implementations, dump em in the classpath and have TLB load em with just an environment variable value flip).
+      <p class="clob_end"/>
+      {% include recursive_variables %}
       <p class="clob_end"/>
       <table class="with_row_deviders">
         <thead>

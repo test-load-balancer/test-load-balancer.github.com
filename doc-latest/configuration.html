@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Home
+title: Configuration
 keywords: tlb, test-load-balancer
 description: Home page of 'Test Load Balancer(TLB)' project(s).
 js: Popup.hookup_envvar_details_popup(); Popup.hookup_titled_popup('a.variable_interpolation', 'Variable Interpolation');
@@ -244,7 +244,7 @@ js: Popup.hookup_envvar_details_popup(); Popup.hookup_titled_popup('a.variable_i
               <a href="#" class="variable_desc_link">SMOOTHING_FACTOR</a>
               <div class="hidden popup">
                 <strong>if</strong>
-                <code>not-set($TLB_APP) OR $TLB_APP == 'tlb.server.TlbServerInitializer'</code>
+                <code>not-set($TLB_APP) OR $TLB_APP == 'tlb.balancer.BalancerInitializer'</code>
                 <hr/>
                 Smoothing in <i>TLB</i> context is the act of using computed test-run-times for balancing, which is the some weighted average of last reported test-run-time and historical test-run-time, so that balancing.
                 <p class="clob_end"/>

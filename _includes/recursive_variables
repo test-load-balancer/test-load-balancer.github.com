@@ -4,7 +4,7 @@
   It is often convinient to define <i>TLB</i> variables in terms of other environment variables set by execution environment. For instance, if the CI server promises to set <i>BUILD_NUMBER</i> and <i>PROJECT_NAME</i>, it may make sense to define <u>TLB_JOB_NAME</u> as 'ant-${PROJECT_NAME}' or '${PROJECT_NAME}-test' and <u>JOB_VERSION</u> as '${PROJECT_NAME}-${BUILD_NUMBER}' etc.
   <p class="clob_end"/>
   <div>
-      Please check <a href="/variable_substitution.html" class="variable_interpolation"><strong>this detailed example</strong></a> to get an in-depth understanding of variable interpolation feature.
+      Please check <a class="variable_interpolation"><strong>this detailed example</strong></a> to get an in-depth understanding of variable interpolation feature.
     <div class="hidden popup">
       TLB supports environment variables that are actually templates that other environment variables can fill. When a variable refers to another environment variable, it is recursively interpolated until there are no more templates left to interpolate. The example below attempts to explain how this feature can be used.
       <hr/>
