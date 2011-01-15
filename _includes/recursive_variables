@@ -1,0 +1,45 @@
+<div class="notice message">
+  <i>TLB</i> allows variable definition in terms of other variables. 
+  <p class="clob_end"/>
+  It is often convinient to define <i>TLB</i> variables in terms of other environment variables set by execution environment. For instance, if the CI server promises to set <i>BUILD_NUMBER</i> and <i>PROJECT_NAME</i>, it may make sense to define <u>TLB_JOB_NAME</u> as 'ant-${PROJECT_NAME}' or '${PROJECT_NAME}-test' and <u>JOB_VERSION</u> as '${PROJECT_NAME}-${BUILD_NUMBER}' etc.
+  <p class="clob_end"/>
+  <div>
+      Please check <a href="/variable_substitution.html" class="variable_interpolation"><strong>this detailed example</strong></a> to get an in-depth understanding of variable interpolation feature.
+    <div class="hidden popup">
+      TLB supports environment variables that are actually templates that other environment variables can fill. When a variable refers to another environment variable, it is recursively interpolated until there are no more templates left to interpolate. The example below attempts to explain how this feature can be used.
+      <hr/>
+      <div class="column">
+        <strong>For the following variable values:</strong>
+        <code class="block">
+          <pre>
+foo='bar'
+bar='oo'
+baz='baz-${foo}'
+quux='baz-${f${bar}}'
+complex='${quux}|${q${bang}}'
+bang='u${boom}'
+boom='u${axe}'
+axe='${X}'
+X='x'
+          </pre>
+        </code>
+      </div>
+      <div class="column">
+        <strong>TLB will interpret the final values(that it uses) as:</strong>
+        <code class="block">
+          <pre>
+foo='bar'
+bar='oo'
+baz='baz-bar'
+quux='baz-bar'
+complex='baz-bar|baz-bar'
+bang='uux'
+boom='ux'
+axe='x'
+X='x'
+          </pre>
+        </code>
+      </div>
+    </div>
+  </div> 
+</div>

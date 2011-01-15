@@ -1,13 +1,34 @@
-function hookup_details_popup() {
-    jQuery('a.variable_desc_link').each(function() {
-        var title = "Environment variable '" + jQuery(this).text() + "'";
-        var popup_body = jQuery(this).parent().find('.popup');
-        jQuery(this).click(function() {
-          popup_body.dialog({width: "800px", title: title, draggable: true});
-          return false;
-        });
+Popup = (function() {
+  function wire_popup(link, title_fn) {
+    var popup_body = link.parent().find('.popup');
+    console.log(link.parents());
+    jQuery(link).click(function() {
+      console.log(popup_body);
+      popup_body.dialog({width: "800px", title: title_fn(link), draggable: true});
+      return false;
     });
-}
+  }
+
+
+  function general_popup(link_selector, title_fn) {
+    jQuery(link_selector).each(function() {
+      wire_popup(jQuery(this), title_fn);
+    });
+  }
+
+  return {
+    hookup_envvar_details_popup: function() {
+      general_popup('a.variable_desc_link', function(link) {
+        return "Environment variable '" + link.text() + "'";
+      });
+    },
+    hookup_titled_popup: function(link_selector, title) {
+      general_popup(link_selector, function() {
+        return title;
+      });
+    }
+  };
+})();
 
 function hookup_collapsible_pane() {
   jQuery(document).ready(function() {

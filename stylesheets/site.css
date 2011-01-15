@@ -38,10 +38,10 @@ li {
 }
 
 div.notice { 
-     padding: 1em 2em;
-    -moz-border-radius: 1.5em;
-    -webkit-border-radius: 1.5em;
-    border-radius: 1.5em;
+     padding: .7em 1em;
+    -moz-border-radius: 1em;
+    -webkit-border-radius: 1em;
+    border-radius: 1em;
     font-style: italics;
 }
 
@@ -115,7 +115,7 @@ table.with_row_deviders tr td {
 }
 
 div.column { 
-     width: 49%;
+     width: 40%;
      float: left;
 }
 
