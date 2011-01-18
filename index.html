@@ -18,13 +18,19 @@ description: Home page of 'Test Load Balancer(TLB)' project(s).
   <div class="scope section">
     <p/>
     {% include components_of_tlb %}
-    Balancer hooks-up with your build-framework and testing-framework to do the actual work, whereas Server is primarily a data-repository that balancer talks to. 
+    Balancer hooks-up with your build-framework and testing-framework to do the actual work, whereas Server is primarily a data-repository that balancer talks to. Data from previous run(s) is used by the balancer to partition/re-order the current run, and data from the current run is posted back so that it can be used for future runs.
+    <p class="clob_end"/> 
     <image src="images/tlb-cycle.png" class="center-468"/>
-    Data from previous run(s) is used by the balancer to partition/re-order the current run, and data from the current run is posted back so that it can be used for future runs.
-    <p class="clob_end"/>
   </div>
 </div>
 <hr/>
+<div>
+  <h3>Getting started with TLB</h3>
+  <div class="scope section">
+    You can visit {% include tlb_getting_started %} to start using TLB in 2 minutes on your project. It gives step by step instructions on how to setup TLB on your project.
+    <p class="clob_end"/>
+  </div>
+</div>
 <div>
   <h3>Can TLB be used for test suite written in a non-java/non-jvm language(Ruby, C#, Python etc..)?</h3>
   <div class="scope section">
