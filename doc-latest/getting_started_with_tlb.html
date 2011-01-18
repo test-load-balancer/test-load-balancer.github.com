@@ -26,14 +26,14 @@ js: hookup_collapsible_pane();
     its dependencies. You can also tweak the 'depends' to fix the task dependencies of your build.
      You can change the fileset's includes pattern to include your tests. --&gt;
     &lt;target name="test.balanced" depends="compile, compile-tests"&gt;
-        &lt;typedef name="load-balanced-fileset" classname="com.github.tlb.ant.LoadBalancedFileSet"
+        &lt;typedef name="load-balanced-fileset" classname="tlb.ant.LoadBalancedFileSet"
                  classpathref="load.balanced.classpath"/&gt;
         &lt;junit failureproperty="test.failure" printsummary="yes" haltonfailure="true" haltonerror="true"
                showoutput="true" fork="true"&gt;
             &lt;classpath refid="load.balanced.classpath"/&gt;
             &lt;batchtest todir="${reports.dir}"&gt;
                 &lt;load-balanced-fileset dir="${test-classes.dir}" includes="**/*Test.class"/&gt;
-                &lt;formatter classname="com.github.tlb.ant.JunitDataRecorder"/&gt;
+                &lt;formatter classname="tlb.ant.JunitDataRecorder"/&gt;
                 &lt;formatter type="plain"/&gt;
             &lt;/batchtest&gt;
         &lt;/junit&gt;
@@ -41,6 +41,27 @@ js: hookup_collapsible_pane();
 </pre>
 	    <!--TLB-DOC-END@junit-ant-task@-->
 	</div>
+<div class="collapsibleContainer" title="Test::Unit on Rake">
+  <!--TLB-DOC-START@test::unit-rake-task@-->
+<pre>
+require 'rake'
+require 'rubygems'
+gem 'tlb-testunit'
+require 'tlb'
+require 'tlb/test_unit/test_task'
+
+Tlb::TestUnit::TestTask.new(:test_balanced) do |t|
+  t.libs &lt;&lt; "test"
+  t.test_files = FileList['test/**/*_test.rb']
+  t.verbose = true
+end
+
+load 'tasks/tlb.rake'
+
+task :bal =&gt; ['tlb:start', :test_balanced]
+</pre>
+  <!--TLB-DOC-END@test::unit-rake-task@-->
+</div>
         <div class="collapsibleContainer" title="RSpec 1.x on Rake">
 	    <!--TLB-DOC-START@rspec1-rake-task@-->
 <pre>
@@ -67,13 +88,6 @@ task :bal =&gt; ['tlb:start', :balanced_specs]
 <pre>
 #Use the task :bal to run balanced test suite. You can change the t.pattern to match whatever tests you need
 #to run.
-require 'rake'
-require 'rspec/core/rake_task'
-
-RSpec::Core::RakeTask.new(:spec) do |t|
-  t.pattern = 'spec/**/*_spec.rb'
-end
-
 require 'rubygems'
 gem 'tlb-rspec2'
 require 'tlb'
@@ -84,7 +98,7 @@ Tlb::RSpec::SpecTask.new(:run_balanced) do |t|
 end
 
 load 'tasks/tlb.rake'
-
+desc "run specs load-balanced(based on environment variables)"
 task :bal =&gt; ['tlb:start', :run_balanced]
 </pre>
 	    <!--TLB-DOC-END@rspec2-rake-task@-->
