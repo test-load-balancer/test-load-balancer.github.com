@@ -18,10 +18,26 @@ description: Home page of 'Test Load Balancer(TLB)' project(s).
   <div class="scope section">
     <p/>
     {% include components_of_tlb %}
-    Balancer hooks-up with your build-framework and testing-framework to do the actual work, whereas Server is primarily a data-repository that balancer talks to. 
+    Balancer hooks-up with your build-framework and testing-framework to do the actual work, whereas Server is primarily a data-repository that balancer talks to. Data from previous run(s) is used by the balancer to partition/re-order the current run, and data from the current run is posted back so that it can be used for future runs.
+    <p class="clob_end"/> 
     <image src="images/tlb-cycle.png" class="center-468"/>
-    Data from previous run(s) is used by the balancer to partition/re-order the current run, and data from the current run is posted back so that it can be used for future runs.
+  </div>
+</div>
+<hr/>
+<div>
+  <h3>Getting started with TLB</h3>
+  <div class="scope section">
+    You can visit {% include tlb_getting_started %} to start using TLB in 2 minutes on your project. It gives step by step instructions on how to setup TLB on your project.
     <p class="clob_end"/>
+  </div>
+</div>
+<hr/>
+<div>
+  <h3>Deep dive</h3>
+  <div class="scope section">
+    While {% include tlb_getting_started %} is a good place to start off, you may want to look at how to configure TLB to your needs and understand the basic concepts involved. With this understanding, you can leverage a lot of things that TLB has to offer.
+    <p class="clob_end"/>
+    {% include documentation_starting_up_link %} is a good place for the concepts. Please check the {% include documentation_link %} section for detailed documentation on TLB configuration.
   </div>
 </div>
 <hr/>
@@ -84,14 +100,5 @@ description: Home page of 'Test Load Balancer(TLB)' project(s).
     Cucumber(Ruby), MSTest(.Net), MSBuild(.Net), Maven(Java), unittest(Python), FiveAM(CommonLisp), cppunit(C++) etc.
     <p class="clob_end"/>
     And of course, anything else you can mail us patches for... :-)
-  </div>
-</div>
-<hr/>
-<div>
-  <h3>How do I configure and use TLB on my project?</h3>
-  <div class="scope section">
-    {% include documentation_starting_up_link %} is usually a good place to start.
-    <p class="clob_end"/>
-    Please check the {% include documentation_link %} section for detailed documentation on TLB.
   </div>
 </div>
