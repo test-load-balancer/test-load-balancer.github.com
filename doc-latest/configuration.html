@@ -403,6 +403,32 @@ js: Popup.hookup_envvar_details_popup(); Popup.hookup_titled_popup('a.variable_i
           </tr>
           <tr>
             <td>
+              <a href="#" class="variable_desc_link">MAX_STAGE_FEED_SEARCH_DEPTH</a>
+              <div class="hidden popup">
+                {% include if_on_balancer_side_against_go_server %}
+                Balancer instance, when running against Go server Stage Feed(an atom feed of completed stages) to find the historical stage instance to download test run data(posted by the previous build) from. 
+                <p class="clob_end"/>
+                However, Go server can have long history of stages, and the stage to be balanced may be a new one or a manual one(which doesn't run too often). In such situations, TLB must stop at a definite depth(number of pages) to keep itself from launching a 'Denial of Service' attack on the Go server feed.
+                <p class="clob_end"/>
+                This number controls what that limit is, for a partition.
+                <div class="notice warning">
+                  <strong>Warning:</strong> Please do not set different values across partitions sharing a job-name(partitions that are supposed to run part of the same set of tests). Setting it to different values between partitions of one invocation can mess-up balancing on one or more of partition instances while other partition instances balance well, which can voilate mutual exclusion and more importantly, collective exhaustion.
+                </div>
+                Obviously, its safe to use different values across different stages, or job-families(for instance, jobs named job-1, job-2, job-3 make one job family, and hello-1, hello-2 make another family).
+                <p class="clob_end"/>
+                TLB uses <i>10</i> as default value of <i>MAX_STAGE_FEED_SEARCH_DEPTH</i>, which means it will go 10 pages back in history(and no more) before declaring that it has failed to find historical stage.
+                <hr/>
+                <strong>Type: </strong> A whole number(number of stages-atom-feed pages TLB is allowed to traverse to find last stage run)
+                <hr/>
+                <strong>Example:</strong> 25
+              </div>
+            </td>
+            <td>{% include not-applicable %}</td>
+            <td>{% include applicable %}</td>
+            <td>{% include not-applicable %}</td>
+          </tr>
+          <tr>
+            <td>
               <a href="#" class="variable_desc_link">Other Go support variables</a>
               <div class="hidden popup">
                 <div class="notice warn">If you are unfamilier with Go and do not intend to use Go support, please feel free ignore this text.</div>
