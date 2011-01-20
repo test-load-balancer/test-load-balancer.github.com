@@ -3,7 +3,7 @@ ifndef samples_dir
 endif
 export samples_dir
 
-export snippets_file := doc-latest/example_snippets.html
+export snippets_file := doc-latest/getting_started_with_tlb.html
 
 export max_snippets_per_source_file=10
 
