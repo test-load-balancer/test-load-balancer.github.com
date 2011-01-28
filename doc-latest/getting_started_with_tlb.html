@@ -7,37 +7,61 @@ js: hookup_collapsible_pane();
 ---
 <h3>Quick Start</h3>
 <div class="scope section">
-  In order to start using TLB in your code base, here are the steps that you need to follow.
+<h4>Introduction</h4>
+  <p>Test load balancer has 2 main components:
+    <ul>
+      <li>Server: This stores historical information about tests</li>
+      <li>Balancer: This uses this information in order to split the tests into smaller subsets and handed over to the test runner</li>
+  </ul></p>
+  <p>TLB comes into picture when the same build is scheduled and ran across multiple processes or machines. The idea is that the subsets returned by TLB is executed in parallel so that the build time is reduced. It is TLB's job to make sure each subset takes about the same time to execute.</p>
+
+  <p><strong>NOTE:</strong> TLB knows how to split the given set of tests into smaller subsets. It has nothing to do with actually running the tests, scheduling them, parallelizing them across machines, VM management etc. All of that would be taken care of, typically, by a CI/build server like Hudson, Go, TeamCity, Bamboo etc. </p>
+
+<h4>Dependencies</h4>
+  <p>TLB is mainly written in Java. Even though a given framework support may be implemented in the appropriate language, TLB itself is written in Java. Hence you would need to have JRE available on any machine on which you want to run TLB.</p>
+
+<h4>Basic Setup</h4>
+  <p>With these basic ideas, here are the steps that you need to follow to setup TLB on your project</p>
   <p class="clob_end"/>
   <ol>
-    <li>Download TLB from our <a href="http://code.google.com/p/tlb/downloads/list" target="blank">Download page</a> on Google code
-    </li>
-    <li>Start the TLB server using the start-server script present in the TLB distribution. Something like:
+    <li>Make sure JRE 1.6 is installed</li>
+    <li><strong>Download</strong> TLB from our <a href="http://code.google.com/p/tlb/downloads/list" target="blank">Download page</a> on Google code. 
       <div class="snippet">
-	<code class="block">$ ${TLB_FOLDER}/start_server.sh</code>
+	If you want to use tlb_rb, you can install TLB as a gem using:
+	<code class="block">$ gem install tlb</code>
       </div>
-      If you wish to use the {% include go_link %} support, please go through the {% include startup_server_link %} documentation to see how it can be done.
+</li>
+    <li><strong>Start</strong> the TLB <strong>Server</strong> using the server.sh or server.bat script present in the TLB distribution. Something like:
+      <div class="snippet">
+	<code class="block">$ ${TLB_FOLDER}/server.sh start</code>
+      </div>
+      <p>This will start a very lightweight RESTlet server bound to port {% include default_server_port %} by default. The script has some basic environment variables that you can tweak if you need to.</p>
+      <p>If you wish to use the {% include go_link %} support instead, please go through the {% include startup_server_link %} documentation to see how it can be done.</p>
     </li>
-    <li>Copy the build task into your build script based on what platform/framework you are using.
+    <li>Now that the server is started, you need to <strong>add Balancing</strong> to your build script.
+</p>As mentioned before, typically, Balancer gets a list of all the tests that need to be executed from the build script. It then prunes it to make a subset using the test information obtained from the Server. This smaller subset is what is given to the test framework to run. Balancer then listens to events published by the test framework to get the time each test took and the result of each test. This is then sent across to the TLB server for future use.</p>
+
+<p><strong>Examples of TLB balancer configuration on supported frameworks</strong></p>
+Copy the build task into your build script based on what platform/framework you are using. Make changes as suggested in the comments.
 	<div class="collapsibleContainer" title="Junit on Ant">
 	    <!--TLB-DOC-START@junit-ant-task@-->
 <pre>
-    &lt;!-- Change the 'load.balanced.classpath' so that it is your test classpath along with the TLB jar and
-    its dependencies. You can also tweak the 'depends' to fix the task dependencies of your build.
-     You can change the fileset's includes pattern to include your tests. --&gt;
-    &lt;target name="test.balanced" depends="compile, compile-tests"&gt;
-        &lt;typedef name="load-balanced-fileset" classname="tlb.ant.LoadBalancedFileSet"
-                 classpathref="load.balanced.classpath"/&gt;
-        &lt;junit failureproperty="test.failure" printsummary="yes" haltonfailure="true" haltonerror="true"
-               showoutput="true" fork="true"&gt;
-            &lt;classpath refid="load.balanced.classpath"/&gt;
-            &lt;batchtest todir="${reports.dir}"&gt;
-                &lt;load-balanced-fileset dir="${test-classes.dir}" includes="**/*Test.class"/&gt;
-                &lt;formatter classname="tlb.ant.JunitDataRecorder"/&gt;
-                &lt;formatter type="plain"/&gt;
-            &lt;/batchtest&gt;
-        &lt;/junit&gt;
-    &lt;/target&gt;
+&lt;!-- Change the 'load.balanced.classpath' so that it is your test classpath along with the TLB jar and
+its dependencies. You can also tweak the 'depends' to fix the task dependencies of your build.
+You can change the fileset's includes pattern to include your tests. --&gt;
+&lt;target name="test.balanced" depends="compile, compile-tests"&gt;
+    &lt;typedef name="load-balanced-fileset" classname="tlb.ant.LoadBalancedFileSet"
+             classpathref="load.balanced.classpath"/&gt;
+    &lt;junit failureproperty="test.failure" printsummary="yes" haltonfailure="true" haltonerror="true"
+           showoutput="true" fork="true"&gt;
+        &lt;classpath refid="load.balanced.classpath"/&gt;
+        &lt;batchtest todir="${reports.dir}"&gt;
+            &lt;load-balanced-fileset dir="${test-classes.dir}" includes="**/*Test.class"/&gt;
+            &lt;formatter classname="tlb.ant.JunitDataRecorder"/&gt;
+            &lt;formatter type="plain"/&gt;
+        &lt;/batchtest&gt;
+    &lt;/junit&gt;
+&lt;/target&gt;
 </pre>
 	    <!--TLB-DOC-END@junit-ant-task@-->
 	</div>
