@@ -119,32 +119,32 @@ task :bal =&gt; ['tlb:start', :run_balanced]
 	    <!--TLB-DOC-END@rspec2-rake-task@-->
 </div>
     </li>
-    <li>After the build script is changed to include TLB some environment variables need to be set before TLB can work. The values of the variables can be tweaked based on what makes sense to your setup. For now, you can just use these values. Visit the {% include documentation_config_vars_link %} to get a detailed description of these and other variables.
+    <li>After the build script is changed to include TLB, some <strong>environment variables</strong> need to be set for the process in which the tests run. The values of the variables can be tweaked based on what makes sense to your setup. For now, you can just use these values.
       <ul>
-	<li><p>TLB_URL=http://${hostname_on_which_server_is_started}:7019</p>
+	<li><p><strong>TLB_URL=http://${hostname_on_which_server_is_started}:7019</strong></p>
 	  <p>This tells TLB where to obtain the test data from and post data to. Replace the ${hostname_on_which_server_is_started} with the right value.</p> 
 	</li>
-	<li><p>TOTAL_PARTITIONS=2</p>
+	<li><p><strong>TOTAL_PARTITIONS=2</strong></p>
 	  <p>The total number of subsets into which TLB split tests. This is generally equal to the number of machines/processes that execute in parallel</p>
 	</li>
-	<li><p>PARTITION_NUMBER=1</p>
+	<li><p><strong>PARTITION_NUMBER=1</strong></p>
 	  <p>The index of the current subset. This tells TLB which subset to give to the test framework to execute. This will have a different value for each parition</p>
 	</li>
-	<li><p>TLB_CRITERIA=tlb.splitter.DefaultingTestSplitterCriteria</p>
+	<li><p><strong>TLB_CRITERIA=tlb.splitter.DefaultingTestSplitterCriteria</strong></p>
 	  <p>This tells the strategy that the Balancer will use to split the tests.</p>
-	<li><p>CRITERIA_DEFAULTING_ORDER=tlb.splitter.TimeBasedTestSplitterCriteria:tlb.splitter.CountBasedTestSplitterCriteria</p>
+	<li><p><strong>CRITERIA_DEFAULTING_ORDER=tlb.splitter.TimeBasedTestSplitterCriteria:tlb.splitter.CountBasedTestSplitterCriteria</strong></p>
 	  <p>This gives the chain of algorithms that TLB uses. If one fails, TLB moves onto the next one until it finds something.</p>
 	</li>
-	<li><p>TLB_JOB_NAME=sample_job</p>
+	<li><p><strong>TLB_JOB_NAME=sample_job</strong></p>
 	  <p>The same TLB server can be used by different suites at the same time. In order for the server to identify them uniquely, TLB uses the job name. Make sure all job names are unique.</p>
 	</li>
-	<li><p>JOB_VERSION=${some_value_unique_per_build}</p>
+	<li><p><strong>JOB_VERSION=${some_value_unique_per_build}</strong></p>
 	  <p>Sometimes you may want to rerun tests so that the same tests run on the same subsets. Make sure ${some_value_unique_per_build} is replaced with right value for each build.</p>
 	</li>
       </ul>
       <p>If you are using a non Java based framework, you need to use these variables as well.</p>
       <ul>
-	<li><p>TLB_BALANCER_PORT=4971<p>
+	<li><p><strong>TLB_BALANCER_PORT=4971</strong><p>
 	  <p>This is the port on which the Balancer standalone process starts a HTTP port.</p>
 	</li>
       </ul>
