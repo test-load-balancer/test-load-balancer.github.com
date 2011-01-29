@@ -13,6 +13,24 @@ description: Starting-up page of 'Test Load Balancer(TLB)' project(s).
   <img src="/images/tlb-timeline.gif"/>
 </div>
 <hr/>
+
+<div>
+  <h3>Components of TLB:</h3>
+  <div class="scope section">
+    <i>TLB</i> has two major functional components.
+    <p class="clob_end"/>
+    {% include tlb_components_description %}
+    <p class="clob_end"/>
+    We recomend users to get a good understanding of roles these two components play. As <i>TLB</i> evolves, the list of alternative algorithms is likely to grow for these functional components. Since <i>TLB</i> configuration allows for a lot of mix-and-match style setup, understanding the role of these components at a broader level enables users to tweak it in ways that work best for them.
+    <p class="clob_end"/>
+    In addition to the functional components mentioned above, <i>TLB</i> has an infrastructural components as well called <b>talk to service</b>. This component is responsible for enabling <i>TLB</i> to talk to remote server that acts as a data repository. <i>TLB</i> uses this abstraction to download test-results, test-times etc from this repository and to publish the run-feedback back to the repository(which is used by future builds).
+    <p class="clob_end"/>
+    <i>TLB</i> is going to continue introducing such abstractions as it evolves, because this style lends itself to enormous flexibility and configurability, and allows us to provide useful options at every level that user can choose from. In addition to this, it allows users to write their own implementation for these abstractions, hence allowing easy plugability and extensibility.
+  </div>
+</div>
+<hr/>
+
+
 <div>
   <h3>Starting-up with TLB</h3>
   <div>
