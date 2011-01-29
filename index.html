@@ -24,6 +24,7 @@ description: Home page of 'Test Load Balancer(TLB)' project(s).
     <p><strong>How do you make sure when your test suite executes in parallel on your build grid, each test runs only once and all the tests get run?</strong> You also need to make sure that all the machines finish at about the same time. This is the problem TLB solves for you.</p>
   </div>
 </div>
+<hr/>
 <div>
   <h3>How does TLB work?</h3>
   <div class="scope section">
@@ -35,30 +36,31 @@ description: Home page of 'Test Load Balancer(TLB)' project(s).
 </div>
 <hr/>
 <div>
+  <h3>What Language/Platform can TLB be used in?</h3>
+  <div class="scope section">
+    <p>TLB is written in Java. That means TLB can be used on pretty much all platforms where Java can run.</p>
+    <p>However, TLB is written from ground up to support both JVM and non-JVM based languages and runtimes. The Balancer is capable of running as a standalone process, in alien-environment (as we call it) setup. The framework and language that tests are written in does not matter.</p>
+    <p>{% include tlb_rb_link %} for instance, runs on MRI (CRuby) and uses standalone balancer. However, since TLB-core is written in java, you will need to have java installed on the box running tests (so balancer process can be launched).</p>
+    <p>Look at the end of this page to see the list of all frameworks that TLB supports right now.</p>
+    <p class="clob_end"/>
+    Infact, it feels like running balancer standalone is actually a better option in most cases, because it has the inherent advantage of process level isolation. 
+  </div>
+</div>
+<hr/>
+<div>
   <h3>Quick start: Get balancing in minutes</h3>
   <div class="scope section">
-    You can visit {% include tlb_getting_started %} to start using TLB(in minutes) on your project. It gives step by step instructions on how to setup TLB on your project.
+    You can visit {% include tlb_getting_started %} to start using TLB (in minutes) on your project. It gives basic definition and step by step instructions on how to setup TLB on your project.
     <p class="clob_end"/>
   </div>
 </div>
 <hr/>
 <div>
-  <h3>Deep dive: Understanding TLB</h3>
+  <h3>Deep dive: Understanding and Configuring TLB</h3>
   <div class="scope section">
     While {% include tlb_getting_started %} is a good place to start off, you may want to look at how to configure TLB to your needs and understand the basic concepts involved. With this understanding, you can leverage a lot of things that TLB has to offer.
     <p class="clob_end"/>
-    {% include documentation_starting_up_link %} is a good place for the concepts. Please check the {% include documentation_link %} section for detailed documentation on TLB configuration.
-  </div>
-</div>
-<hr/>
-<div>
-  <h3>Can TLB be used for test suite written in a non-java/non-jvm language(Ruby, C#, Python etc..)?</h3>
-  <div class="scope section">
-    <p/>
-    <strong>Yes</strong>. While TLB is written in Java, it was written from ground up to support both jvm and non-jvm based languages/runtimes. Balancer is capable of running as a standalone process, in alien-environment(as we call it) setup framework/language that tests are written in does not matter. {% include tlb_rb_link %} 
-    for instance, runs on MRI(CRuby) and uses standalone balancer. However, since TLB-core is written in java, you will need to have java installed on the box running tests(so balancer process can be launched).
-    <p class="clob_end"/>
-    Infact, it feels like running balancer standalone is actually a better option in most cases, because it has the inherent advantage of process level isolation. 
+    {% include documentation_starting_up_link %} is a good place for the concepts. Please check the {% include documentation_config_vars_link %} section for detailed documentation on TLB configuration.
   </div>
 </div>
 <hr/>
