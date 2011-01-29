@@ -1,3 +1,4 @@
+
 ---
 layout: default
 title: Quick start TLB
@@ -11,7 +12,7 @@ js: hookup_collapsible_pane();
   <p>Test load balancer has 2 main components:
     <ul>
       <li>Server: This stores historical information about tests</li>
-      <li>Balancer: This uses this information in order to split the tests into smaller subsets and handed over to the test runner</li>
+      <li>Balancer: This uses this information in order to split the tests into smaller subsets and hand over to the test runner</li>
   </ul></p>
   <p>TLB comes into picture when the same build is scheduled and ran across multiple processes or machines. The idea is that the subsets returned by TLB is executed in parallel so that the build time is reduced. It is TLB's job to make sure each subset takes about the same time to execute.</p>
 

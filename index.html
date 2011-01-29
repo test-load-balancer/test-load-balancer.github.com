@@ -7,12 +7,23 @@ description: Home page of 'Test Load Balancer(TLB)' project(s).
 <div>
   <h3>What is Test Load Balancer (TLB)?</h3>
   <div class="scope section">
-    Test Load Balancer(TLB) is a tool that can automatically partition tests among multiple sets, each one of which can run in parallel like on different physical/virtual machine at the same time. This can significantly improve the speed of a test stage in a build pipeline, and significantly shorten the feedback loop for large or slow running test suites such as functional or UI tests.
+    Test Load Balancer(TLB) is a tool that can automatically partition tests into multiple subsets each one of which can be executed in parallel. The execution can happen on different physical/virtual machines or on the same machine as different processes or threads. This mechanism will significantly improve the speed of a test stage in a build pipeline and speeds up the feedback loop. TLB can be used for any of unit, integration or functional tests.
     <p class="clob_end"/>
-    In addition to balancing, it also allows you to do other interesting things like re-order your tests-subset, before it executes. For instance, run tests that failed in the last run, first.
+    In addition to balancing, TLB also allows you to do other interesting things like re-order tests within a subset before they get executed. For instance, run tests that failed in the previous run first.
   </div>
 </div>
 <hr/>
+<div>
+  <h3>What is the problem TLB trying to solve?</h3>
+  <div class="scope section">
+    <h4>Context</h4>
+    <p>A good amount of time spent in building code is on running tests. Over a period of time, as tests increase in number, the build process starts taking a long time. This is particularly true for automated functional tests. With slow builds when things break, it is a frustrating process to wait for hours to make sure the build is fixed. How can builds be speed up?</p>
+    <p>Given that hardware costs are dropping significantly and that tests should inherently be independent of each other (otherwise its a big smell that needs to be fixed) most people opt for the option of parallelizing the test execution.</p>
+    <p>Most build servers provide the capability of executing across multiple machines like Hudson, Go, TeamCity, Bamboo etc. Lets say a build grid with many machines/VMs or a powerful machine that can run multiple test processes in parallel is ready.</p>
+    <h4>The Problem</h4>
+    <p><strong>How do you make sure when your test suite executes in parallel on your build grid, each test runs only once and all the tests get run?</strong> You also need to make sure that all the machines finish at about the same time. This is the problem TLB solves for you.</p>
+  </div>
+</div>
 <div>
   <h3>How does TLB work?</h3>
   <div class="scope section">
@@ -20,7 +31,6 @@ description: Home page of 'Test Load Balancer(TLB)' project(s).
     {% include components_of_tlb %}
     Balancer hooks-up with your build-framework and testing-framework to do the actual work, whereas Server is primarily a data-repository that balancer talks to. Data from previous run(s) is used by the balancer to partition/re-order the current run, and data from the current run is posted back so that it can be used for future runs.
     <p class="clob_end"/> 
-    <image src="images/tlb-cycle.png" class="center-468"/>
   </div>
 </div>
 <hr/>
