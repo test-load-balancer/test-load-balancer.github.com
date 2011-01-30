@@ -15,7 +15,7 @@ description: Starting-up page of 'Test Load Balancer(TLB)' project(s).
       <label id="server">
         <h4>Server</h4>
       </label>
-      The Server is a repository of test run data. It stores historical test run data (test times and test result as of now) that is posted by Balancer(s) and fetched later, during the next build, to figure out what tests to run on a partition and what way to order them.
+      The Server is a repository of test run data. It stores historical test run data (test times and test result as of now) that is posted by Balancer(s) and fetched later, during the next build, to figure out what tests to run on a partition and what way to order them as shown in Figure 1.
       <p class="clob_end"/>
       However, the Server should not be confused with something that will schedule builds, assign tests to different machines etc. All of those is the responsibility of a Build Server. Server will be used by Balancers when a build starts running.
       <p class="clob_end"/>
@@ -28,12 +28,18 @@ description: Starting-up page of 'Test Load Balancer(TLB)' project(s).
       </label>
       This is where the real action happens. The Balancer can be setup in the build script such that it hooks up a listener with the given Test Runner. You can check out {% include tlb_getting_started_examples %} to see how this is done.
       <p class="clob_end"/>
-      Just before the tests start running, TLB gets a call back from the build with the list of all the tests that get executed. It prunes this list, reorders it if setup and gives a smaller subset of tests to the Test Runner. When a test finishes execution, Test Runners typically notify listeners. Using this, the Balancer gets the data that it cares about and posts this to the server.
+      Just before the tests start running, Balancer gets a call back from the build with the list of all the tests that get executed. It prunes this list, reorders it if setup and gives a smaller subset of tests to the Test Runner. When a test finishes execution, Test Runners typically notify listeners. Using this, the Balancer gets the data that it cares about and posts this to the server.
       <p class="clob_end"/>
       For example: the Ant JUnit support is done using Ant FileSets (Build) for the JUnit task (Test Runner). This task obtains the historical test data from the TLB Server and uses it to split and order the tests. The pruned list is then handed over to JUnit. JUnit in turn provides call back on test completion with the time the test took and the test result. This is then posted to the Server.
       <p class="clob_end" />
       The Balancer has 2 aspects to it. Splitter and Orderer. Check out the <a href="#balancer_components">Balancer Components</a> to learn more about them. We strongly recommend reading about the Balancer components as they are core to how TLB works.
     </div>
+    <p class="clob_end" />
+    <h4>Interaction between the Server and the Balancer</h4>
+    <p>
+      <img src="/images/tlb-cycle.png" />
+      <p><strong>Figure 1</strong>: Interaction between the Server and the Balancer</p>
+      This diagram shows how the Server and the Balancer interact with each other as mentioned before.
   </div>
   <hr/>
   
@@ -41,7 +47,7 @@ description: Starting-up page of 'Test Load Balancer(TLB)' project(s).
   <div class="scope section">
     <p>
       <img src="/images/tlb-java.png"/>
-      <p><strong>Figure 1</strong>: Typical TLB setup for a JVM based project</p>
+      <p><strong>Figure 2</strong>: Typical TLB setup for a JVM based project</p>
     </p>
     <p class="clob_end"/>
     The above diagram shows how a typical TLB setup looks like. 
@@ -66,7 +72,7 @@ description: Starting-up page of 'Test Load Balancer(TLB)' project(s).
     This gif image gives an exact picture of the communication between the Balancer and the Server.
     <img src="/images/tlb-timeline.gif"/>
     <p class="clob_end" />
-    <strong>Figure 2</strong>: Server-Balancer communication Timline
+    <strong>Figure 3</strong>: Server-Balancer communication Timline
   </div>
   <hr />
 
@@ -142,7 +148,7 @@ description: Starting-up page of 'Test Load Balancer(TLB)' project(s).
   <div class="scope section">
     <p>
       <img src="/images/tlb-alien.png"/>
-    <p><strong>Figure 3</strong>: Typical TLB setup for a non-JVM based project</p>
+    <p><strong>Figure 4</strong>: Typical TLB setup for a non-JVM based project</p>
     </p>
     <p class="clob_end"/>
     The way TLB supports non-JVM based projects is by making the Balancer available as a HTTP service to the build and test runner. Then, in order to implement support to a new framework, its just a matter of calling the HTTP service from the given environment.
