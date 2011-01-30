@@ -32,7 +32,7 @@ js: hookup_collapsible_pane();
     <li>Now that the server is started, you need to <strong>add Balancing</strong> to your build script.
 </p>As mentioned before, typically, Balancer gets a list of all the tests that need to be executed from the build script. It then prunes it to make a subset using the test information obtained from the Server. This smaller subset is what is given to the test framework to run. Balancer then listens to events published by the test framework to get the time each test took and the result of each test. This is then sent across to the TLB server for future use.</p>
 
-<p><strong>Examples of TLB balancer configuration on supported frameworks</strong></p>
+<p id="example_configuration"><strong>Examples of TLB balancer configuration on supported frameworks</strong></p>
 Copy the build task into your build script based on what platform/framework you are using. Make changes as suggested in the comments.
 	<div class="collapsibleContainer" title="Junit on Ant">
 	    <!--TLB-DOC-START@junit-ant-task@-->

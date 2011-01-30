@@ -1,128 +1,169 @@
 ---
 layout: default
-title: Starting-up with TLB
+title: Concepts in TLB
 keywords: tlb, test-load-balancer, kick-start, starting-up, setup
 description: Starting-up page of 'Test Load Balancer(TLB)' project(s).
 ---
-<div class="section scope">
-  <div class="notice error">
-    <strong>Work in progress:</strong> We are working on this section, please ignore contents as its not finished yet.
-  </div>
-  <img src="/images/tlb-java.png"/>
-  <img src="/images/tlb-alien.png"/>
-  <img src="/images/tlb-timeline.gif"/>
-</div>
-<hr/>
-
 <div>
-  <h3>Components of TLB:</h3>
+  <h2>Concepts in TLB</h2>
+  
+  <h3>Components</h3>
+  <div class="scope section">
+    {% include components_of_tlb %}
+    <hr/>
+    <div>
+      <label id="server">
+        <h4>Server</h4>
+      </label>
+      The Server is a repository of test run data. It stores historical test run data (test times and test result as of now) that is posted by Balancer(s) and fetched later, during the next build, to figure out what tests to run on a partition and what way to order them.
+      <p class="clob_end"/>
+      However, the Server should not be confused with something that will schedule builds, assign tests to different machines etc. All of those is the responsibility of a Build Server. Server will be used by Balancers when a build starts running.
+      <p class="clob_end"/>
+      TLB supports two kinds of server configurations out of the box. Look at the <a href="#implementations_of_tlb_server">implementations of the server</a> for more details.
+    </div>
+    <p class="clob_end"/>
+    <div>
+      <label id="balancer">
+        <h4>Balancer</h4>
+      </label>
+      This is where the real action happens. The Balancer can be setup in the build script such that it hooks up a listener with the given Test Runner. You can check out {% include tlb_getting_started_examples %} to see how this is done.
+      <p class="clob_end"/>
+      Just before the tests start running, TLB gets a call back from the build with the list of all the tests that get executed. It prunes this list, reorders it if setup and gives a smaller subset of tests to the Test Runner. When a test finishes execution, Test Runners typically notify listeners. Using this, the Balancer gets the data that it cares about and posts this to the server.
+      <p class="clob_end"/>
+      For example: the Ant JUnit support is done using Ant FileSets (Build) for the JUnit task (Test Runner). This task obtains the historical test data from the TLB Server and uses it to split and order the tests. The pruned list is then handed over to JUnit. JUnit in turn provides call back on test completion with the time the test took and the test result. This is then posted to the Server.
+      <p class="clob_end" />
+      The Balancer has 2 aspects to it. Splitter and Orderer. Check out the <a href="#balancer_components">Balancer Components</a> to learn more about them. We strongly recommend reading about the Balancer components as they are core to how TLB works.
+    </div>
+  </div>
+  <hr/>
+  
+  <h3>Typical TLB setup</h3>
+  <div class="scope section">
+    <p>
+      <img src="/images/tlb-java.png"/>
+      <p><strong>Figure 1</strong>: Typical TLB setup for a JVM based project</p>
+    </p>
+    <p class="clob_end"/>
+    The above diagram shows how a typical TLB setup looks like. 
+    <p class="clob_end"/>
+    <ol>
+      <li><strong>TLB Server</strong>: We already covered this.</li>
+      <li><strong>TLB Balancer</strong>: We already covered this.</li>
+      <li><strong>Test Runner</strong>: This is the runner that actually runs the tests. TLB does not know how to run tests. That is still done by the underlying framework i.e. the Test Runner. Example: JUnit, RSpec, Test::Unit, NUnit etc.</li>
+      <li><strong>Partitions</strong>: These are the parallel machines/VMs/processes/threads that run the <strong>same</strong> build task. With TLB hooked in, each of these partitions execute mutually exclusive sets of tests. This is also responsible to start off the build so that the test framework and TLB are started up. Typically these are agents or build farm of a build server.</li>
+      <li><strong>Server-Balancer communication</strong>: Balancer posts data (as of now, only test time and result) about current test run to the server and obtains historical data when it is trying to balance and reorder.</li>
+      <li><strong>Balancer-Test Runner communication</strong>: Before a test runner starts executing tests, TLB gets a callback with the original list of all the tests. This will be same across all the partitions. In each parition, TLB executes the same algorithm and based on what the partition number is, it returns the correct subset of tests to the Test Runner. Thus, the Test Runner ends up executing a smaller set of tests.
+	<p class="clob_end"/>
+	Most test runners provide a mechanism for hooking up listeners to find out about the state of tests. Using this, TLB gets information about test run times and result. This is what gets posted to the TLB Server.</li>
+    </ol>
+    <p class="clob_end"/>
+    The way TLB works in an alien (non-JVM based projects is a little different. Take a look at the <a href="#alien_environment_setup">Typical TLB setup in Alien Environment</a> to see how that is done. 
+  </div>
+  <hr />
+
+  <h3>Server-Balancer Communication Timeline</h3>
+  <div class="scope section">
+    This gif image gives an exact picture of the communication between the Balancer and the Server.
+    <img src="/images/tlb-timeline.gif"/>
+    <p class="clob_end" />
+    <strong>Figure 2</strong>: Server-Balancer communication Timline
+  </div>
+  <hr />
+
+  <label id="balancer_components">
+    <h3>Balancer Components</h3>
+  </label>
   <div class="scope section">
     <i>TLB</i> has two major functional components.
     <p class="clob_end"/>
     {% include tlb_components_description %}
     <p class="clob_end"/>
+    Please take a look at {% include balancer_configuration_link %} and {% include orderer_configuration_link %} to understand how Splitters and Orderers can be chosen and configured.
+    <p class="clob_end" />
     We recomend users to get a good understanding of roles these two components play. As <i>TLB</i> evolves, the list of alternative algorithms is likely to grow for these functional components. Since <i>TLB</i> configuration allows for a lot of mix-and-match style setup, understanding the role of these components at a broader level enables users to tweak it in ways that work best for them.
+  </div>
+  <hr />
+
+  <label id="implementations_of_tlb_server">
+    <h3>Implementations of the Server component</h3>
+  </label>
+  <div class="scope section">
+    As of now, TLB can work against 2 kinds of TLB server implementations. This means Balancer can run against either of them. One of them comes packaged in TLB distribution which is called "TLB Server" and the other is a Continious-Integration/Release-Management server called "{% include go_link %} Server".
+    <p class="clob_end" />
+    <h4>TLB server[ {% include tlb_repo_link_link %} ]:</h4>
+    TLB server comes packaged as an all-jar (a java archive that carries all dependencies that tlb requires). In order to start the server, you can use
+    <code class="block">
+      $ java -jar tlb-all-gXXXX.jar
+    </code>(XXXX here needs to be substituted with the corresponding version/revision of jar used).
+    Or you can use the "server.[sh|bat]" scripts that are bundled in the distribution.
     <p class="clob_end"/>
-    In addition to the functional components mentioned above, <i>TLB</i> has an infrastructural components as well called <b>talk to service</b>. This component is responsible for enabling <i>TLB</i> to talk to remote server that acts as a data repository. <i>TLB</i> uses this abstraction to download test-results, test-times etc from this repository and to publish the run-feedback back to the repository(which is used by future builds).
+    When started this way, TLB server binds to port<sup><a href="#1">[1]</a></sup> 7019. Once the server is up, partitions that are to be balanced (clients/balancer instances), can be pointed to it by setting a url on Balancer<sup><a href="#2">[2]</a></sup> to the base url of the tlb server. Balancer works using an abstraction called TalkToService, and TalkToTlbServer<sup><a href="#3">[3]</a></sup> is an implementation of this contract that comes packaged in TLB.
+    <p class="clob_end"/>
+    <h4>Go™ server[ {% include go_link_link %} ]:</h4>
+    TLB has inbuilt support for Go, which means TLB can balance against Go just like it balances against the TLB-Server. Running against Go obviously means the tests are run as part of a Go-Task, which will run on a Go-Agent. Additionally, because TLB is environment aware, it can implicit a few things while running against Go server. It deduces equivallent of things like job-name<sup><a href="#4">[4]</a></sup>, version<sup><a href="#5">[5]</a></sup> and total partitions<sup><a href="#6">[6]</a></sup> from the way jobs are configured under stage and pipeline. To make TLB work with Go, TalkToService needs to use TalkToGoServer<sup><a href="#3">[3]</a></sup>. 
+    <p class="clob_end"/>
+    In this case, you do not need to run a seperate process(TLB Server) to act as server, because Go-server plays that role. This does not need any change in the go-server or go-configuration apart from the naming convension your Go job-names need to follow. The convention is that they need to be of the form "&lt;my-job-name&gt;-X"(where X is a natural number 1..n, when you want to make n partitions), or "&lt;my-job-name&gt;-&lt;UUID&gt;"(where each such job will be made to execute only one partition).
+    <p class="clob_end"/>
+    <i>TLB</i> has an abstraction called <b>Talk to service</b>. This is responsible for enabling <i>TLB</i> to talk to the remote Server component. <i>TLB</i> uses this abstraction to download test-results, test-times etc from this repository and to publish the run-feedback back to the repository (which is used by future builds).
     <p class="clob_end"/>
     <i>TLB</i> is going to continue introducing such abstractions as it evolves, because this style lends itself to enormous flexibility and configurability, and allows us to provide useful options at every level that user can choose from. In addition to this, it allows users to write their own implementation for these abstractions, hence allowing easy plugability and extensibility.
+    <hr />
+    <ul class="footnotes without_dots">
+      <li>
+	<sup><label id="1">1</label></sup> can be overridden, read TLB_PORT in {% include config_vars_link %}
+      </li>
+      <li>
+	<sup><label id="2">2</label></sup> read TLB_URL in {% include config_vars_link %}
+      </li>
+      <li>
+	<sup><label id="3">3</label></sup> read TALK_TO_SERVICE in 
+	{% include config_vars_link %} 
+	should be set to the fully qualified name of the implementation
+      </li>
+      <li>
+	<sup><label id="4">4</label></sup> read TLB_JOB_NAME in {% include config_vars_link %}
+      </li>
+      <li>
+	<sup><label id="5">5</label></sup> read JOB_VERSION in {% include config_vars_link %}
+      </li>
+      <li>
+	<sup><label id="6">6</label></sup> read TOTAL_PARTITIONS in {% include config_vars_link %}
+      </li>
+      <li>
+	<sup><label id="7">7</label></sup> read PARTITION_NUMBER in {% include config_vars_link %}
+      </li>
+    </ul>
+  </div>
+  <hr />
+  
+  <label id="alien_environment_setup">
+    <h3>Typical TLB Setup for non-JVM based projects</h3>
+  </label>
+  <div class="scope section">
+    <p>
+      <img src="/images/tlb-alien.png"/>
+    <p><strong>Figure 3</strong>: Typical TLB setup for a non-JVM based project</p>
+    </p>
+    <p class="clob_end"/>
+    The way TLB supports non-JVM based projects is by making the Balancer available as a HTTP service to the build and test runner. Then, in order to implement support to a new framework, its just a matter of calling the HTTP service from the given environment.
+    <p class="clob_end" />
+    <ol>
+      <li><strong>TLB Server</strong>: We already covered this.</li>
+      <li><strong>TLB Balancer Server</strong>: This is the Java Balancing and Ordering algorithms exposed as a HTTP service. This gets the test data from the Support Library and posts it to the TLB server and uses the data from the TLB server to balance and order tests.</li>
+      <li><strong>Test Runner</strong>: This is the runner that actually runs the tests. TLB does not know how to run tests. That is still done by the underlying framework i.e. the Test Runner. Example: JUnit, RSpec, Test::Unit, NUnit etc.</li>
+      <li><strong>Partitions</strong>: These are the parallel machines/VMs/processes/threads that run the <strong>same</strong> build task. With TLB hooked in, each of these partitions execute mutually exclusive sets of tests. This is also responsible to start off the build so that the test framework and TLB are started up. Typically these are agents or build farm of a build server.</li>
+      <li><strong>Server-Balancer communication</strong>: Balancer posts data (as of now, only test time and result) about current test run to the server and obtains historical data when it is trying to balance and reorder.</li>
+      <li><strong>Balancing Server-Support Library communication</strong>: This is the interaction between the Balancer server and the Support Library. This is done over HTTP. The Support Library gives the list of the tests to the service and gets back a pruned list from the Balancer server. It also posts the test data to the Balancer server.
+      </li>
+      <li><strong>Support Library</strong>: This is the platform/framework/language specific code that talks HTTP with the Balancer Server and integrates with the Build and the Test Framework. This is the only thing that needs to be written for every new framework that needs to be supported.
+      </li>
+      <li><strong>Balancer-Support Library communication</strong>: Before a test runner starts executing tests, TLB gets a callback with the original list of all the tests. This will be same across all the partitions. In each parition, TLB executes the same algorithm and based on what the partition number is, it returns the correct subset of tests to the Test Runner. Thus, the Test Runner ends up executing a smaller set of tests.
+	<p class="clob_end"/>
+	Most test runners provide a mechanism for hooking up listeners to find out about the state of tests. Using this, TLB gets information about test run times and result. This is what gets posted to the TLB Server.</li>
+    </ol>
   </div>
 </div>
 <hr/>
-
-
-<div>
-  <h3>Starting-up with TLB</h3>
-  <div>
-    <div class="scope section">
-    {% include components_of_tlb %}
-    <div class="notice warning">
-      While the documentation is good for geting a high level picture of what TLB is all about, we believe the {% include sample_projects_link %} is the best way to cover the details, as it gives you a example-project to play around with. You can tune the variables and observe its effect on balancing firsthand.
-    </div>
-    </div>
-    <hr/>
-    <div>
-      <label id="server">
-        <h4>Server:</h4>
-      </label>
-      <div class="scope section">
-        Tlb Server is a repository of the test run data. Balancer obtains historical data from the server and also posts new data for runs it performs(so the updated data is available for future builds).
-        <p class="clob_end"/>
-        Setting up Server talks about the how a server instance can be chosen & configured. <!--You may also want to, take a look at some Typical Server Example Setups.-->
-        <p class="clob_end"/>
-        In order for the splitter and orderer to work, historical data of test runs is used. TLB server or Go server can act as the repository that stores historical test run data (test times, test result etc) that can be populated while running tests, and fetched later(during the next build) to figure out what tests to run on a partition and what way to order them etc.
-        <p class="clob_end"/>
-        TLB supports two kinds of server configurations out of the box. This means Balancer can run against two different kinds of servers. One of them comes packaged in TLB distribution which is called "TLB Server" and the other is a Continious-Integration/Release-Management server called "{% include go_link %} Server".
-        <hr/>
-        <h5>TLB server[ {% include tlb_repo_link_link %} ]:</h5>
-        <div class="scope section">
-          TLB server comes packaged as an all-jar(a java archive that carries all dependencies that tlb requires). In order to start the server, you can use
-          <code class="block">
-            $ java -jar tlb-all-gXXXX.jar
-          </code>(XXXX here needs to be substituted with the corresponding version/revision of jar used). 
-          <p class="clob_end"/>
-          When started this way, TLB server binds to port<sup><a href="#1">[1]</a></sup> 7019. Once the server is up, partitions that are to be balanced(clients/balancer instances), can be pointed to it by setting url on balancer side<sup><a href="#2">[2]</a></sup> to the base url of the tlb server. Balancer works using an abstraction called TalkToService, and TalkToTlbServer<sup><a href="#3">[3]</a></sup> is just an implementation of this contract that comes packaged in TLB.
-          <p class="clob_end"/>
-          At this point, we have a TLB server all set to be consumed by Balancer partitions.
-        </div>
-        <hr/>
-        <h5>Go™ server[ {% include go_link_link %} ]:</h5>
-        <div class="scope section">
-          TLB has inbuilt support for Go, which means TLB can balance against Go just like it balances against the TLB-Server. Running against Go obviously means the tests are run as part of a Go-Task, which will run on a Go-Agent. Additionally, because TLB is environment aware, it can implicit a few things while running against Go server. It deduces equivallent of things like job-name<sup><a href="#4">[4]</a></sup>, version<sup><a href="#5">[5]</a></sup> and total partitions<sup><a href="#6">[6]</a></sup> etc from the way jobs are configured under stage and pipeline. To make TLB work with Go, TalkToService needs to use TalkToGoServer<sup><a href="#3">[3]</a></sup>. 
-          <p class="clob_end"/>
-          However, since the other side of balancing(server) in this case is not TLB, 'smoothened time balancing' for instance, would not be available in Go based setup. <!-- remove after versioning for gem -->
-          <p class="clob_end"/>
-          In this case, you do not need to run a seperate process(TLB Server) to act as server, because Go-server plays that role. This does not need any change in the go-server or go-configuration apart from the naming convension your Go job-names need to follow. The convention is that they need to be of the form "&lt;my-job-name&gt;-X"(where X is a natural number 1..n, when you want to make n partitions), or "&lt;my-job-name&gt;-&lt;UUID&gt;"(where each such job will be made to execute only one partition).
-          <p class="clob_end"/>
-        </div>
-      </div>
-    </div>
-    <hr/>
-    <div>
-      <label id="balancer">
-        <h4>Balancer:</h4>
-      </label>
-      <div class="section scope">
-        This is where the real action happens. The balancer sits in your build script and build-related libraries and knows spliting and re-ordering tests and hooks up a listener with test-runner so it can publish test data as tests complete.
-        <p class="clob_end"/>
-        <strong>Balancer contains:</strong>
-        {% include tlb_components_description %} 
-        TLB exposes all of its configuration parameters (knobs to tweek its behaviour) through environment variables. 
-        <p class="clob_end"/>
-        For example, the Ant JUnit support is done using Ant FileSets for the JUnit task. This task obtains the historical test data from the TLB Server and uses it to split and order the tests.
-        <p class="clob_end"/>
-        For all the configurable environment variables and discription of possible values, please refer {% include config_vars_link %}
-        .
-        Please take a look at {% include balancer_configuration_link %} 
-        and {% include orderer_configuration_link %} 
-        to understand how Splitters and Orderers can be chosen and configured.
-      </div>
-    </div>
+<div class="notice warning">
+  While the documentation is good for geting a high level picture of what TLB is all about, we believe the {% include sample_projects_link %} is the best way to cover the details, as it gives you a example-project to play around with. You can tune the variables and observe its effect on balancing firsthand.
 </div>
-
-<hr/>
-<ul class="footnotes scope section without_dots">
-  <li>
-    <sup><label id="1">1</label></sup> can be overridden, read TLB_PORT in {% include config_vars_link %}
-  </li>
-  <li>
-    <sup><label id="2">2</label></sup> read TLB_URL in {% include config_vars_link %}
-  </li>
-  <li>
-    <sup><label id="3">3</label></sup> read TALK_TO_SERVICE in 
-    {% include config_vars_link %} 
-    should be set to the fully qualified name of the implementation
-  </li>
-  <li>
-    <sup><label id="4">4</label></sup> read TLB_JOB_NAME in {% include config_vars_link %}
-  </li>
-  <li>
-    <sup><label id="5">5</label></sup> read JOB_VERSION in {% include config_vars_link %}
-  </li>
-  <li>
-    <sup><label id="6">6</label></sup> read TOTAL_PARTITIONS in {% include config_vars_link %}
-  </li>
-  <li>
-    <sup><label id="7">7</label></sup> read PARTITION_NUMBER in {% include config_vars_link %}
-  </li>
-</ul>
