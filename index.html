@@ -7,21 +7,33 @@ description: Home page of 'Test Load Balancer(TLB)' project(s).
 <div>
   <h3>What is Test Load Balancer (TLB)?</h3>
   <div class="scope section">
-    Test Load Balancer(TLB) is a tool that can automatically partition tests into multiple subsets each one of which can be executed in parallel. The execution can happen on different physical/virtual machines or on the same machine as different processes or threads. This mechanism will significantly improve the speed of a test stage in a build pipeline and speeds up the feedback loop. TLB can be used for any of unit, integration or functional tests.
+    Test Load Balancer(TLB) is a tool that can automatically partition tests into multiple subsets each one of which can be executed in parallel. The execution can happen on different physical/virtual machines or on the same machine as different processes or threads. 
+    More the partitions, lesser are the number of tests executed on each one, and since all of the partitions start at the same time(and finish almost at the same time) overall test-execution time gets divided by the number of partitions you make. Test-running is by far the longest step in most(if not all) builds, and cutting down test-running time speeds up the build, hence feedback loop. 
+    TLB can be used for any kind of test-suite, it can be unit, integration or functional tests.
     <p class="clob_end"/>
-    In addition to balancing, TLB also allows you to do other interesting things like re-order tests within a subset before they get executed. For instance, run tests that failed in the previous run first.
+    In addition to balancing, TLB does other interesting things like re-order tests within a subset(set of tests that run on a partition) before they are executed. For instance, it re-arranges tests to execute failing once(that failed in previous build) first, hence ensuring early feedback.
+    <p class="clob_end"/>
+    
   </div>
 </div>
 <hr/>
 <div>
-  <h3>What is the problem TLB trying to solve?</h3>
+  <h3>What problem does TLB solve?</h3>
   <div class="scope section">
-    <h4>Context</h4>
-    <p>A good amount of time spent in building code is on running tests. Over a period of time, as tests increase in number, the build process starts taking a long time. This is particularly true for automated functional tests. With slow builds when things break, it is a frustrating process to wait for hours to make sure the build is fixed. How can builds be speed up?</p>
-    <p>Given that hardware costs are dropping significantly and that tests should inherently be independent of each other (otherwise its a big smell that needs to be fixed) most people opt for the option of parallelizing the test execution.</p>
-    <p>Most build servers provide the capability of executing across multiple machines like Hudson, Go, TeamCity, Bamboo etc. Lets say a build grid with many machines/VMs or a powerful machine that can run multiple test processes in parallel is ready.</p>
-    <h4>The Problem</h4>
-    <p><strong>How do you make sure when your test suite executes in parallel on your build grid, each test runs only once and all the tests get run?</strong> You also need to make sure that all the machines finish at about the same time. This is the problem TLB solves for you.</p>
+    <p class="clob_end"/>
+    Running tests is the biggest time slice in any project's build. Over a period of time, funcationality and features grow, and so do tests. Eventually because of huge number of tests, the end-to-end build ends up taking so much time that it actually starts eating into team's productivity. This is particularly true for automated functional tests or integration tests.
+    When things fail in a slow build, fixing em, getting a green build and having development/testing teams back on track can be an extremely frustrating and time consuming process. It takes time to attempt fixes and having slow builds often forces the developer(s) to wait for hours together to get a single green build.
+    <p class="clob_end"/>
+    Given that hardware is so cheep now a days and that assuming tests are independent of each other and are order insensitive, most teams can cut their build time by parallelizing test execution. No matter how many tests the project has, you can maintain really low build time just by throwing more hardware at it. Parallelization and scaling-out(distribution of computing to several comodity machines) is a terrific strategy to conquer independent computing problems that when executed serially take long time and running of tests is one such problem.
+    Most build servers(like Hudson, Go, TeamCity, Bamboo etc.) provide parallel execution capability(capibility to execute command(s) on different machines at the same time). However, parallelization of tests needs a tool that can decide what tests need to be run in each such parallely running process across machines. This is where TLB comes in.
+    <p class="clob_end"/>
+    Given that you have a way to invoke the test command(project's test target) on multiple machines at the same time(which can be using a CI server's agent-grid environment, or can even be actually invoked by a tiny utility script from your terminal), you can use TLB to ensure each one of these invocations execute only a few tests(and not all). TLB ensures these few tests for each partition are selected in a way, such that:
+    <ul>
+      <li>No test is run on more than one partition: <i>Mutual Exclusion</i></li>
+      <li>No test is missed out(every test is selected by at-least one partition): <i>Collective Exhaustion</i></li>
+    </ul>
+    <p class="clob_end"/>
+    The problem TLB solves for you is that of slicing and dicing your test suites in the most optimal way, allowing you to get the best of parallel execution(and not that of launching parallel processes on single or multiple machines). TLB engages once your test target is launched, it remains agnostic to how it is triggered.
   </div>
 </div>
 <hr/>
@@ -30,27 +42,26 @@ description: Home page of 'Test Load Balancer(TLB)' project(s).
   <div class="scope section">
     <p/>
     {% include components_of_tlb %}
-    Balancer hooks-up with your build-framework and testing-framework to do the actual work, whereas Server is primarily a data-repository that balancer talks to. Data from previous run(s) is used by the balancer to partition/re-order the current run, and data from the current run is posted back so that it can be used for future runs.
+    Balancer hooks-up with your build-framework and testing-framework to do the actual work, whereas Server is primarily a data-repository that balancer talks to. Data from historical run(s) is used by the balancer to partition/re-order the current run, and in-turn, data from the current run is posted back so it can be used as historical data for future runs.
     <p class="clob_end"/> 
+    It actually forms a cycle where historical data is used to partition accurately, and run data is captured to seed future runs.
   </div>
 </div>
 <hr/>
 <div>
-  <h3>What Language/Platform can TLB be used in?</h3>
+  <h3>What Language(s)/Platform(s) does TLB support?</h3>
   <div class="scope section">
-    <p>TLB is written in Java. That means TLB can be used on pretty much all platforms where Java can run.</p>
-    <p>However, TLB is written from ground up to support both JVM and non-JVM based languages and runtimes. The Balancer is capable of running as a standalone process, in alien-environment (as we call it) setup. The framework and language that tests are written in does not matter.</p>
-    <p>{% include tlb_rb_link %} for instance, runs on MRI (CRuby) and uses standalone balancer. However, since TLB-core is written in java, you will need to have java installed on the box running tests (so balancer process can be launched).</p>
-    <p>Look at the end of this page to see the list of all frameworks that TLB supports right now.</p>
-    <p class="clob_end"/>
-    Infact, it feels like running balancer standalone is actually a better option in most cases, because it has the inherent advantage of process level isolation. 
+    <p>TLB is written in Java, which means, it can be used on pretty much all platforms that Java can run on.</p>
+    <p>However, TLB was written from ground up to support both JVM and non-JVM based languages and runtimes. The Balancer is capable of running as a standalone process, in alien-environment(as we call it). The build/test framework and programming language that tests are written in does not matter.</p>
+    <p>{% include tlb_rb_link %} for instance, supports MRI(CRuby) and using standalone balancer. However, since TLB-core is written in java, you will need to have java installed on the box running tests(so balancer process can be launched).</p>
+    <p><a href="#supported_tools_and_environments">Supported tools and environments</a> section below has the list of all frameworks/environments TLB supports as of now.</p>
   </div>
 </div>
 <hr/>
 <div>
   <h3>Quick start: Get balancing in minutes</h3>
   <div class="scope section">
-    You can visit {% include tlb_getting_started %} to start using TLB (in minutes) on your project. It gives basic definition and step by step instructions on how to setup TLB on your project.
+    You can visit {% include tlb_getting_started %} to start using TLB (in minutes) on your project. It gives basic definition and step by step instructions on how to setup TLB for your project.
     <p class="clob_end"/>
   </div>
 </div>
@@ -58,9 +69,9 @@ description: Home page of 'Test Load Balancer(TLB)' project(s).
 <div>
   <h3>Deep dive: Understanding and Configuring TLB</h3>
   <div class="scope section">
-    While {% include tlb_getting_started %} is a good place to start off, you may want to look at how to configure TLB to your needs and understand the basic concepts involved. With this understanding, you can leverage a lot of things that TLB has to offer.
+    While {% include tlb_getting_started %} is a good place to start off, sooner or later you will want to understand the basic concepts involved, and find out more about configurable parameters TLB exposes to allow you to tune it best for your project and environment. Getting a good grasp of TLB concepts will enable you to leverage a lot of very useful features TLB exposes.
     <p class="clob_end"/>
-    {% include documentation_starting_up_link %} is a good place for the concepts. Please check the {% include documentation_config_vars_link %} section for detailed documentation on TLB configuration.
+    {% include documentation_starting_up_link %} covers TLB concepts. {% include documentation_config_vars_link %} section for configuration related documentation which covers configuration parameters in detail.
   </div>
 </div>
 <hr/>

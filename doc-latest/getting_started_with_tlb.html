@@ -9,31 +9,46 @@ js: hookup_collapsible_pane();
 <div class="scope section">
 <h4>Introduction</h4>
   {% include components_of_tlb %}
-  <p>TLB comes into picture when the same build is scheduled and ran across multiple processes or machines. The idea is that the subsets returned by TLB is executed in parallel so that the build time is reduced. It is TLB's job to make sure each subset takes about the same time to execute.</p>
-  <p><strong>NOTE:</strong> TLB knows how to split the given set of tests into smaller subsets. It has nothing to do with actually running the tests, scheduling them, parallelizing them across machines, VM management etc. All of that would be taken care of, typically, by a CI/build server like Hudson, Go, TeamCity, Bamboo etc. </p>
-<h4>Basic Setup</h4>
-  <p>With these basic ideas, here are the steps that you need to follow to setup TLB on your project</p>
+  <p class="clob_end"/>
+  TLB engages once the test-task has been invoked on multiple processes or machines each one of which is supposed to share the test-load(hence participate in test-load-balancing by executing only a part of the whole). 
+  Since each of these partitions run only a subset of tests, time taken to run one such partition is as many times lesser than the total test time, as the number of partitions.
+  For instance, if total time(time required to execute all tests) is 50 minutes. And there are 10 partitions participating in load-balancing of this test-suite, each one runs only a subset, which takes about 5 minutes to finish(50 mins / 10 partitions = 5 minutes each).
+  Each such partition is started at the same time, so they finish at about the same time too. Which means a the 50 minute test-task with parallelization finishes only in 5 minutes. Once all the partitions finish, because of the way TLB partitions tests, it is guranteed that all tests have executed. 
+  Which means, if all such partitions finish successfully(no tests fail on any partition), the build is green. If one of more of participating processes fail(test fail in one of more partitions), that amounts to a red build(even if most partitions finished successfully).
+  TLB ensures each such subset takes about the same time to execute.
+  <p class="clob_end"/>
+  <strong>NOTE:</strong> TLB only understands splitting the given set of tests into smaller subsets and reordering them within the aforementioned subsets. It has nothing to do with actually running the tests(which build-tool's and testing-framework's jobs), parallelizing them across machines or Virtual Machine management(which are typically taken care of by CI/build server like Hudson, Go, TeamCity, Bamboo etc.
+  <p class="clob_end"/>
+  <h4>Basic Setup</h4>
+  <p>Having explained what TLB is and isn't, here are the steps to follow to incorporate test-load-balancing on your project's test-suite</p>
   <p class="clob_end"/>
   <ol>
-    <li>Make sure JRE 1.6 is installed. This is because TLB is written mainly in Java.</li>
-    <li><strong>Download</strong> TLB from our <a href="http://code.google.com/p/tlb/downloads/list" target="blank">Download page</a> on Google code. 
+    <li>Ensure <strong>JRE 1.6</strong> is installed(Note: JDK bundles JRE as well, so if you have JDK installed, you are all set). This is because TLB core is written in Java.</li>
+    <li><strong>Download</strong> TLB distribution from the <a href="http://code.google.com/p/tlb/downloads/list" target="blank">Downloads page</a>. 
       <div class="snippet">
-	If you want to use tlb_rb, you can install TLB as a gem using:
-	<code class="block">$ gem install tlb</code>
+	      If you want to use TLB on a Ruby project, you can install the relevant TLB gem using:
+	      <code class="block">$ gem install tlb-testunit</code> if you have test::unit based test suite
+        <code class="block">$ gem install tlb-rspec1</code> if you have RSpec-1.x (1.2.x, or 1.3.x etc) based test suite
+        <code class="block">$ gem install tlb-rspec2</code> if you have RSpec-2.x (2.4, or 2.3 etc) based test suite
       </div>
-</li>
-    <li><strong>Start</strong> the TLB <strong>Server</strong> using the server.sh or server.bat script present in the TLB distribution. Something like:
-      <div class="snippet">
-	<code class="block">$ ${TLB_FOLDER}/server.sh start</code>
-      </div>
-      <p>This will start a very lightweight RESTlet server bound to port {% include default_server_port %} by default. The script has some basic environment variables that you can tweak if you need to.</p>
-      <p>If you wish to use the {% include go_link %} support instead, please go through the {% include startup_server_link %} documentation to see how it can be done.</p>
     </li>
-    <li>Now that the server is started, you need to <strong>add Balancing</strong> to your build script.
-</p>As mentioned before, typically, Balancer gets a list of all the tests that need to be executed from the build script. It then prunes it to make a subset using the test information obtained from the Server. This smaller subset is what is given to the test framework to run. Balancer then listens to events published by the test framework to get the time each test took and the result of each test. This is then sent across to the TLB server for future use.</p>
+    <li><strong>Start</strong> the TLB <strong>Server</strong> using the server.sh(for *nix) or server.bat(for windows) script(s) present in the TLB distribution. You'd want to do something similar to:
+      <div class="snippet">
+	      For *nix: <code class="block">$ tlb-x.x/server.sh start</code> 
+        For Windows:<code class="block">&gt; tlb-x.x/server.bat start</code>
+      </div>
+      <p class="clob_end"/>
+      This will start a very lightweight http RESTlet server bound to port {% include default_server_port %} (or whatever user's override is). These scripts have commonly used environment variables relevant to tlb-server configuration that you can tweak if need be.
+      If you wish to use the {% include go_link %} support instead(if using Go-server support, you won't need the TLB Server), please go through the {% include startup_server_link %} documentation to understand how to have balancer work in Go-server-support mode.
+    </li>
+    <li>
+      Once the server is up, you need to <strong>add Balancing</strong> to your build.
+      <p class="clob_end"/>
+      Balancer gets a list of all the tests that need to be executed from the build script(after the build script has been invoked, and before tests start running).
+      It then prunes that list to make a subset using the historical test information obtained from the Server. This smaller subset is passed-on to the test framework to execute. Balancer continues to listens to events published by the test framework as these tests execute, to record result and time taken by each test. This data is then posted across to the TLB server and acts as seed data for balancing/ordering future builds.
 
-<p><strong>Examples of TLB balancer configuration on supported frameworks</strong></p>
-Copy the build task into your build script based on what platform/framework you are using. Make changes as suggested in the comments.
+<p><strong>Some examples of TLB balancer configuration on supported frameworks</strong></p>
+Feel free to copy the build task fragment relevant to the platform and tool-set your project uses into your build script and tweak the details to fit your project needs. In addition to project specific changes, you'll need to make other changes as suggested by the inline comments in relevant fragment(s).
 	<div class="collapsibleContainer" title="Junit on Ant">
 	    <!--TLB-DOC-START@junit-ant-task@-->
 <pre>
@@ -119,38 +134,62 @@ task :bal =&gt; ['tlb:start', :run_balanced]
 	    <!--TLB-DOC-END@rspec2-rake-task@-->
 </div>
     </li>
-    <li>After the build script is changed to include TLB some environment variables need to be set before TLB can work. The values of the variables can be tweaked based on what makes sense to your setup. For now, you can just use these values. Visit the {% include documentation_config_vars_link %} to get a detailed description of these and other variables.
+    <li>Once the necessary build script modifications are made, some TLB configuration environment variables need to be set before TLB can work. Feel free to tweak value of these variables to what makes sense for your project and environment. These variables need to be set for each partition invocation(for example, if you have chosen to make 2 partitions of your test-suite, these values should before executing either of them). 
+      <p class="clob_end"/>
+      <div class="notice message">
+        A detailed description of possible values and implications of all TLB configuration parameters(including the ones below) is available at {% include documentation_config_vars_link %}
+      </div>
+      <p class="clob_end"/>
+      We recomend the following values to start with.
+      <p class="clob_end"/>
       <ul>
-	<li><p>TLB_URL=http://${hostname_on_which_server_is_started}:7019</p>
-	  <p>This tells TLB where to obtain the test data from and post data to. Replace the ${hostname_on_which_server_is_started} with the right value.</p> 
-	</li>
-	<li><p>TOTAL_PARTITIONS=2</p>
-	  <p>The total number of subsets into which TLB split tests. This is generally equal to the number of machines/processes that execute in parallel</p>
-	</li>
-	<li><p>PARTITION_NUMBER=1</p>
-	  <p>The index of the current subset. This tells TLB which subset to give to the test framework to execute. This will have a different value for each parition</p>
-	</li>
-	<li><p>TLB_CRITERIA=tlb.splitter.DefaultingTestSplitterCriteria</p>
-	  <p>This tells the strategy that the Balancer will use to split the tests.</p>
-	<li><p>CRITERIA_DEFAULTING_ORDER=tlb.splitter.TimeBasedTestSplitterCriteria:tlb.splitter.CountBasedTestSplitterCriteria</p>
-	  <p>This gives the chain of algorithms that TLB uses. If one fails, TLB moves onto the next one until it finds something.</p>
-	</li>
-	<li><p>TLB_JOB_NAME=sample_job</p>
-	  <p>The same TLB server can be used by different suites at the same time. In order for the server to identify them uniquely, TLB uses the job name. Make sure all job names are unique.</p>
-	</li>
-	<li><p>JOB_VERSION=${some_value_unique_per_build}</p>
-	  <p>Sometimes you may want to rerun tests so that the same tests run on the same subsets. Make sure ${some_value_unique_per_build} is replaced with right value for each build.</p>
-	</li>
+	      <li><code>TLB_URL=http://tlb-server-host.my-domain.com:7019</code>
+	        <p>This tells TLB balancer where to obtain the test data from and post data to. Replace the use the appropriate hostname and port.</p> 
+	      </li>
+	      <li><code>TOTAL_PARTITIONS=2</code>
+	        <p>Total number of subsets/splits to be made. This should be equal to the number of machines/processes that are going to execute in this test-task parallel.</p>
+	      </li>
+	      <li><code>PARTITION_NUMBER=1</code>
+	        <p>Controls which of the $TOTAL_PARTITIONS is the current partition. Assuming you have decided to go with 2 partitions, this variable will need to be set to 1 for the first partition, and 2 for the second. Its the one-based index of current subset.</p>
+	      </li>
+	      <li><code>TLB_CRITERIA=tlb.splitter.DefaultingTestSplitterCriteria</code>
+	        <p>This governs the algorithm that the Balancer uses to split the tests. We have chosen a value here that doesn't really do the splitting itself, it actually delegates to the preferred splitter algorithm, and defaults to the next in decreasing order of preference if the preffered algorithm fails to balance(which is usually because of external factors, like unavailablity of historical data for a new load-balanced task/project)</p>
+        </li>
+	      <li><code>CRITERIA_DEFAULTING_ORDER=tlb.splitter.TimeBasedTestSplitterCriteria:tlb.splitter.CountBasedTestSplitterCriteria</code>
+	        <p>This is the list of preffered splitter algorithms that user wants the defaulting-algorithm to try. List is supposed to be in decreasing order of preference(which means the leftmost algorithm is most preffered, and the rightmost is the least preffered one). If one fails, TLB moves on to the next one until it finds one that manages to split the test-suite successfully.</p>
+	      </li>
+	      <li><code>TLB_JOB_NAME=sample_job</code>
+	        <p>The same TLB server can be used by different builds from different projects at the same time. In order for the server to identify them uniquely, TLB uses a notion of name(we call it 'job name'). Make sure all job names are unique.</p>
+          <p>For instance, if you want to configure two projects, one thats has a JUnit suite and is a java project called 'foo', and other that is a Ruby project called 'bar' that is using TLB to balance Test::Unit based tests, this value can be 'foo' for the former and 'bar' for the later. However, if 'foo' in the subject has two different test suites, one that is a JUnit test suite, and another that is a Twist test suite, you'd want to distinguish between those as well, which means, the sensible job-names for the current scenario would probably be 'foo-junit' and 'foo-twist' etc.</p>
+	      </li>
+	      <li><code>JOB_VERSION=foo-project-${build_number}</code>
+	        <p>Sometimes you may end up with multiple running builds executing partitions for the same test-suite(as in, using the same job name). This value supposed to be a build instance unique fingerprint.
+            All partitions running for the one build instance should have the same value of job version, and each build instance should use a unique 'job version'.
+            Here is a scenario that will help understand the importance of this variable, and the contract it enforces:
+            <ul class="without_dots">
+              <li>Jen and Matt are two developers on a certain project</li>
+              <li>The project's build has a unit-test task which is configured to use TLB, and the CI server is configured to have 2 different build-machines execute test task with the right set of environment variables, so that they balance</li>
+              <li>Lets say the job name for unit-test task is 'project-tests'</li>
+              <li>Matt triggers build number 74 with his changes to source, the first partition of which completes and posts test-data back to the TLB server, whereas the second partition is still running</li>
+              <li>Jen triggers build number 75 in the meantime with her changes, and the build reaches a stage where first build-machine has downloaded the test-data from shared TLB server and has decided upon a subset, and has started running tests, but the second partition has not pulled down the data yet.</li>
+              <li>At this point, the other partition from Matt's build finishes, and uploads data back to the server</li>
+              <li>Second partition of Jen's build now downloads updated copy of data(<i>which is different from the data first partition pulled</i>)</li>
+            </ul>
+            Now this is a problem, because second partition of Jen's build is going to balance differently from the first one, which means though it will run the second partition, it may run some tests that first partition has executed as well, and worse than that, may ignore a few tests that the first partition did not run(because according to the data at that point, they fell in the second partition).
+            This is where job version comes in. Job version forces TLB server to store a snapshot of data as seen by one of the partitions of a particular build instance, and then TLB server ensures that every other partition using the same job version sees the exact same snapshot of data.
+            In the example above, build number can be used as job version, and that'll ensure second partition of build number 75 gets the same snapshot of data that was served to the first partition of the same build.
+            <p class="clob_end"/>
+            Phew! that was some description :-)
+	      </li>
       </ul>
-      <p>If you are using a non Java based framework, you need to use these variables as well.</p>
+      <p>If you are in a non Java environment, you need to setup the following variables as well.</p>
       <ul>
-	<li><p>TLB_BALANCER_PORT=4971<p>
-	  <p>This is the port on which the Balancer standalone process starts a HTTP port.</p>
-	</li>
+	      <li><code>TLB_BALANCER_PORT=4971</code>
+	        <p>This is the port that standalone balancer process should bind to.</p>
+	      </li>
       </ul>
-      <p>For a list of all the configuration variables refer to {% include documentation_config_vars_link %}.</p>
+      <p>For a list of all the configuration variables and more details on configuration options refer to {% include documentation_config_vars_link %}.</p>
     </li>
-    <li>Make sure all the environment variables are set before the build starts. In the build, make sure all the partitions are executed in parallel to see the effect of TLB.
-    </li>
+    <li>Ensure that the environment variables are set before the build starts. During the build, all the partitions should execute parallely for TLB to give best results(remember, more the prallelization, shorter the build).</li>
   </ol>
 </div>
