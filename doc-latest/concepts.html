@@ -35,10 +35,8 @@ description: Concepts in 'Test Load Balancer(TLB)'.
       The Balancer has 2 aspects to it. Splitter and Orderer. Check out the <a href="#balancer_components">Balancer Components</a> to understand them in greater depth. We strongly recommend reading about the Balancer components as they are core to what TLB does.
     </div>
     <p class="clob_end" />
-    <h4>Interaction between the Server and the Balancer</h4>
-    <p>
-      <img src="/images/tlb-cycle.png" class="center-468"/>
-      <p><strong>Figure 1</strong>: Pictorial expression of aforementioned interaction between Server and Balancer, to show where Server fits in the entire act of load balancing.</p>
+    <h4>Interaction between the Server and the Balancer while TLBing</h4>
+    {% include interaction_while_tlbing %}
   </div>
   <hr/>
   
@@ -113,25 +111,25 @@ description: Concepts in 'Test Load Balancer(TLB)'.
     <hr />
     <ul class="footnotes without_dots">
       <li>
-	<sup><label id="1">1</label></sup> can be overridden, read TLB_PORT in {% include config_vars_link %}
+	      <sup><label id="1">1</label></sup> can be overridden, read TLB_PORT in {% include config_vars_link %}
       </li>
       <li>
-	<sup><label id="2">2</label></sup> read TLB_URL in {% include config_vars_link %}
+	      <sup><label id="2">2</label></sup> read TLB_URL in {% include config_vars_link %}
       </li>
       <li>
-	<sup><label id="3">3</label></sup> read TALK_TO_SERVICE in {% include config_vars_link %} should be set to the fully qualified name of the implementation
+	      <sup><label id="3">3</label></sup> read TALK_TO_SERVICE in {% include config_vars_link %} should be set to the fully qualified name of the implementation
       </li>
       <li>
-	<sup><label id="4">4</label></sup> read TLB_JOB_NAME in {% include config_vars_link %}
+	      <sup><label id="4">4</label></sup> read TLB_JOB_NAME in {% include config_vars_link %}
       </li>
       <li>
-	<sup><label id="5">5</label></sup> read JOB_VERSION in {% include config_vars_link %}
+	      <sup><label id="5">5</label></sup> read JOB_VERSION in {% include config_vars_link %}
       </li>
       <li>
-	<sup><label id="6">6</label></sup> read TOTAL_PARTITIONS in {% include config_vars_link %}
+	      <sup><label id="6">6</label></sup> read TOTAL_PARTITIONS in {% include config_vars_link %}
       </li>
       <li>
-	<sup><label id="7">7</label></sup> read PARTITION_NUMBER in {% include config_vars_link %}
+	      <sup><label id="7">7</label></sup> read PARTITION_NUMBER in {% include config_vars_link %}
       </li>
     </ul>
   </div>
