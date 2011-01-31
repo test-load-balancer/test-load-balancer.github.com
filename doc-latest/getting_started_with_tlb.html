@@ -47,7 +47,7 @@ js: hookup_collapsible_pane();
       Balancer gets a list of all the tests that need to be executed from the build script(after the build script has been invoked, and before tests start running).
       It then prunes that list to make a subset using the historical test information obtained from the Server. This smaller subset is passed-on to the test framework to execute. Balancer continues to listens to events published by the test framework as these tests execute, to record result and time taken by each test. This data is then posted across to the TLB server and acts as seed data for balancing/ordering future builds.
 
-<p><strong>Some examples of TLB balancer configuration on supported frameworks</strong></p>
+<p id="example_configuration"><strong>Example of TLB balancer configuration for some of the supported frameworks</strong></p>
 Feel free to copy the build task fragment relevant to the platform and tool-set your project uses into your build script and tweak the details to fit your project needs. In addition to project specific changes, you'll need to make other changes as suggested by the inline comments in relevant fragment(s).
 	<div class="collapsibleContainer" title="Junit on Ant">
 	    <!--TLB-DOC-START@junit-ant-task@-->
@@ -134,7 +134,7 @@ task :bal =&gt; ['tlb:start', :run_balanced]
 	    <!--TLB-DOC-END@rspec2-rake-task@-->
 </div>
     </li>
-    <li>Once the necessary build script modifications are made, some TLB configuration environment variables need to be set before TLB can work. Feel free to tweak value of these variables to what makes sense for your project and environment. These variables need to be set for each partition invocation(for example, if you have chosen to make 2 partitions of your test-suite, these values should before executing either of them). 
+    <li>Once the necessary build script modifications are made, some TLB configuration environment variables need to be set before TLB can start heavy lifting. Feel free to tweak value of these variables to what makes sense for your project and environment. These variables need to be set for each partition invocation(for example, if you have chosen to make 2 partitions of your test-suite, these values should before executing either of them). 
       <p class="clob_end"/>
       <div class="notice message">
         A detailed description of possible values and implications of all TLB configuration parameters(including the ones below) is available at {% include documentation_config_vars_link %}
@@ -147,19 +147,19 @@ task :bal =&gt; ['tlb:start', :run_balanced]
 	        <p>This tells TLB balancer where to obtain the test data from and post data to. Replace the use the appropriate hostname and port.</p> 
 	      </li>
 	      <li><code>TOTAL_PARTITIONS=2</code>
-	        <p>Total number of subsets/splits to be made. This should be equal to the number of machines/processes that are going to execute in this test-task parallel.</p>
+	        <p>Total number of subsets/splits to be made. This should be equal to the number of machines/processes that are going to execute in this test-task parallely.</p>
 	      </li>
 	      <li><code>PARTITION_NUMBER=1</code>
-	        <p>Controls which of the $TOTAL_PARTITIONS is the current partition. Assuming you have decided to go with 2 partitions, this variable will need to be set to 1 for the first partition, and 2 for the second. Its the one-based index of current subset.</p>
+	        <p>Controls which of the $TOTAL_PARTITIONS is the current partition. It decides which of all the computed subsets needs to be given to the current process's test-runner to execute. Assuming you have decided to go with 2 partitions, this variable will need to be set to 1 for the first partition, and 2 for the second. Its the one-based index of current subset.</p>
 	      </li>
 	      <li><code>TLB_CRITERIA=tlb.splitter.DefaultingTestSplitterCriteria</code>
-	        <p>This governs the algorithm that the Balancer uses to split the tests. We have chosen a value here that doesn't really do the splitting itself, it actually delegates to the preferred splitter algorithm, and defaults to the next in decreasing order of preference if the preffered algorithm fails to balance(which is usually because of external factors, like unavailablity of historical data for a new load-balanced task/project)</p>
+	        <p>This governs the algorithm that the Balancer uses to split the tests. We have chosen a value here that doesn't really do the splitting itself, it infact just delegates to the most preferred splitter algorithm that works. It starts with the most preffered algorithm, and defaults to the next in decreasing order of preference if the most preffered algorithm fails to balance(which is usually because of external factors, like unavailablity of historical data for a new load-balanced task/project etc.)</p>
         </li>
 	      <li><code>CRITERIA_DEFAULTING_ORDER=tlb.splitter.TimeBasedTestSplitterCriteria:tlb.splitter.CountBasedTestSplitterCriteria</code>
-	        <p>This is the list of preffered splitter algorithms that user wants the defaulting-algorithm to try. List is supposed to be in decreasing order of preference(which means the leftmost algorithm is most preffered, and the rightmost is the least preffered one). If one fails, TLB moves on to the next one until it finds one that manages to split the test-suite successfully.</p>
+	        <p>This is the list of preffered splitter algorithms that defaulting-algorithm is going to try. List is supposed to be in decreasing order of preference(which means the leftmost algorithm is most preffered, and the rightmost is the least preffered one). If one fails, TLB moves on to the next one until it finds one that manages to split the test-suite successfully. Colon(:) is a seperator.</p>
 	      </li>
 	      <li><code>TLB_JOB_NAME=sample_job</code>
-	        <p>The same TLB server can be used by different builds from different projects at the same time. In order for the server to identify them uniquely, TLB uses a notion of name(we call it 'job name'). Make sure all job names are unique.</p>
+	        <p>The same TLB server can be used by different builds from different projects at the same time. In order for the server to identify them uniquely, TLB uses a notion of name-space(we call it 'job name'). Make sure all job names are unique.</p>
           <p>For instance, if you want to configure two projects, one thats has a JUnit suite and is a java project called 'foo', and other that is a Ruby project called 'bar' that is using TLB to balance Test::Unit based tests, this value can be 'foo' for the former and 'bar' for the later. However, if 'foo' in the subject has two different test suites, one that is a JUnit test suite, and another that is a Twist test suite, you'd want to distinguish between those as well, which means, the sensible job-names for the current scenario would probably be 'foo-junit' and 'foo-twist' etc.</p>
 	      </li>
 	      <li><code>JOB_VERSION=foo-project-${build_number}</code>
@@ -179,7 +179,7 @@ task :bal =&gt; ['tlb:start', :run_balanced]
             This is where job version comes in. Job version forces TLB server to store a snapshot of data as seen by one of the partitions of a particular build instance, and then TLB server ensures that every other partition using the same job version sees the exact same snapshot of data.
             In the example above, build number can be used as job version, and that'll ensure second partition of build number 75 gets the same snapshot of data that was served to the first partition of the same build.
             <p class="clob_end"/>
-            Phew! that was some description :-)
+            Phew!
 	      </li>
       </ul>
       <p>If you are in a non Java environment, you need to setup the following variables as well.</p>

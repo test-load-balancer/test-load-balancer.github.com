@@ -4,17 +4,14 @@ title: Documentation
 keywords: tlb, test-load-balancer, documentation, configuration, help
 description: Documentation/Help/Starting-up page of 'Test Load Balancer(TLB)' project(s).
 ---
-
-<div class="message notice">
-  This documentation covers core concepts and all the configuration options of TLB. It also covers getting started with <i>TLB</i> in detail. If you have any feedback about the tool itself or documentation or if you find something not explained well enough, please report an issue (here: {% include issue_tracker_link %} ) and we will make sure its addressed.
-</div>
-
+<p>This documentation covers core concepts and all the configuration options of TLB.</p>
+<!--
 <div class="warn notice">
-  This documentation is kept up-to-date with the source/upstream. Which means, as features are added or changed, the regular documentation pages will be modified, even if the feature/change has not been released or tagged yet. Please refer to version specific documentation to ensure you see details of only whats shipped in the version you are using.
+  This documentation is kept up-to-date with source/upstream. Which means, as features are added or changed, the regular documentation pages will be modified, even if the feature/change has not been released or tagged yet. Please refer to version specific documentation to ensure you see details of only whats shipped in the version you are using.
   If you find any discripancies, please report the same(here: {% include issue_tracker_link %} ).
 </div>
 <hr/>
-
+-->
 <div>
   <h3>Documentation for released versions:</h3>
   <div class="scope section">
@@ -27,7 +24,8 @@ description: Documentation/Help/Starting-up page of 'Test Load Balancer(TLB)' pr
 <hr/>
 
 <div>
-  <h3>This version of <i>TLB</i> supports:</h3>
+  <h3>Current Version</h3>
+  <h4>Supported Frameworks</h4>
   <div class="scope section">
     {% include upstream_supported_frameworks %}
   </div>
@@ -36,43 +34,31 @@ description: Documentation/Help/Starting-up page of 'Test Load Balancer(TLB)' pr
 
 <div>
   <label id="starting_up"></label>
-  <h3>Starting up with TLB:</h3>
+  <h4>Concepts in TLB</h4>
   <div class="scope section">
-    {% include starting_up_link %} is usually a good place to start.
+    {% include starting_up_link %} gives details on all the concepts on which TLB is built. This is useful if you want to understand what all you can do with TLB. We strongly suggest that anyone who wants to use TLB in production at least get a hang of this.
     <p class="clob_end"/>
-    We maintain a project(called {% include sample_projects_link %} ) that has example setup(s), written for different frameworks and build-tools in corresponding languages to demonstrate how <i>TLB</i> can be hooked up with your test suite.
+    We maintain a project called {% include sample_projects_link %} that has example setups  written for different frameworks and build-tools in their corresponding languages to demonstrate how <i>TLB</i> can be hooked up with your test suite.
     <p class="clob_end"/>
     The <i>sample projects</i> repository has one directory per build-tool/testing-tool scenario. For instance, there is a directory named <i>ant_junit</i> which demonstrates [Ant(build tool) + JUnit(testing framework) + TLB] setup and <i>test-unit_example</i> which demonstrates [Rake(build tool) + Test::Unit(testing framework) + TLB] setup.
     <p class="clob_end"/>
-    {% include documentation_config_vars_link %}(the next section) explains <i>TLB</i> configuration. Once you have a rough picture of what variables <i>TLB</i> expects and uses, and the possible values, you can start tweaking corresponding values the <i>sample project</i>  of your interest, and observe how it affects behaviour.
+    {% include documentation_config_vars_link %} explains TLB configuration. Once you have a rough picture of what variables <i>TLB</i> expects and uses, and the possible values, you can start tweaking corresponding values on the <i>sample project</i>  of your interest, and observe how it affects behaviour.
   </div>
 </div>
 <hr/>
-
 <div>
-  <h3>Configuration Variables:</h3>
+  <label id="configuring_tlb">
+    <h4>Configuring TLB</h4>
+  </label>
   <div class="scope section">
-    <i>TLB</i> exposes all of its configuration parameters (knobs to tweek its behaviour) through environment variables. 
+    TLB exposes all of its configuration parameters (knobs to tweek its behaviour) through environment variables. 
     <p class="clob_end"/>
-    This means, all it takes to tweak a config parameter is setting an environment variable before you start the build(which uses tlb) or tlb-server. This helps decouple <i>TLB</i> from its environment. Since environment variables set for parent process are visible to child processes as well, its possible to say, configure half of these variables in your shell-initialization and set the other half just before executing tests.
+    This means, all it takes to tweak a configuration is setting an environment variable before you start the build (which uses tlb) or TLB Server. This helps decouple TLB from its environment. Since environment variables set for parent process are visible to child processes as well, its possible to say, configure half of these variables in your shell-initialization and set the other half just before executing tests.
     <p class="clob_end"/>
-    Check {% include config_link %} page for detailed documentation on all environment variables <i>TLB</i> uses.
+    Check the {% include config_link %} page for detailed documentation on all environment variables TLB uses.
   </div>
 </div>
 <hr/>
-
-<div>
-  <h3>Components of TLB:</h3>
-  <div class="scope section">
-    <i>TLB</i> has two major functional components.
-    <p class="clob_end"/>
-    {% include tlb_components_description %}
-    <p class="clob_end"/>
-    We recomend users to get a good understanding of roles these two components play. As <i>TLB</i> evolves, the list of alternative algorithms is likely to grow for these functional components. Since <i>TLB</i> configuration allows for a lot of mix-and-match style setup, understanding the role of these components at a broader level enables users to tweak it in ways that work best for them.
-    <p class="clob_end"/>
-    In addition to the functional components mentioned above, <i>TLB</i> has an infrastructural components as well called <b>talk to service</b>. This component is responsible for enabling <i>TLB</i> to talk to remote server that acts as a data repository. <i>TLB</i> uses this abstraction to download test-results, test-times etc from this repository and to publish the run-feedback back to the repository(which is used by future builds).
-    <p class="clob_end"/>
-    <i>TLB</i> is going to continue introducing such abstractions as it evolves, because this style lends itself to enormous flexibility and configurability, and allows us to provide useful options at every level that user can choose from. In addition to this, it allows users to write their own implementation for these abstractions, hence allowing easy plugability and extensibility.
-  </div>
+<div class="message notice">
+   If you have any feedback about the tool, documentation or if you find something not explained well enough, please report an issue here: {% include issue_tracker_link %} and we will make sure its addressed.
 </div>
-<hr/>
