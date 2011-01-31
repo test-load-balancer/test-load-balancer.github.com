@@ -1,8 +1,8 @@
 ---
 layout: default
 title: Concepts in TLB
-keywords: tlb, test-load-balancer, kick-start, starting-up, setup
-description: Starting-up page of 'Test Load Balancer(TLB)' project(s).
+keywords: tlb, test-load-balancer, kick-start, understanding tlb, tlb concepts, deep dive
+description: Concepts in 'Test Load Balancer(TLB)'.
 ---
 <div>
   <h2>Concepts in TLB</h2>
@@ -37,9 +37,9 @@ description: Starting-up page of 'Test Load Balancer(TLB)' project(s).
     <p class="clob_end" />
     <h4>Interaction between the Server and the Balancer</h4>
     <p>
-      <img src="/images/tlb-cycle.png" />
+      <img src="/images/tlb-cycle.png" class="center-468"/>
       <p><strong>Figure 1</strong>: Interaction between the Server and the Balancer</p>
-      This diagram shows how the Server and the Balancer interact with each other as mentioned before.
+      Pictorial expression of aforementioned interaction between Server and Balancer.
   </div>
   <hr/>
   
@@ -91,10 +91,10 @@ description: Starting-up page of 'Test Load Balancer(TLB)' project(s).
   <hr />
 
   <label id="implementations_of_tlb_server">
-    <h3>Implementations of the Server component</h3>
+    <h3>Implementation(s) of the Server component</h3>
   </label>
   <div class="scope section">
-    As of now, TLB can work against 2 kinds of TLB server implementations. This means Balancer can run against either of them. One of them comes packaged in TLB distribution which is called "TLB Server" and the other is a Continious-Integration/Release-Management server called "{% include go_link %} Server".
+    As of now, TLB can work against 2 kinds of server implementation. This means Balancer can run against either of them. One of them comes packaged in TLB distribution which is called "TLB Server" and the other is a well known Continious-Integration/Release-Management server called "{% include go_link %} Server".
     <p class="clob_end" />
     <h4>TLB server[ {% include tlb_repo_link_link %} ]:</h4>
     TLB server comes packaged as an all-jar (a java archive that carries all dependencies that tlb requires). In order to start the server, you can use
@@ -105,7 +105,7 @@ description: Starting-up page of 'Test Load Balancer(TLB)' project(s).
     <p class="clob_end"/>
     When started this way, TLB server binds to port<sup><a href="#1">[1]</a></sup> 7019. Once the server is up, partitions that are to be balanced (clients/balancer instances), can be pointed to it by setting a url on Balancer<sup><a href="#2">[2]</a></sup> to the base url of the tlb server. Balancer works using an abstraction called TalkToService, and TalkToTlbServer<sup><a href="#3">[3]</a></sup> is an implementation of this contract that comes packaged in TLB.
     <p class="clob_end"/>
-    <h4>Go™ server[ {% include go_link_link %} ]:</h4>
+    <h4>Go server[ {% include go_link_link %} ]:</h4>
     TLB has inbuilt support for Go, which means TLB can balance against Go just like it balances against the TLB-Server. Running against Go obviously means the tests are run as part of a Go-Task, which will run on a Go-Agent. Additionally, because TLB is environment aware, it can implicit a few things while running against Go server. It deduces equivallent of things like job-name<sup><a href="#4">[4]</a></sup>, version<sup><a href="#5">[5]</a></sup> and total partitions<sup><a href="#6">[6]</a></sup> from the way jobs are configured under stage and pipeline. To make TLB work with Go, TalkToService needs to use TalkToGoServer<sup><a href="#3">[3]</a></sup>. 
     <p class="clob_end"/>
     In this case, you do not need to run a seperate process(TLB Server) to act as server, because Go-server plays that role. This does not need any change in the go-server or go-configuration apart from the naming convension your Go job-names need to follow. The convention is that they need to be of the form "&lt;my-job-name&gt;-X"(where X is a natural number 1..n, when you want to make n partitions), or "&lt;my-job-name&gt;-&lt;UUID&gt;"(where each such job will be made to execute only one partition).
