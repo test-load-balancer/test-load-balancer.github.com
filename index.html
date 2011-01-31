@@ -21,11 +21,11 @@ description: Home page of 'Test Load Balancer(TLB)' project(s).
   <h3>What problem does TLB solve?</h3>
   <div class="scope section">
     <p class="clob_end"/>
-    Running tests is the biggest time slice in any project's build. Over a period of time, funcationality and features grow, and so do tests. Eventually because of huge number of tests, the end-to-end build ends up taking so much time that it actually starts eating into team's productivity. This is particularly true for automated functional tests or integration tests.
+    Running tests is the biggest time slice in any project's build. Over a period of time, functionality and features grow, and so do tests. Eventually because of huge number of tests, the end-to-end build ends up taking so much time that it actually starts eating into team's productivity. This is particularly true for automated functional tests or integration tests.
     When things fail in a slow build, fixing em, getting a green build and having development/testing teams back on track can be an extremely frustrating and time consuming process. It takes time to attempt fixes and having slow builds often forces the developer(s) to wait for hours together to get a single green build.
     <p class="clob_end"/>
-    Given that hardware is so cheep now a days and that assuming tests are independent of each other and are order insensitive, most teams can cut their build time by parallelizing test execution. No matter how many tests the project has, you can maintain really low build time just by throwing more hardware at it. Parallelization and scaling-out(distribution of computing to several comodity machines) is a terrific strategy to conquer independent computing problems that when executed serially take long time and running of tests is one such problem.
-    Most build servers(like Hudson, Go, TeamCity, Bamboo etc.) provide parallel execution capability(capibility to execute command(s) on different machines at the same time). However, parallelization of tests needs a tool that can decide what tests need to be run in each such parallely running process across machines. This is where TLB comes in.
+    Given that hardware is so cheep now a days and that assuming tests are independent of each other and are order insensitive, most teams can cut their build time by parallelizing test execution. No matter how many tests the project has, you can maintain really low build time just by throwing more hardware at it. Parallelization and scaling-out(distribution of computing to several commodity machines) is a terrific strategy to conquer independent computing problems that when executed serially take long time and running of tests is one such problem.
+    Most build servers(like Hudson, Go, TeamCity, Bamboo etc.) provide parallel execution capability(capability to execute command(s) on different machines at the same time). However, parallelization of tests needs a tool that can decide what tests need to be run in each such parallely running process across machines. This is where TLB comes in.
     <p class="clob_end"/>
     Given that you have a way to invoke the test command(project's test target) on multiple machines at the same time(which can be using a CI server's agent-grid environment, or can even be actually invoked by a tiny utility script from your terminal), you can use TLB to ensure each one of these invocations execute only a few tests(and not all). TLB ensures these few tests for each partition are selected in a way, such that:
     <p class="clob_end"/>
@@ -53,7 +53,7 @@ description: Home page of 'Test Load Balancer(TLB)' project(s).
   <h3>What Language(s)/Platform(s) does TLB support?</h3>
   <div class="scope section">
     <p>TLB is written in Java, which means, it can be used on pretty much all platforms that Java can run on.</p>
-    <p>However, TLB was written from ground up to support both JVM and non-JVM based languages and runtimes. The Balancer is capable of running as a standalone process, in alien-environment(as we call it). The build/test framework and programming language that tests are written in does not matter.</p>
+    <p>However, TLB was written from ground up to support both JVM and non-JVM based languages and runtime(s). The Balancer is capable of running as a standalone process, in alien-environment(as we call it). The build/test framework and programming language that tests are written in does not matter.</p>
     <p>{% include tlb_rb_link %} for instance, supports MRI(CRuby) and using standalone balancer. However, since TLB-core is written in java, you will need to have java installed on the box running tests(so balancer process can be launched).</p>
     <p><a href="#supported_tools_and_environments">Supported tools and environments</a> section below has the list of all frameworks/environments TLB supports as of now.</p>
   </div>
@@ -119,7 +119,7 @@ description: Home page of 'Test Load Balancer(TLB)' project(s).
     <p class="clob_end"/>
     <div class="with_desc">
       <h5>We plan to add support for:</h5>
-      <span class="heading_desc">We have not yet started work on adding suppport for tools mentioned in this section.</span>
+      <span class="heading_desc">We have not yet started work on adding support for tools mentioned in this section.</span>
     </div>
     Cucumber(Ruby), MSTest(.Net), MSBuild(.Net), Maven(Java), unittest(Python), FiveAM(CommonLisp), cppunit(C++) etc.
     <p class="clob_end"/>
