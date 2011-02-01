@@ -82,6 +82,19 @@ h4 {
      padding-left: 8px;
 }
 
+.undo.scope.section { 
+    margin-left: 4px;
+    padding-left: 0px;
+}
+
+.undo.scope.section.no_border { 
+    border: none;
+}
+
+.section_indent { 
+    margin-left: 4px;
+}
+
 ul.without_dots li {
      list-style: none;
 }
@@ -133,4 +146,16 @@ ul.wide-items li {
 
 div.collapsibleContainer {
     margin: 1.5em;
+}
+
+ul.spaced_out_rows li { 
+    padding: .1em 0 1em 0;
+}
+
+ul.spaced_out_rows li .scope { 
+    margin-top: .5em;
+}
+
+ul.spaced_out_rows li hr.no_margin { 
+    margin: 1em 0 0 0;
 }
