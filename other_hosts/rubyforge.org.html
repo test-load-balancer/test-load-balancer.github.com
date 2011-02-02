@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  
+    <meta name="description" content="tlb_rb project page" />
+    <meta name="keywords" content="tlb_rb, tlb, test-load-balancer, ruby, rspec-2, rspec-1, test::unit, parallelization" />
+    <meta name="robots" content="noodp,noydir" />
+    
+    <title>TLB - Ruby Support Library</title>
+    <style type="text/css">
+      .container {
+          margin: 2% 10%;
+      }
+      
+      ul {
+          margin-top: 1em;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">  
+      <h3>tlb_rb - 'Test Load Balancer' for Ruby</h3>
+      <p><a href="http://test-load-balancer.github.com/projects.html#ruby">tlb_rb</a> is the TLB Ruby support library. It allows load-balancing of Test::Unit, RSpec-1.x or RSpec-2.x test suites among multiple hosts that share the test-running load.</p>
+      <p/>
+      <p>TLB makes multiple partitions of the tests to-be-run by the subject test-task, and allows execution of each such partition on a different machine/process. Since each such partition executes only a subset of tests, the time each one takes is 'total-serial-execution-time / number-of-partitions'.</p>
+      <p>All such partitions execute parallely and finish at almost the same time, hence dividing the build time by number-of-partitions made.</p>
+      <p>So assuming serial-execution of the entire test-suite for a project 'foo' takes 10 miutes, and there are 5 machines available to load-balance these tests, TLB can have the build finish in just 2 minutes by insuring:
+        <ol>
+          <li>each machine/process executes only one subset of tests</li>
+          <li>no tests are skipped</li>
+          <li>no tests are executed on more than one machine</li>
+        </ol>
+      </p>
+      <p/>
+      <p>It can be used on the CI server(to run tests parallely, hence cutting build time) or can be used in other innovative ways, like with a Capistrano recipe that invokes test-task on multiple machines at the same time, so that TLB can engage to have each machine run only a subset of tests, and provide developers quicker feedback on local changes.</p>
+
+      <p>TLB Ruby support library is distributed through RubyGems.org as multiple framework-specific gems:</p>
+      <ul>
+        <li><strong>tlb-rspec2</strong>: Support library for RSpec-2.x(2.4, 2.3 etc)</li>
+        <li><strong>tlb-rspec1</strong>: Support library for RSpec-1.x(1.3.1, 1.3.0 etc)</li>
+        <li><strong>tlb-testunit</strong>: Support library for Test::Unit</li>
+      </ul>
+      
+      <p>Please refer to <strong><a href="http://test-load-balancer.github.com">http://test-load-balancer.github.com</a></strong> for <strong>Detailed Documentation</strong>, <strong>Quick Start</strong>, <strong>Issue Tracker</strong> and other 'tlb' and 'tlb_rb' related details.</p>
+      <p>The tlb_rb codebase is available at <a href="https://github.com/test-load-balancer/tlb_rb">https://github.com/test-load-balancer/tlb_rb</a></p>
+
+      <p>Reach us at: <a href="mailto:test-load-balancer@googlegroups.com">test-load-balancer@googlegroups.com</a></p>
+    </div>
+  </body>
+</html>
