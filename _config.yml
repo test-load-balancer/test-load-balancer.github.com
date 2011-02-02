@@ -20,7 +20,7 @@ maruku:
 url:          http://localhost:4000
 title:        Test Load Balancer(TLB)
 description:  A tool that allows load-balancing/parallelizing your test across multiple machines, to bring project build time down.
-keywords:     tlb, test-load-balancer, ant, buildr, java, junit, rspec, test::unit, ruby, .Net, Nant, NUnit, Twist, tlb_rb
+keywords:     tlb, test-load-balancer, ant, buildr, java, junit, rspec, test::unit, ruby, .Net, Nant, NUnit, Twist, tlb.rb
 author:       Pavan KS, Janmejay Singh,
 email:        itspanzi@gmail.com, singh.janmejay@gmail.com
 analytics_id: UA-20747157-1
