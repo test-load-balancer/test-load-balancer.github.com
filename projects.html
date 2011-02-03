@@ -5,7 +5,7 @@ keywords: tlb, test-load-balancer, projects, subprojects, project list, project 
 description: Projects under the TLB umbrella
 ---
 <div>
-  <h3>{% include tlb_repo_name_link %} (the core) [Java]</h3>
+  <label id="java"><h3>{% include tlb_repo_name_link %} (the core) [Java]</h3></label>
   <div class="scope section">
     {% include tlb_repo_name_link %}
     is the core/base project that implements all the test-load-balancing logic and infrastructure. We chose Java to implement TLB core because it promises platform independence. This is what has enabled TLB to be easily used across architectures and operating systems as long as JVM is installed. 
@@ -19,7 +19,7 @@ description: Projects under the TLB umbrella
 </div>
 <hr/>
 <div>
-  <h3>{% include tlb_rb_link %} (ruby support) [Ruby]</h3>
+  <label id="ruby"><h3>{% include tlb_rb_link %} (ruby support) [Ruby]</h3></label>
   <div class="scope section">
     {% include tlb_rb_link %}
     is TLB Ruby support library. The distributables for this project are bundled as ruby-gems. There are three different gems(listed below) that are built as distributables out of this project. Each one bundles support for a specific ruby testing framework and a rake task that needs to be used to start the balancer server sub-process(a local java process).
@@ -35,7 +35,7 @@ description: Projects under the TLB umbrella
 </div>
 <hr/>
 <div>
-  <h3>{% include sample_projects_link %} (demo tlb setup) [soup, has all kinds of projects]</h3>
+  <label id="examples"><h3>{% include sample_projects_link %} (demo tlb setup) [soup, has all kinds of projects]</h3></label>
   <div class="scope section">
     {% include sample_projects_link %}
     is a repository of dummy projects, that use supported testing frameworks and build tools to bring it all together, and demonstrate how TLB can be used on a typical project. Its meant to highlight the hookup points and allow users to play with environment variables even before they hook-up TLB with their project's build.
@@ -50,7 +50,7 @@ description: Projects under the TLB umbrella
 </div>
 <hr/>
 <div>
-  <h3>{% include set_part_link %} (proving grounds) [Common Lisp]</h3>
+  <label id="set-part"><h3>{% include set_part_link %} (proving grounds) [Common Lisp]</h3></label>
   <div class="scope section">
     {% include set_part_link %}
     is a spike(proof of concept) repository. Set-partitioning is a computationally difficult problem. Since it is an NP-hard problem, approximation algorithms are often used to solve it satisfactorily in polynomial time.
@@ -64,7 +64,7 @@ description: Projects under the TLB umbrella
 </div>
 <hr/>
 <div>
-  <h3>{% include tlb_dot_net_link %} (.Net support) [C#]</h3>
+  <label id="dot_net"><h3>{% include tlb_dot_net_link %} (.Net support) [C#]</h3></label>
   <div class="scope section">
     {% include tlb_dot_net_link %}
     is TLB .Net support library. Its under development, still in very nascent stage.
@@ -72,7 +72,7 @@ description: Projects under the TLB umbrella
 </div>
 <hr/>
 <div>
-  <h3>{% include tlb_misc_link %} (latex, text, images... etc) [soup, has various things]</h3>
+  <label id="misc"><h3>{% include tlb_misc_link %} (latex, text, images... etc) [soup, has various things]</h3></label>
   <div class="scope section">
     {% include tlb_misc_link %}
     is used to version .tex files for presentation, images used in tlb-site, text related to tlb and other related things that are not directly related to code.
@@ -80,7 +80,7 @@ description: Projects under the TLB umbrella
 </div>
 <hr/>
 <div>
-  <h3>{% include tlb_site_link %} (this website) [html/javascript/css]</h3>
+  <label id="website"><h3>{% include tlb_site_link %} (this website) [html/javascript/css]</h3></label>
   <div class="scope section">
     {% include tlb_site_link %}
     is used to version the tlb-site content(documentation, details about the projects etc).

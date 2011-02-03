@@ -1,9 +1,7 @@
 Popup = (function() {
   function wire_popup(link, title_fn) {
     var popup_body = link.parent().find('.popup');
-    console.log(link.parents());
     jQuery(link).click(function() {
-      console.log(popup_body);
       popup_body.dialog({width: "800px", title: title_fn(link), draggable: true});
       return false;
     });

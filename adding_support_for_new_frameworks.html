@@ -27,7 +27,7 @@ To load-balance tests across multiple processes, TLB needs to hook up with 2 kin
   Supporting build tools is a matter of implementing the end user interface(s) which delegate to the Splitter and Orderer. Build tool integration layer also does the plumbing work of attaching listeners to the test running framework so the feedback can be posted. For instance, Ant support hooks up at the fileset-filter level for partitioning and re-ordering and attaches a JUnitResultFormatter with the test task, so the feedback gets posted. Rake support hooks up SpecFormatter for RSpec or TestObserver for Test::Unit.
 </div>
 <hr/>
-<a href="http://github.com/test-load-balancer/tlb_rb">tlb_rb</a> can be used as spec-implementation of alien-environment(non-java language) integration. Obviously, code can not be treated as spec in all purity, but it should be give a good enough idea of various things that need to be done to get alien-environment working with TLB.
+<a href="http://github.com/test-load-balancer/tlb.rb">tlb.rb</a> can be used as spec-implementation of alien-environment(non-java language) integration. Obviously, code can not be treated as spec in all purity, but it should be give a good enough idea of various things that need to be done to get alien-environment working with TLB.
 <p class="clob_end"/>
 If you plan to implement TLB support for a new language or for a new framework in one of the supported languages, please get in touch with us(check: {% include contact_us_link %}
 ) on the test-load-balancer mailing list or drop a mail to one of the developers.
