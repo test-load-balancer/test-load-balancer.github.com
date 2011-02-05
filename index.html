@@ -20,21 +20,19 @@ description: Home page of 'Test Load Balancer(TLB)' project(s).
 <div>
   <h3>What problem does TLB solve?</h3>
   <div class="scope section">
+    Most build servers(like Hudson, Go, TeamCity, Bamboo etc.) provide parallel execution capability(capability to execute command(s) on different machines at the same time). 
+    However, parallelization of tests needs a tool that can decide what tests need to be run in each such parallely running process across machines. This is where TLB comes in.
     <p class="clob_end"/>
-    Running tests is the biggest time slice in any project's build. Over a period of time, functionality and features grow, and so do tests. Eventually because of huge number of tests, the end-to-end build ends up taking so much time that it actually starts eating into team's productivity. This is particularly true for automated functional tests or integration tests.
-    When things fail in a slow build, fixing em, getting a green build and having development/testing teams back on track can be an extremely frustrating and time consuming process. It takes time to attempt fixes and having slow builds often forces the developer(s) to wait for hours together to get a single green build.
-    <p class="clob_end"/>
-    Given that hardware is so cheep now a days and that assuming tests are independent of each other and are order insensitive, most teams can cut their build time by parallelizing test execution. No matter how many tests the project has, you can maintain really low build time just by throwing more hardware at it. Parallelization and scaling-out(distribution of computing to several commodity machines) is a terrific strategy to conquer independent computing problems that when executed serially take long time and running of tests is one such problem.
-    Most build servers(like Hudson, Go, TeamCity, Bamboo etc.) provide parallel execution capability(capability to execute command(s) on different machines at the same time). However, parallelization of tests needs a tool that can decide what tests need to be run in each such parallely running process across machines. This is where TLB comes in.
-    <p class="clob_end"/>
-    Given that you have a way to invoke the test command(project's test target) on multiple machines at the same time(which can be using a CI server's agent-grid environment, or can even be actually invoked by a tiny utility script from your terminal), you can use TLB to ensure each one of these invocations execute only a few tests(and not all). TLB ensures these few tests for each partition are selected in a way, such that:
+    Given that you have a way to invoke the test command(project's test target) on multiple machines at the same time(which can be using a CI server's agent-grid environment, or can even be actually invoked by a tiny utility script from your terminal), you can use TLB to ensure each one of these invocations execute only a few tests(and not all). 
+    TLB ensures these few tests for each partition are selected in a way, such that:
     <p class="clob_end"/>
     <ul>
       <li>No test is run on more than one partition: <i>Mutual Exclusion</i></li>
       <li>No test is missed out(every test is selected by at-least one partition): <i>Collective Exhaustion</i></li>
     </ul>
     <p class="clob_end"/>
-    The problem TLB solves for you is that of slicing and dicing your test suites in the most optimal way, allowing you to get the best of parallel execution(and not that of launching parallel processes on single or multiple machines). TLB engages once your test target is launched, it remains agnostic to how it is triggered.
+    The problem TLB solves for you is that of slicing and dicing your test suites in the most optimal way, allowing you to get the best of parallel execution(and not that of launching parallel processes on single or multiple machines). 
+    TLB engages once your test target is launched, it remains agnostic to what triggers it.
   </div>
 </div>
 <hr/>
@@ -125,6 +123,24 @@ description: Home page of 'Test Load Balancer(TLB)' project(s).
     Cucumber(Ruby), MSTest(.Net), MSBuild(.Net), Maven(Java), unittest(Python), FiveAM(CommonLisp), cppunit(C++) etc.
     <p class="clob_end"/>
     And of course, anything else you can mail us patches for... :-)
+  </div>
+</div>
+<hr/>
+<div>
+  <h3>Philosophy and Inspiration</h3>
+  <div class="scope section">
+    Running tests is by far the biggest time slice in any project's build, unless the project has very little or no tests at all(which if the case, is obviously a bigger problem).
+    <p/>
+    Over a period of time, functionality and features grow, and so do tests. Eventually because of these huge number of tests, the time taken by end-to-end build starts eating into the productivity pie. Every upstream change-set goes through a build process which is several minutes(or worse, hours) long, which makes cost of a fixing a failing test really high. 
+    This is particularly true for automated functional tests or integration tests just because they generally take more time to execute than unit-tests.
+    <p/>
+    When things fail in a slow build, fixing em, getting a green build and having development/testing teams back on track can be an extremely frustrating and time consuming process. It takes awful lot of time to attempt fixes(especially so, when dealing with an indirect or complicated issue, which takes multiple attempts) and having slow build often forces the developer(s) to wait for hours together to get a single good build.
+    <p/>
+    Given that hardware is so cheep now a days and that assuming tests are independent of each other and are order insensitive, most teams can cut their build time by parallelizing test execution. No matter how many tests the project has, you can maintain really low build time just by throwing more hardware at it. Parallelization and scaling-out(distribution of computing to several commodity machines) is a terrific strategy to conquer independent computing problems that when executed serially, take long time and running of tests is one such problem.
+    <p/>
+    Before coming up with TLB, we faced the slow-serial builds problem on every single project we worked on, and couldn't find anything out there capable of solving it satisfactorily. TLB has been written from ground-up to solve this problem for every language and every testing-framework. 
+    <p/>
+    TLB is our final answer to the slow builds problem.
   </div>
 </div>
 <hr/>
