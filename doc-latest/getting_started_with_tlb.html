@@ -6,19 +6,23 @@ description: Example snippets demonstrating how to tlb-enable your project
 js: hookup_collapsible_pane();
 ---
 <h3>Quick Start</h3>
-<div class="scope section">
+<hr/>
+<div>
 <h4>Introduction</h4>
-  {% include components_of_tlb %}
-  <p class="clob_end"/>
-  TLB engages once the test-task has been invoked. This generally happens on multiple processes or machines each one of which is supposed to share the test-load (and hence participate in test-load-balancing by executing only a part of the whole). Since each of these partitions run only a subset of tests, time taken to run each such partition is as many times lesser than the total test time. TLB ensures each such subset takes about the same time to execute.
-  <p class="clob_end" />
-  For instance, if total time (time required to execute all tests) is 50 minutes and there are 10 partitions participating in load-balancing of this test-suite, each one runs only a subset, which takes about 5 minutes to finish (50 mins / 10 partitions = 5 minutes each).
-  <p class="clob_end" />
-  When each such partition is started at the same time, they finish at about the same time too. Which means a 50 minute test-task with parallelization finishes only in 5 minutes. Once all the partitions finish, because of the way TLB partitions tests, it is guranteed that all tests have executed. The build should be considered red if any test fails on any partition. If all the tests pass, the build can be considered green.
-  <p class="clob_end"/>
-  <strong>NOTE:</strong> TLB only understands splitting the given set of tests into smaller subsets and reordering them within the aforementioned subsets. It has nothing to do with actually running the tests(which build-tool's and testing-framework's jobs), parallelizing them across machines or Virtual Machine management(which are typically taken care of by CI/build server like Hudson, Go, TeamCity, Bamboo etc.
-  <p class="clob_end"/>
+  <div class="scope section">
+    {% include components_of_tlb %}
+    <p class="clob_end"/>
+    TLB engages once the test-task has been invoked. This generally happens on multiple processes or machines each one of which is supposed to share the test-load (and hence participate in test-load-balancing by executing only a part of the whole). Since each of these partitions run only a subset of tests, time taken to run each such partition is as many times lesser than the total test time. TLB ensures each such subset takes about the same time to execute.
+    <p class="clob_end" />
+    For instance, if total time (time required to execute all tests) is 50 minutes and there are 10 partitions participating in load-balancing of this test-suite, each one runs only a subset, which takes about 5 minutes to finish (50 mins / 10 partitions = 5 minutes each).
+    <p class="clob_end" />
+    When each such partition is started at the same time, they finish at about the same time too. Which means a 50 minute test-task with parallelization finishes only in 5 minutes. Once all the partitions finish, because of the way TLB partitions tests, it is guranteed that all tests have executed. The build should be considered red if any test fails on any partition. If all the tests pass, the build can be considered green.
+    <p class="clob_end"/>
+    <strong>NOTE:</strong> TLB only understands splitting the given set of tests into smaller subsets and reordering them within the aforementioned subsets. It has nothing to do with actually running the tests(which build-tool's and testing-framework's jobs), parallelizing them across machines or Virtual Machine management(which are typically taken care of by CI/build server like Hudson, Go, TeamCity, Bamboo etc.
+  </div>
+  <hr/>
   <h4>Basic Setup</h4>
+  <div class="scope section">
   <p>Having explained what TLB is and isn't, here are the steps to follow to incorporate test-load-balancing on your project's test-suite</p>
   <p class="clob_end"/>
   <ol>
@@ -190,4 +194,5 @@ task :bal =&gt; ['tlb:start', :run_balanced]
     </li>
     <li>Ensure that the environment variables are set before the build starts. During the build, all the partitions should execute parallely for TLB to give best results(remember, more the prallelization, shorter the build).</li>
   </ol>
+  </div>
 </div>
