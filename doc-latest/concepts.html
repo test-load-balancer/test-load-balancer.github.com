@@ -98,10 +98,10 @@ description: Concepts in 'Test Load Balancer(TLB)'.
     </code>(XXXX here needs to be substituted with the corresponding version/revision of jar used).
     Or you can use the "server.[sh|bat]" scripts that are bundled in the distribution.
     <p class="clob_end"/>
-    When started this way, TLB server binds to port<sup><a href="#1">[1]</a></sup> 7019. Once the server is up, partitions that are to be balanced (clients/balancer instances), can be pointed to it by setting a url on Balancer<sup><a href="#2">[2]</a></sup> to the base url of the tlb server. Balancer works using an abstraction called TalkToService, and TalkToTlbServer<sup><a href="#3">[3]</a></sup> is an implementation of this contract that comes packaged in TLB.
+    When started this way, TLB server binds to port<sup><a href="#1">[1]</a></sup> 7019. Once the server is up, partitions that are to be balanced (clients/balancer instances), can be pointed to it by setting a url on Balancer<sup><a href="#2">[2]</a></sup> to the base url of the tlb server. Balancer works using an abstraction called Server, and TlbServer<sup><a href="#3">[3]</a></sup> is an implementation of this contract that comes packaged in TLB.
     <p class="clob_end"/>
     <h4>Go server[ {% include go_link_link %} ]:</h4>
-    TLB has inbuilt support for Go, which means TLB can balance against Go just like it balances against the TLB-Server. Running against Go obviously means the tests are run as part of a Go-Task, which will run on a Go-Agent. Additionally, because TLB is environment aware, it can implicit a few things while running against Go server. It deduces equivalent of things like job-name<sup><a href="#4">[4]</a></sup>, version<sup><a href="#5">[5]</a></sup> and total partitions<sup><a href="#6">[6]</a></sup> from the way jobs are configured under stage and pipeline. To make TLB work with Go, TalkToService needs to use TalkToGoServer<sup><a href="#3">[3]</a></sup>. 
+    TLB has inbuilt support for Go, which means TLB can balance against Go just like it balances against the TLB-Server. Running against Go obviously means the tests are run as part of a Go-Task, which will run on a Go-Agent. Additionally, because TLB is environment aware, it can implicit a few things while running against Go server. It deduces equivalent of things like job-name<sup><a href="#4">[4]</a></sup>, version<sup><a href="#5">[5]</a></sup> and total partitions<sup><a href="#6">[6]</a></sup> from the way jobs are configured under stage and pipeline. To make TLB work with Go, Server needs to use GoServer<sup><a href="#3">[3]</a></sup>. 
     <p class="clob_end"/>
     In this case, you do not need to run a separate process(TLB Server) to act as server, because Go-server plays that role. This does not need any change in the go-server or go-configuration apart from the naming convention your Go job-names need to follow. The convention is that they need to be of the form "&lt;my-job-name&gt;-X"(where X is a natural number 1..n, when you want to make n partitions), or "&lt;my-job-name&gt;-&lt;UUID&gt;"(where each such job will be made to execute only one partition).
     <p class="clob_end"/>
@@ -111,25 +111,25 @@ description: Concepts in 'Test Load Balancer(TLB)'.
     <hr />
     <ul class="footnotes without_dots">
       <li>
-	      <sup><label id="1">1</label></sup> can be overridden, read TLB_PORT in {% include config_vars_link %}
+	      <sup><label id="1">1</label></sup> can be overridden, read TLB_SERVER_PORT in {% include config_vars_link %}
       </li>
       <li>
-	      <sup><label id="2">2</label></sup> read TLB_URL in {% include config_vars_link %}
+	      <sup><label id="2">2</label></sup> read TLB_BASE_URL in {% include config_vars_link %}
       </li>
       <li>
-	      <sup><label id="3">3</label></sup> read TALK_TO_SERVICE in {% include config_vars_link %} should be set to the fully qualified name of the implementation
+	      <sup><label id="3">3</label></sup> read TYPE_OF_SERVER in {% include config_vars_link %} should be set to the fully qualified name of the implementation
       </li>
       <li>
 	      <sup><label id="4">4</label></sup> read TLB_JOB_NAME in {% include config_vars_link %}
       </li>
       <li>
-	      <sup><label id="5">5</label></sup> read JOB_VERSION in {% include config_vars_link %}
+	      <sup><label id="5">5</label></sup> read TLB_JOB_VERSION in {% include config_vars_link %}
       </li>
       <li>
-	      <sup><label id="6">6</label></sup> read TOTAL_PARTITIONS in {% include config_vars_link %}
+	      <sup><label id="6">6</label></sup> read TLB_TOTAL_PARTITIONS in {% include config_vars_link %}
       </li>
       <li>
-	      <sup><label id="7">7</label></sup> read PARTITION_NUMBER in {% include config_vars_link %}
+	      <sup><label id="7">7</label></sup> read TLB_PARTITION_NUMBER in {% include config_vars_link %}
       </li>
     </ul>
   </div>

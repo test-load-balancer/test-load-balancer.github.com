@@ -146,27 +146,27 @@ task :bal =&gt; ['tlb:start', :run_balanced]
       We recomend the following values to start with.
       <p class="clob_end"/>
       <ul>
-	      <li><code>TLB_URL=http://tlb-server-host.my-domain.com:7019</code>
+	      <li><code>TLB_BASE_URL=http://tlb-server-host.my-domain.com:7019</code>
 	        <p>This tells TLB balancer where to obtain the test data from and post data to. Replace the use the appropriate hostname and port.</p> 
 	      </li>
-	      <li><code>TOTAL_PARTITIONS=2</code>
+	      <li><code>TLB_TOTAL_PARTITIONS=2</code>
 	        <p>Total number of subsets/splits to be made. This should be equal to the number of machines/processes that are going to execute in this test-task parallely.</p>
 	      </li>
-	      <li><code>PARTITION_NUMBER=1</code>
-	        <p>Controls which of the $TOTAL_PARTITIONS is the current partition. It decides which of all the computed subsets needs to be given to the current process's test-runner to execute. Assuming you have decided to go with 2 partitions, this variable will need to be set to 1 for the first partition, and 2 for the second. Its the one-based index of current subset.</p>
+	      <li><code>TLB_PARTITION_NUMBER=1</code>
+	        <p>Controls which of the $TLB_TOTAL_PARTITIONS is the current partition. It decides which of all the computed subsets needs to be given to the current process's test-runner to execute. Assuming you have decided to go with 2 partitions, this variable will need to be set to 1 for the first partition, and 2 for the second. Its the one-based index of current subset.</p>
 	      </li>
-	      <li><code>TLB_CRITERIA=tlb.splitter.DefaultingTestSplitterCriteria</code>
+	      <li><code>TLB_SPLITTER=tlb.splitter.DefaultingTestSplitter</code>
 	        <p>This governs the algorithm that the Balancer uses to split the tests. We have chosen a value here that doesn't really do the splitting itself, it infact just delegates to the most preferred splitter algorithm that works. It starts with the most preffered algorithm, and defaults to the next in decreasing order of preference if the most preffered algorithm fails to balance(which is usually because of external factors, like unavailablity of historical data for a new load-balanced task/project etc.)</p>
         </li>
-	      <li><code>CRITERIA_DEFAULTING_ORDER=tlb.splitter.TimeBasedTestSplitterCriteria:tlb.splitter.CountBasedTestSplitterCriteria</code>
+	      <li><code>TLB_PREFERRED_SPLITTERS=tlb.splitter.TimeBasedTestSplitter:tlb.splitter.CountBasedTestSplitter</code>
 	        <p>This is the list of preffered splitter algorithms that defaulting-algorithm is going to try. List is supposed to be in decreasing order of preference(which means the leftmost algorithm is most preffered, and the rightmost is the least preffered one). If one fails, TLB moves on to the next one until it finds one that manages to split the test-suite successfully. Colon(:) is a seperator.</p>
 	      </li>
 	      <li><code>TLB_JOB_NAME=sample_job</code>
 	        <p>The same TLB server can be used by different builds from different projects at the same time. In order for the server to identify them uniquely, TLB uses a notion of name-space(we call it 'job name'). Make sure all job names are unique.</p>
 		<p>For instance, if you want to configure two projects, one that has a JUnit suite and is a Java project called 'foo', and other that is a Ruby project called 'bar' that is using TLB to balance Test::Unit based tests. The value for TLB_JOB_NAME can be 'foo' for the former and 'bar' for the later. However, if 'foo' in the subject has two different test suites, one that is a unit test suite, and another that is a JUnit functional test suite, you'd want to distinguish between those as well. Sensible job-names for the current scenario would probably be 'foo-unit' and 'foo-functional'. Of course, you can choose to name it anything.</p>
 	      </li>
-	      <li><code>JOB_VERSION=foo-project-${build_number}</code>
-	        <p>Sometimes you may end up with multiple builds running at the same time, executing the same test-suite (i.e. has the same TLB_JOB_NAME). Now, when the test data is to be sent to the server, there needs to be a way for the server to identify the instance of the build that is reporting. All partitions running the same build instance should have the same value of JOB_VERSION and each build instance should use a unique JOB_VERSION.
+	      <li><code>TLB_JOB_VERSION=foo-project-${build_number}</code>
+	        <p>Sometimes you may end up with multiple builds running at the same time, executing the same test-suite (i.e. has the same TLB_JOB_NAME). Now, when the test data is to be sent to the server, there needs to be a way for the server to identify the instance of the build that is reporting. All partitions running the same build instance should have the same value of TLB_JOB_VERSION and each build instance should use a unique TLB_JOB_VERSION.
             Here is a scenario that will help understand the importance of this variable, and the contract it enforces:
             <ul class="without_dots">
               <li>Jen and Matt are two developers on a certain project</li>

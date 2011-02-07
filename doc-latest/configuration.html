@@ -29,7 +29,7 @@ js: Popup.hookup_envvar_details_popup(); Popup.hookup_titled_popup('a.variable_i
         <tbody>
           <tr>
             <td>
-              <a href="#talk_to_service">TALK_TO_SERVICE</a>: governs the type of server to use for partitioning(whether to use TLB Server or Go Server).
+              <a href="#type_of_server">TYPE_OF_SERVER</a>: governs the type of server to use for partitioning(whether to use TLB Server or Go Server).
             </td>
             <td>{% include applicable-required %}</td>
             <td>{% include applicable-required %}</td>
@@ -37,7 +37,7 @@ js: Popup.hookup_envvar_details_popup(); Popup.hookup_titled_popup('a.variable_i
           </tr>
           <tr>
             <td>
-              <a href="#tlb_criteria">TLB_CRITERIA</a> is algorithm to use for balancing.
+              <a href="#tlb_splitter">TLB_SPLITTER</a> is algorithm to use for balancing.
             </td>
             <td>{% include applicable-required %}</td>
             <td>{% include applicable-required %}</td>
@@ -53,7 +53,7 @@ js: Popup.hookup_envvar_details_popup(); Popup.hookup_titled_popup('a.variable_i
           </tr>
           <tr>
             <td>
-              <a href="#criteria_defaulting_order">CRITERIA_DEFAULTING_ORDER</a> is list of algorithms to try(most prefered first), when using DefaultingTestSplitterCriteria for balancing.
+              <a href="#tlb_preferred_splitters">TLB_PREFERRED_SPLITTERS</a> is list of algorithms to try(most prefered first), when using DefaultingTestSplitter for balancing.
             </td>
             <td>{% include applicable-conditionally %}</td>
             <td>{% include applicable-conditionally %}</td>
@@ -85,7 +85,7 @@ js: Popup.hookup_envvar_details_popup(); Popup.hookup_titled_popup('a.variable_i
           </tr>
           <tr>
             <td>
-              <a href="#tlb_port">TLB_PORT</a> is TCP port the TLB Server binds to.
+              <a href="#tlb_server_port">TLB_SERVER_PORT</a> is TCP port the TLB Server binds to.
             </td>
             <td>{% include not-applicable %}</td>
             <td>{% include not-applicable %}</td>
@@ -93,7 +93,7 @@ js: Popup.hookup_envvar_details_popup(); Popup.hookup_titled_popup('a.variable_i
           </tr>
           <tr>
             <td>
-              <a href="#tlb_store">tlb_store</a> is the directory used by TLB Server to store test-data posted by partitions.
+              <a href="#tlb_data_dir">TLB_DATA_DIR</a> is the directory used by TLB Server to store test-data posted by partitions.
             </td>
             <td>{% include not-applicable %}</td>
             <td>{% include not-applicable %}</td>
@@ -101,7 +101,7 @@ js: Popup.hookup_envvar_details_popup(); Popup.hookup_titled_popup('a.variable_i
           </tr>
           <tr>
             <td>
-              <a href="#version_life_in_days">VERSION_LIFE_IN_DAYS</a> governs how long test-data version is kept from the time its created.
+              <a href="#tlb_version_life_in_days">TLB_VERSION_LIFE_IN_DAYS</a> governs how long test-data version is kept from the time its created.
             </td>
             <td>{% include not-applicable %}</td>
             <td>{% include not-applicable %}</td>
@@ -109,7 +109,7 @@ js: Popup.hookup_envvar_details_popup(); Popup.hookup_titled_popup('a.variable_i
           </tr>
           <tr>
             <td>
-              <a href="#smoothing_factor">SMOOTHING_FACTOR</a> controls how aggressively test-time data is smoothened.
+              <a href="#tlb_smoothing_factor">TLB_SMOOTHING_FACTOR</a> controls how aggressively test-time data is smoothened.
             </td>
             <td>{% include applicable %}</td>
             <td>{% include applicable %}</td>
@@ -117,7 +117,7 @@ js: Popup.hookup_envvar_details_popup(); Popup.hookup_titled_popup('a.variable_i
           </tr>
           <tr>
             <td>
-              <a href="#total_partitions">TOTAL_PARTITIONS</a> declares number of partitions to be made.
+              <a href="#tlb_total_partitions">TLB_TOTAL_PARTITIONS</a> declares number of partitions to be made.
             </td>
             <td>{% include applicable-required %}</td>
             <td>{% include not-applicable %}</td>
@@ -125,7 +125,7 @@ js: Popup.hookup_envvar_details_popup(); Popup.hookup_titled_popup('a.variable_i
           </tr>
           <tr>
             <td>
-              <a href="#partition_number">PARTITION_NUMBER</a> for any partition, pin-points which one of the TOTAL_PARTITIONS is the subject itself.
+              <a href="#tlb_partition_number">TLB_PARTITION_NUMBER</a> for any partition, pin-points which one of the TLB_TOTAL_PARTITIONS is the subject itself.
             </td>
             <td>{% include applicable-required %}</td>
             <td>{% include not-applicable %}</td>
@@ -133,7 +133,7 @@ js: Popup.hookup_envvar_details_popup(); Popup.hookup_titled_popup('a.variable_i
           </tr>
           <tr>
             <td>
-              <a href="#tlb_url">TLB_URL</a> is the locator that balancer uses to reach the TLB Server.
+              <a href="#tlb_base_url">TLB_BASE_URL</a> is the locator that balancer uses to reach the TLB Server.
             </td>
             <td>{% include applicable-required %}</td>
             <td>{% include not-applicable %}</td>
@@ -149,7 +149,7 @@ js: Popup.hookup_envvar_details_popup(); Popup.hookup_titled_popup('a.variable_i
           </tr>
           <tr>
             <td>
-              <a href="#job_version">JOB_VERSION</a> is the string TLB server uses as version identifier for tracking partitions of a particular test-task invocation(should be unique for every invocation).
+              <a href="#tlb_job_version">TLB_JOB_VERSION</a> is the string TLB server uses as version identifier for tracking partitions of a particular test-task invocation(should be unique for every invocation).
             </td>
             <td>{% include applicable-required %}</td>
             <td>{% include not-applicable %}</td>
@@ -173,7 +173,7 @@ js: Popup.hookup_envvar_details_popup(); Popup.hookup_titled_popup('a.variable_i
           </tr>
           <tr>
             <td>
-              <a href="#max_stage_feed_search_depth">MAX_STAGE_FEED_SEARCH_DEPTH</a> limits the number of pages balancer is allowed to crawl to find previous instance of stage on Go Server.
+              <a href="#go_stage_feed_max_search_depth">GO_STAGE_FEED_MAX_SEARCH_DEPTH</a> limits the number of pages balancer is allowed to crawl to find previous instance of stage on Go Server.
             </td>
             <td>{% include not-applicable %}</td>
             <td>{% include applicable %}</td>
@@ -195,20 +195,20 @@ js: Popup.hookup_envvar_details_popup(); Popup.hookup_titled_popup('a.variable_i
     <div class="scope section undo">
     <ul class="without_dots spaced_out_rows undo scope section 5px_indent section_indent no_border">
       <li>
-        <label id="talk_to_service">TALK_TO_SERVICE</label>
+        <label id="type_of_server">TYPE_OF_SERVER</label>
         <div class="scope section">
           In order to split tests into subsets based on data(say based on test time) or order tests based on say the result last time(for instance running tests that failed in the last run first), the test times and test results need to be stored somewhere. While balancing TLB gets this historical data off the storage and decides how to balance and re-order tests based on it and post feedback to the storage(so it can be used to balance test suite next time). This variable controls what server should the balancing instance(the process running tests) talk to in order to get/publish data.
           <p class="clob_end"/>
-          TLB loads the class that TALK_TO_SERVICE points to, and uses an instance of that to talk to service. The contract for the class used here is enforced by a java interface called TalkToService
+          TLB loads the class that TYPE_OF_SERVER points to, and uses an instance of that to talk to service. The contract for the class used here is enforced by a java interface called Server
           <hr/>
           {% include type_class_name %}
           <hr/>
-          <strong>Example:</strong> <i>tlb.service.TalkToTlbServer</i> or <i>tlb.service.TalkToGoServer</i>
+          <strong>Example:</strong> <i>tlb.service.TlbServer</i> or <i>tlb.service.GoServer</i>
         </div>
         <hr class="no_margin"/>
       </li>
       <li>
-        <label id="tlb_criteria">TLB_CRITERIA</label>
+        <label id="tlb_splitter">TLB_SPLITTER</label>
         <div class="scope section">
           This variable dictates the algorithm that TLB should use to balance the test set. The decision of how to split the test case(say based on time or count) is governed by the class that this variable points to.
           <p class="clob_end"/>
@@ -216,7 +216,7 @@ js: Popup.hookup_envvar_details_popup(); Popup.hookup_titled_popup('a.variable_i
           <hr/>
           {% include type_class_name %}
           <hr/>
-          <strong>Example:</strong> <i>tlb.splitter.DefaultingTestSplitterCriteria</i>, <i>tlb.splitter.CountBasedTestSplitterCriteria</i> or <i>tlb.splitter.TimeBasedTestSplitterCriteria</i>
+          <strong>Example:</strong> <i>tlb.splitter.DefaultingTestSplitter</i>, <i>tlb.splitter.CountBasedTestSplitter</i> or <i>tlb.splitter.TimeBasedTestSplitter</i>
         </div>
         <hr class="no_margin"/>
       </li>
@@ -234,25 +234,25 @@ js: Popup.hookup_envvar_details_popup(); Popup.hookup_titled_popup('a.variable_i
         <hr class="no_margin"/>
       </li>
       <li>
-        <label id="criteria_defaulting_order">CRITERIA_DEFAULTING_ORDER</label>
+        <label id="tlb_preferred_splitters">TLB_PREFERRED_SPLITTERS</label>
         <div class="scope section">
           <strong>if</strong>
-          <code>$TLB_CRITERIA == 'tlb.splitter.DefaultingTestSplitterCriteria'</code>
+          <code>$TLB_SPLITTER == 'tlb.splitter.DefaultingTestSplitter'</code>
           <hr/>
-          This variable is relevant only in the scenario where <i>DefaultingTestSplitterCriteria</i> is used as <i>TLB_CRITERIA</i>. 
-          <i>DefaultingTestSplitterCriteria</i> tries multiple criterion in the order they appear in this value. 
-          The role of <i>DefaultingTestSplitterCriteria</i> is to only delegate to other criterion. It tries to delegate the balancing work to other criteria classes in the order user has specified.
+          This variable is relevant only in the scenario where <i>DefaultingTestSplitter</i> is used as <i>TLB_SPLITTER</i>. 
+          <i>DefaultingTestSplitter</i> tries multiple criterion in the order they appear in this value. 
+          The role of <i>DefaultingTestSplitter</i> is to only delegate to other criterion. It tries to delegate the balancing work to other criteria classes in the order user has specified.
           If balancer fails to balance using the first criteria, it moves on to the second one and tries balancing again, and then third and so on. 
           <p class="clob_end"/>
-          This is why we recomend a using a complex and more powerful criteria like <i>TimeBasedTestSplitterCriteria</i> first, but since it needs historical data, 
-          it fails when historical data is unavailable(which will be the case during the very first build using TLB). For situations like these, we recomend chaining it with a simpler criterion like <i>CountBasedTestSplitterCriteria</i>, 
-          which doesn't need any historical data, but doesn't balancer as good as <i>TimeBasedTestSplitterCriteria</i> either.
+          This is why we recomend a using a complex and more powerful criteria like <i>TimeBasedTestSplitter</i> first, but since it needs historical data, 
+          it fails when historical data is unavailable(which will be the case during the very first build using TLB). For situations like these, we recomend chaining it with a simpler criterion like <i>CountBasedTestSplitter</i>, 
+          which doesn't need any historical data, but doesn't balancer as good as <i>TimeBasedTestSplitter</i> either.
           <p class="clob_end"/>
           The criteria names can be specified delimited by colon(:) character.
           <hr/>
           <strong>Type:</strong> Colon seperated list of fully qualified Java class names (for instance foo.bar.Baz:quux.bar.Foo:baz.quux.Bar).
           <hr/>
-          <strong>Example:</strong> <i>tlb.splitter.TimeBasedTestSplitterCriteria:tlb.splitter.CountBasedTestSplitterCriteria</i>
+          <strong>Example:</strong> <i>tlb.splitter.TimeBasedTestSplitter:tlb.splitter.CountBasedTestSplitter</i>
         </div>
         <hr class="no_margin"/>
       </li>
@@ -260,7 +260,7 @@ js: Popup.hookup_envvar_details_popup(); Popup.hookup_titled_popup('a.variable_i
         <label id="tlb_tmp_dir">TLB_TMP_DIR</label>
         <div class="scope section">
           <strong>if</strong>
-          <code>$TALK_TO_SERVICE == 'tlb.service.TalkToGoServer'</code>
+          <code>$TYPE_OF_SERVER == 'tlb.service.GoServer'</code>
           <hr/>
           Expects tmp directory name. Uses the default Java temp dir(system property <i>java.io.tmpdir</i>) if not given.
           <p class="clob_end"/>
@@ -309,12 +309,12 @@ js: Popup.hookup_envvar_details_popup(); Popup.hookup_titled_popup('a.variable_i
         <hr class="no_margin"/>
       </li>
       <li>
-        <label id="tlb_port">TLB_PORT</label>
+        <label id="tlb_server_port">TLB_SERVER_PORT</label>
         <div class="scope section">
           <strong>if</strong>
           <code>not-set($TLB_APP) OR $TLB_APP == 'tlb.server.TlbServerInitializer'</code>
           <hr/>
-          This is the tcp port you want TLB-Server to listen to, changing this to a different value, say 9005, will require change in the value of $TLB_URL being used on the TLB partitions running against the server.
+          This is the tcp port you want TLB-Server to listen to, changing this to a different value, say 9005, will require change in the value of $TLB_BASE_URL being used on the TLB partitions running against the server.
           <p class="clob_end"/>
           Defaults to <i>7019</i>.
           <hr/>
@@ -325,7 +325,7 @@ js: Popup.hookup_envvar_details_popup(); Popup.hookup_titled_popup('a.variable_i
         <hr class="no_margin"/>
       </li>
       <li>
-        <label id="tlb_store">tlb_store</label>
+        <label id="tlb_data_dir">TLB_DATA_DIR</label>
         <div class="scope section">
           <strong>if</strong>
           <code>not-set($TLB_APP) OR $TLB_APP == 'tlb.server.TlbServerInitializer'</code>
@@ -334,7 +334,7 @@ js: Popup.hookup_envvar_details_popup(); Popup.hookup_titled_popup('a.variable_i
           <p class="clob_end"/>
           You want this directory to survive machine restarts, so using something like <i>/tmp</i> is usually a bad idea.
           <p class="clob_end"/>
-          Defaults to a directory called <i>tlb_store</i> in the tlb-server's working directory.
+          Defaults to a directory called <i>TLB_DATA_DIR</i> in the tlb-server's working directory.
           <hr/>
           <strong>Type: </strong> Path to a directory.
           <hr/>
@@ -343,7 +343,7 @@ js: Popup.hookup_envvar_details_popup(); Popup.hookup_titled_popup('a.variable_i
         <hr class="no_margin"/>
       </li>
       <li>
-        <label id="version_life_in_days">VERSION_LIFE_IN_DAYS</label>
+        <label id="tlb_version_life_in_days">TLB_VERSION_LIFE_IN_DAYS</label>
         <div class="scope section">
           <strong>if</strong>
           <code>not-set($TLB_APP) OR $TLB_APP == 'tlb.server.TlbServerInitializer'</code>
@@ -365,7 +365,7 @@ js: Popup.hookup_envvar_details_popup(); Popup.hookup_titled_popup('a.variable_i
         <hr class="no_margin"/>
       </li>
       <li>
-        <label id="smoothing_factor">SMOOTHING_FACTOR</label>
+        <label id="tlb_smoothing_factor">TLB_SMOOTHING_FACTOR</label>
         <div class="scope section">
           {% include if_on_balancer_side %}
           Smoothing in <i>TLB</i> context is the act of using computed test-run-times for balancing, which is the some weighted average of last reported test-run-time and historical test-run-time, so that balancing.
@@ -374,12 +374,12 @@ js: Popup.hookup_envvar_details_popup(); Popup.hookup_titled_popup('a.variable_i
           <p class="clob_end"/>
           <a href="http://en.wikipedia.org/wiki/Exponential_smoothing">http://en.wikipedia.org/wiki/Exponential_smoothing</a> explains this smoothing algorithm.
           <p class="clob_end"/>
-          Setting <i>SMOOTHING_FACTOR</i> for a partition ensures data for the subject partition is posted after smoothing it with respect to historical data. This does not, in any way affect other partitions for the same run.
+          Setting <i>TLB_SMOOTHING_FACTOR</i> for a partition ensures data for the subject partition is posted after smoothing it with respect to historical data. This does not, in any way affect other partitions for the same run.
           This means, partitions in the same run have the freedom to choose different smoothing factor values. 
           <p class="clob_end"/>
           The way we see it being used is, if a machine is known to be slow intermitently, you set a low smoothing factor on that partitcular machine. Whenever one of load-balanced partitions is run on that slow machine, it will get the locally assigned value of smoothing factor, hence will smoothen more aggresively compared to others.
           <p class="clob_end"/>
-          TLB uses <i>1</i> as default value of <i>SMOOTHING_FACTOR(alpha)</i>. But <i>1</i> means NO-smoothing, so you almost always want to override this to some sensible value. We have chosen <i>i</i> as default because we want <i>TLB</i> to have as non-intrusive defaults as possible.
+          TLB uses <i>1</i> as default value of <i>TLB_SMOOTHING_FACTOR(alpha)</i>. But <i>1</i> means NO-smoothing, so you almost always want to override this to some sensible value. We have chosen <i>i</i> as default because we want <i>TLB</i> to have as non-intrusive defaults as possible.
           <hr/>
           <strong>Type: </strong> A real number (0 &lt; i &lt= 1) [Lower the value, more is the weightage given to historical data, hence more aggresive the smoothing is]
           <hr/>
@@ -388,7 +388,7 @@ js: Popup.hookup_envvar_details_popup(); Popup.hookup_titled_popup('a.variable_i
         <hr class="no_margin"/>
       </li>
       <li>
-        <label id="total_partitions">TOTAL_PARTITIONS</label>
+        <label id="tlb_total_partitions">TLB_TOTAL_PARTITIONS</label>
         <div class="scope section">
           {% include if_on_balancer_side_against_tlb_server %}
           Balancer instance, when running against TlbServer, needs to know how many total partitions have been made. 
@@ -403,22 +403,22 @@ js: Popup.hookup_envvar_details_popup(); Popup.hookup_titled_popup('a.variable_i
         <hr class="no_margin"/>
       </li>
       <li>
-        <label id="partition_number">PARTITION_NUMBER</label>
+        <label id="tlb_partition_number">TLB_PARTITION_NUMBER</label>
         <div class="scope section">
           {% include if_on_balancer_side_against_tlb_server %}
-          Balancer instance when running against TlbServer, needs to know which partition(of <i>TOTAL_PARTITIONS</i>) is it itself. 
+          Balancer instance when running against TlbServer, needs to know which partition(of <i>TLB_TOTAL_PARTITIONS</i>) is it itself. 
           <p class="clob_end"/>
           Say while running 5 partitions first one would have this value set to ‘1’ whereas third one would have it set to ‘3’.
           {% include not_required_for_go_server_based_balancing %}
           <hr/>
-          <strong>Type: </strong> A natural number(which one of <i>TOTAL_PARTITIONS</i> is the current partition). 
+          <strong>Type: </strong> A natural number(which one of <i>TLB_TOTAL_PARTITIONS</i> is the current partition). 
           <hr/>
-          <strong>Example:</strong> 4 <code>1 &lt;= $PARTITION_NUMBER &lt;= 7 if $TOTAL_PARTITIONS = 7</code>
+          <strong>Example:</strong> 4 <code>1 &lt;= $TLB_PARTITION_NUMBER &lt;= 7 if $TLB_TOTAL_PARTITIONS = 7</code>
         </div>
         <hr class="no_margin"/>
       </li>
       <li>
-        <label id="tlb_url">TLB_URL</label>
+        <label id="tlb_base_url">TLB_BASE_URL</label>
         <div class="scope section">
           {% include if_on_balancer_side_against_tlb_server %}
           Balancer instance when running against TlbServer, needs to know what url it must use to talk to the TlbServer(which is an restful http service). 
@@ -448,19 +448,19 @@ js: Popup.hookup_envvar_details_popup(); Popup.hookup_titled_popup('a.variable_i
         <hr class="no_margin"/>
       </li>
       <li>
-        <label id="job_version">JOB_VERSION</label>
+        <label id="tlb_job_version">TLB_JOB_VERSION</label>
         <div class="scope section">
           {% include if_on_balancer_side_against_tlb_server %}
           When a suite is balanced against TlbServer, the dataset(test time, result etc) is maintained as one mutating set on the server. In a real world balancing scenario, test runner instances(partitions) do not all start at the same time. 
           <p class="clob_end"/>
-          This means out of 3 partitions for instance(lets call the partitions A, B and C), A may have started running tests and may have already reported result and time for a few tests by the time B and C start. However, B and C must balance based on the exact same version of data that A started out with(and not the updated data, which has feedback from A). To solve this problem, TLB has a concept of version-ing. When A starts running, it posts the TlbServer a version string(against which the server stores a snapshot of data thats relevant for the corresponding TLB_JOB_NAME. When B or C queries data using the same version, the frozen snapshot is returned(which ensures that all partitions see the same snapshot of data, in-spite of server receiving feedback continuously and the actual namespace dataset evolving. Usually this can be set such that it changes between suite-runs. For instance, when A, B and C trying to balance build number 10, build number can be used as JOB_VERSION. 
+          This means out of 3 partitions for instance(lets call the partitions A, B and C), A may have started running tests and may have already reported result and time for a few tests by the time B and C start. However, B and C must balance based on the exact same version of data that A started out with(and not the updated data, which has feedback from A). To solve this problem, TLB has a concept of version-ing. When A starts running, it posts the TlbServer a version string(against which the server stores a snapshot of data thats relevant for the corresponding TLB_JOB_NAME. When B or C queries data using the same version, the frozen snapshot is returned(which ensures that all partitions see the same snapshot of data, in-spite of server receiving feedback continuously and the actual namespace dataset evolving. Usually this can be set such that it changes between suite-runs. For instance, when A, B and C trying to balance build number 10, build number can be used as TLB_JOB_VERSION. 
           <p class="clob_end"/>
           Using a unique version ensures the frozen(hence stale) data is not used for balancing/ordering the new run of the same test suite(when the next build is triggered all three partitions start with the corresponding build number, which may be 11, hence the frozen snapshot of data is not used. Recursive variable substitution can be used to make sensible and satisfactorily unique version strings.
           {% include not_required_for_go_server_based_balancing %}
           <p class="clob_end"/>
           TLB allows environment variables interpolation, which means you can use a string that is composed of references to other environment variables(that change between builds, but remain the same for jobs in a build).
           <p class="clob_end"/>
-          For instance, when balancing a Go stage, using TLB Server, <code> $JOB_VERSION = ${GO_PIPELINE_COUNTER}-${GO_STAGE_COUNTER} </code> can be a sensible value. TLB will resolve the refered values before using the variable.
+          For instance, when balancing a Go stage, using TLB Server, <code> $TLB_JOB_VERSION = ${GO_PIPELINE_COUNTER}-${GO_STAGE_COUNTER} </code> can be a sensible value. TLB will resolve the refered values before using the variable.
           <hr/>
           <strong>Type: </strong> Any unique string(that changes across suite runs(and remains same across partitions for any given run)).
           <hr/>
@@ -495,7 +495,7 @@ js: Popup.hookup_envvar_details_popup(); Popup.hookup_titled_popup('a.variable_i
         <hr class="no_margin"/>
       </li>
       <li>
-        <label id="max_stage_feed_search_depth">MAX_STAGE_FEED_SEARCH_DEPTH</label>
+        <label id="go_stage_feed_max_search_depth">GO_STAGE_FEED_MAX_SEARCH_DEPTH</label>
         <div class="scope section">
           {% include if_on_balancer_side_against_go_server %}
           Balancer instance, when running against Go server Stage Feed(an atom feed of completed stages) to find the historical stage instance to download test run data(posted by the previous build) from. 
@@ -508,7 +508,7 @@ js: Popup.hookup_envvar_details_popup(); Popup.hookup_titled_popup('a.variable_i
           </div>
           Obviously, its safe to use different values across different stages, or job-families(for instance, jobs named job-1, job-2, job-3 make one job family, and hello-1, hello-2 make another family).
           <p class="clob_end"/>
-          TLB uses <i>10</i> as default value of <i>MAX_STAGE_FEED_SEARCH_DEPTH</i>, which means it will go 10 pages back in history(and no more) before declaring that it has failed to find historical stage.
+          TLB uses <i>10</i> as default value of <i>GO_STAGE_FEED_MAX_SEARCH_DEPTH</i>, which means it will go 10 pages back in history(and no more) before declaring that it has failed to find historical stage.
           <hr/>
           <strong>Type: </strong> A whole number(number of stages-atom-feed pages TLB is allowed to traverse to find last stage run)
           <hr/>

@@ -14,7 +14,7 @@ description: Help for setting-up test-splitter/partitioner for projects using 'T
 	  <li>39 tests and 6 units =&gt; 3 units with 6 tests and 3 units with 7 tests each.</li> 
   </ul>
   <p class="clob_end"/>
-  You need to set <code class="block margin">TLB_CRITERIA='tlb.splitter.CountBasedTestSplitterCriteria'</code> to use count based splitting. But this is not recomended except as a fallback, because in our experience, this is almost always suboptimal. 
+  You need to set <code class="block margin">TLB_SPLITTER='tlb.splitter.CountBasedTestSplitter'</code> to use count based splitting. But this is not recomended except as a fallback, because in our experience, this is almost always suboptimal. 
 </div>
 <hr/>
 <h3>Time Based Criterion:</h3> 
@@ -26,19 +26,19 @@ description: Help for setting-up test-splitter/partitioner for projects using 'T
 	  <li>10 tests and 2 units with each taking 2 minutes =&gt; 2 units with 5 tests each taking 10 minutes each.</li> 
 	  <li>18 tests and 3 units, with 1 taking 13 minutes and rest taking 1 minute =&gt; 1 unit with the 13 minute test, 1 unit with 9 tests taking 9 minutes, 1 unit with 8 tests taking 8 minutes.</li> 
   </ul>
-  You need to set <code class="block margin">TLB_CRITERIA='tlb.splitter.TimeBasedTestSplitterCriteria'</code> to use time based splitting. But this is not recomended either, because the first time your build runs, it won't have data to time balance(which means it will fail).
+  You need to set <code class="block margin">TLB_SPLITTER='tlb.splitter.TimeBasedTestSplitter'</code> to use time based splitting. But this is not recomended either, because the first time your build runs, it won't have data to time balance(which means it will fail).
 </div>
 <hr/>
 <h3>Delegating/Failover Criterion:<span class="tiny_font">(Recomended)</span></h3>
 <div class="scope section">
   This criterion delegates to a criteria chain, trying criterion in order, until reaches the last one. This is recomended way of using ‘time based’ setup. We make a chain of ‘time based splitter’ followed by ‘count based splitter’ so if time based splitting fails(which may happen because the server is momenteraly unreachable, or its the first time build is running and time balancing data is not available), it defaults to ‘count balancing’ which doesn’t require the ‘test suite time’ data. If all criterion in the chain fail, the build fails.
   <p class="clob_end"/>
-  Delegating criterion requires <strong>CRITERIA_DEFAULTING_ORDER</strong> to be set to a colon(:) separated list of fully qualified names of criteria classes. For instance, a typical time followed by count criteria would look like ‘tlb.splitter.TimeBasedTestSplitterCriteria:tlb.splitter.CountBasedTestSplitterCriteria’
+  Delegating criterion requires <strong>TLB_PREFERRED_SPLITTERS</strong> to be set to a colon(:) separated list of fully qualified names of criteria classes. For instance, a typical time followed by count criteria would look like ‘tlb.splitter.TimeBasedTestSplitter:tlb.splitter.CountBasedTestSplitter’
   <p class="clob_end"/>
-  The test split criteria is passed in using the environment variable <strong>TLB_CRITERIA</strong>. If this variable is not set, <i>TLB</i> by default uses a criteria that doesn’t do any balancing at all.
+  The test split criteria is passed in using the environment variable <strong>TLB_SPLITTER</strong>. If this variable is not set, <i>TLB</i> by default uses a criteria that doesn’t do any balancing at all.
   <p class="clob_end"/>
   You need to set 
-  <code class="block margin">TLB_CRITERIA='tlb.splitter.DefaultingTestSplitterCriteria'</code> 
-  <code class="block margin">CRITERIA_DEFAULTING_ORDER='tlb.splitter.TimeBasedTestSplitterCriteria:tlb.splitter.CountBasedTestSplitterCriteria'</code> 
+  <code class="block margin">TLB_SPLITTER='tlb.splitter.DefaultingTestSplitter'</code> 
+  <code class="block margin">TLB_PREFERRED_SPLITTERS='tlb.splitter.TimeBasedTestSplitter:tlb.splitter.CountBasedTestSplitter'</code> 
   to use delegating/defaulting criterion. The setting above tries time based balacing first, and then defaults to count based balacing in case it fails.
 </div> 
