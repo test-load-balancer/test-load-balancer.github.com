@@ -1,6 +1,11 @@
 body { margin: 1em 0; }
-#site-menu { padding-left: 0; }
 
+.menu,
+#site-menu { 
+    padding-left: 0;
+}
+
+.menu li,
 #site-menu li { 
      display: inline;
 }
