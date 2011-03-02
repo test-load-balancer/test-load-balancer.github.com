@@ -20,7 +20,7 @@ description: Concepts in 'Test Load Balancer(TLB)'.
       <p class="clob_end"/>
       However, the word Server here must not be confused with a Build/Continuous Integration(CI) server that usually schedules builds, assigns task to different machines from the worker-machine grid etc. All of those is the responsibility of a Build/CI Server. Server in the context of TLB is a very simple data white-board that is used by Balancers only to download and upload test data when the test-target of the build executes.
       <p class="clob_end"/>
-      TLB supports two kinds of server configurations out of the box. Look at the <a href="#implementations_of_tlb_server">implementations of the server</a> for more details.
+      TLB supports two server configurations out of the box. Look at the <a href="#implementations_of_tlb_server">implementations of the server</a> for more details.
     </div>
     <p class="clob_end"/>
     <div>
@@ -90,16 +90,18 @@ description: Concepts in 'Test Load Balancer(TLB)'.
     <h3>Implementation(s) of the Server component</h3>
   </label>
   <div class="scope section">
-    As of now, TLB can work against 2 kinds of server implementation. This means Balancer can run against either of them. One of them comes packaged in TLB distribution which is called "TLB Server" and the other is a well known Continuous-Integration/Release-Management server called "{% include go_link %} Server".
+    TLB can work against two different server implementations. This means Balancer can run against either of them. One of them comes packaged in TLB distribution which is called "TLB Server" and the other is a well known Continuous-Integration/Release-Management server called "{% include go_link %} Server".
     <p class="clob_end" />
     <h4>TLB server[ {% include tlb_repo_link_link %} ]:</h4>
-    TLB server comes packaged as an all-jar (a java archive that carries all dependencies that tlb requires). In order to start the server, you can use
+    Server is bundled in both tlb-server-gXXX.tar.gz and tlb-complete-gXXX.tar.gz archives and can be obtained from the download page. TLB server comes packaged as tlb-server jar (a java archive that carries all dependencies that server requires). 
+    You can use the "server.[sh|bat]" scripts to manage the server process(these scripts are bundled in the distribution). Alternatively you can directly invoke:
     <code class="block">
-      $ java -jar tlb-all-gXXXX.jar
-    </code>(XXXX here needs to be substituted with the corresponding version/revision of jar used).
-    Or you can use the "server.[sh|bat]" scripts that are bundled in the distribution.
+      $ java -jar tlb-server-gXXX.jar
+    </code>(substitute the corresponding version/revision of jar used).
     <p class="clob_end"/>
-    When started this way, TLB server binds to port<sup><a href="#1">[1]</a></sup> 7019. Once the server is up, partitions that are to be balanced (clients/balancer instances), can be pointed to it by setting a url on Balancer<sup><a href="#2">[2]</a></sup> to the base url of the tlb server. Balancer works using an abstraction called Server, and TlbServer<sup><a href="#3">[3]</a></sup> is an implementation of this contract that comes packaged in TLB.
+    TLB server binds to port<sup><a href="#1">[1]</a></sup> 7019. Once the server is up, partitions that are to be balanced(balancer instances), can be pointed to it by setting the environment variable <sup><a href="#2">[2]</a></sup> to the base url of the TLB server. Balancer works using an abstraction called Server, and TlbServer<sup><a href="#3">[3]</a></sup> is an implementation of this contract that comes packaged in TLB.
+    <p class="clob_end"/>
+    Or 
     <p class="clob_end"/>
     <h4>Go server[ {% include go_link_link %} ]:</h4>
     TLB has inbuilt support for Go, which means TLB can balance against Go just like it balances against the TLB-Server. Running against Go obviously means the tests are run as part of a Go-Task, which will run on a Go-Agent. Additionally, because TLB is environment aware, it can implicit a few things while running against Go server. It deduces equivalent of things like job-name<sup><a href="#4">[4]</a></sup>, version<sup><a href="#5">[5]</a></sup> and total partitions<sup><a href="#6">[6]</a></sup> from the way jobs are configured under stage and pipeline. To make TLB work with Go, Server needs to use GoServer<sup><a href="#3">[3]</a></sup>. 
