@@ -57,22 +57,21 @@ Feel free to copy the build task fragment relevant to the platform and tool-set 
 	  <h4>Junit on Ant</h4>
 	    <!--TLB-DOC-START@junit-ant-task@-->
 <pre>
-&lt;!-- Change the 'load.balanced.classpath' so that it is your test classpath along with the TLB jar and
-its dependencies. You can also tweak the 'depends' to fix the task dependencies of your build.
-You can change the fileset's includes pattern to include your tests. --&gt;
-&lt;target name="test.balanced" depends="compile, compile-tests"&gt;
-    &lt;typedef name="load-balanced-fileset" classname="tlb.ant.LoadBalancedFileSet"
-             classpathref="load.balanced.classpath"/&gt;
-    &lt;junit failureproperty="test.failure" printsummary="yes" haltonfailure="true" haltonerror="true"
-           showoutput="true" fork="true"&gt;
-        &lt;classpath refid="load.balanced.classpath"/&gt;
-        &lt;batchtest todir="${reports.dir}"&gt;
-            &lt;load-balanced-fileset dir="${test-classes.dir}" includes="**/*Test.class"/&gt;
-            &lt;formatter classname="tlb.ant.JunitDataRecorder"/&gt;
-            &lt;formatter type="plain"/&gt;
-        &lt;/batchtest&gt;
-    &lt;/junit&gt;
-&lt;/target&gt;
+    &lt;!-- Change the 'load.balanced.classpath' so that it is your test classpath along with the TLB jar and
+    its dependencies. You can also tweak the 'depends' to fix the task dependencies of your build.
+     You can change the fileset's includes pattern to include your tests. --&gt;
+    &lt;target name="test.balanced" depends="compile, compile-tests"&gt;
+        &lt;typedef name="load-balanced-fileset" classname="tlb.ant.LoadBalancedFileSet" classpathref="load.balanced.classpath"/&gt;
+        &lt;junit failureproperty="test.failure" printsummary="yes" haltonfailure="true" haltonerror="true"
+               showoutput="true" fork="true"&gt;
+            &lt;classpath refid="load.balanced.classpath"/&gt;
+            &lt;batchtest todir="${reports.dir}"&gt;
+                &lt;load-balanced-fileset dir="${test-classes.dir}" includes="**/*Test.class"/&gt;
+                &lt;formatter classname="tlb.ant.JunitDataRecorder"/&gt;
+                &lt;formatter type="plain"/&gt;
+            &lt;/batchtest&gt;
+        &lt;/junit&gt;
+    &lt;/target&gt;
 </pre>
 	    <!--TLB-DOC-END@junit-ant-task@-->
 	</div>
@@ -83,7 +82,6 @@ You can change the fileset's includes pattern to include your tests. --&gt;
 require 'rake'
 require 'rubygems'
 gem 'tlb-testunit'
-require 'tlb'
 require 'tlb/test_unit/test_task'
 
 Tlb::TestUnit::TestTask.new(:test_balanced) do |t|
@@ -106,8 +104,7 @@ task :bal =&gt; ['tlb:start', :test_balanced]
 #to run.
 require 'rubygems'
 gem 'tlb-rspec1'
-require 'tlb'
-require File.join('tlb/spec_task')
+require 'tlb/spec_task'
 
 Tlb::SpecTask.new(:balanced_specs) do |t|
   t.spec_files = FileList['spec/**/*_spec.rb']
@@ -128,7 +125,6 @@ task :bal =&gt; ['tlb:start', :balanced_specs]
 #to run.
 require 'rubygems'
 gem 'tlb-rspec2'
-require 'tlb'
 require 'tlb/rspec/spec_task'
 
 Tlb::RSpec::SpecTask.new(:run_balanced) do |t|
