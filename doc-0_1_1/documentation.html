@@ -5,7 +5,12 @@ keywords: tlb, test-load-balancer, documentation, configuration, help
 description: Documentation/Help/Starting-up page of 'Test Load Balancer(TLB)' project(s) version 0.1.1.
 ---
 
-{% include version_0_1_1_notice %}
+{% include doc_for_releases %}
+
+<div class="message notice">
+  {% include covers_doc_of_message %} version {% include 0_1_1 %}
+</div>
+<hr/>
 
 <div>
   <h3>This version of <i>TLB</i> supports:</h3>
@@ -39,7 +44,7 @@ description: Documentation/Help/Starting-up page of 'Test Load Balancer(TLB)' pr
   <label id="starting_up"></label>
   <h3>Starting up with TLB:</h3>
   <div class="scope section">
-    {% include starting_up_link %} is usually a good place to start.
+    <a href="./starting_up.html">Starting Up</a> is usually a good place to start.
     <p class="clob_end"/>
     We maintain a project(called {% include sample_projects_link %} ) that has example setup(s), written for different frameworks and build-tools in corresponding languages to demonstrate how <i>TLB</i> can be hooked up with your test suite.
     <p class="clob_end"/>
@@ -48,7 +53,7 @@ description: Documentation/Help/Starting-up page of 'Test Load Balancer(TLB)' pr
     {% include documentation_config_vars_link %} explains <i>TLB</i> configuration. Once you have a rough picture of what variables <i>TLB</i> expects and uses, and the possible values, you can start tweaking corresponding values the <i>sample project</i>  of your interest, and observe how it affects behaviour.
     <p class="clob_end"/>
     <div class="notice warning">
-      User git tag {% include 0_1_1 %} on {% include sample_projects_link %} repository.
+      Use git tag {% include 0_1_1 %} on {% include sample_projects_link %} repository.
     </div>
   </div>
 </div>

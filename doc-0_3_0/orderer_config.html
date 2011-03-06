@@ -1,0 +1,16 @@
+---
+layout: default
+title: Setting-up test-orderer
+keywords: tlb, test-load-balancer, orderer setup, re-ordering setup, starting up, setup, balancer setup, reordering tests
+description: Help for setting-up TLB test-orderer to order tests in a certain way.
+---
+<h3>Ordering tests:</h3> 
+<div class="scope section"> 
+  <i>TLB</i>, along with load balancing can also set the order in which the tests get executed. For instance one can execute the tests which failed in the previous run first, before running other tests, which provides early feedback. Leveraging the fact that tests are not order-sensitive, ordering can be used to do nifty things. However, this should not be misused so to run tests in a predefined order all the time(which by the way, is an anti-pattern).
+  <p class="clob_end"/>
+  <i>TLB</i> has 1 built-in Orderer called FailedTestFirst orderer(<code>tlb.orderer.FailedFirstOrderer</code>). This runs the test that are known to have failed in the previous run first. <i>TLB</i> along with the test times also records the test status, and uploads that to the central repository(TLB server or equivallent). Using this information, it runs the failed tests first in the subsequent runs.
+  <p class="clob_end"/>
+  The ordering criterion is passed in using the environment variable <strong>TLB_ORDERER</strong>. This is a comma separated list of fully qualified names of orderer classes. If nothing is mentioned, <i>TLB</i> does not re-order the tests.
+  <p class="clob_end"/>
+  You need to set <code class="block margin">TLB_ORDERER='tlb.orderer.FailedFirstOrderer'</code> to have failed tests run first. 
+</div> 

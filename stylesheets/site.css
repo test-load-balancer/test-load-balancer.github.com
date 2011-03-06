@@ -164,3 +164,8 @@ ul.spaced_out_rows li .scope {
 ul.spaced_out_rows li hr.no_margin { 
     margin: 1em 0 0 0;
 }
+
+.bigger { 
+    font-size: +1;
+    font-weight: bold;
+}

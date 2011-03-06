@@ -14,16 +14,49 @@ description: Documentation/Help/Starting-up page of 'Test Load Balancer(TLB)' pr
 <hr/>
 -->
 {% include doc_for_releases %}
+
 <div class="message notice">
-  {% include covers_doc_of_message %} <strong>bleeding-edge</strong>.
+  {% include covers_doc_of_message %} version {% include 0_3_0 %}
 </div>
 <hr/>
 
+
 <div>
-  <h3>Upstream Version</h3>
+  <h3>Release {% include 0_3_0 %}</h3>
   <h4>Supported Frameworks</h4>
   <div class="scope section">
-    {% include upstream_supported_frameworks %}
+    <label id="supported_tools_and_environments"></label>
+    <table>
+      <thead>
+        <tr>
+          <th>Testing Tool</th>
+          <th>Build Tool(s)</th>
+          <th>Programming Language(s) or Platform(s)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{% include junit_link %}</td>
+          <td>{% include ant_link %}, {% include buildr_link %}</td>
+          <td>{% include java_link %}</td>
+        </tr>
+        <tr>
+          <td>{% include twist_link %}</td>
+          <td>{% include ant_link %}, {% include buildr_link %}</td>
+          <td>{% include java_link %}</td>
+        </tr>
+        <tr>
+          <td>{% include rspec_1_link %} & {% include rspec_2_link %}</td>
+          <td>{% include rake_link %}</td>
+          <td>{% include mri_link %}</td>
+        </tr>
+        <tr>
+          <td>{% include testunit_link %}</td>
+          <td>{% include rake_link %}</td>
+          <td>{% include mri_link %}</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>
 <hr/>
@@ -52,7 +85,6 @@ description: Documentation/Help/Starting-up page of 'Test Load Balancer(TLB)' pr
   </div>
 </div>
 <hr/>
-
 <div>
   <label id="configuring_tlb">
     <h4>Configuring TLB</h4>

@@ -36,13 +36,13 @@ description: Home page of 'Test Load Balancer(TLB)' project(s).
   </div>
 </div>
 <hr/>
-<h2 class="big_button_container">3.. 2.. 1.. {% include tlb_getting_started %} </h2>
+<h2 class="big_button_container">3.. 2.. 1.. {% include abs_tlb_getting_started %} </h2>
 <hr/>
 <div>
   <h3>How does TLB work?</h3>
   <div class="scope section">
     <p/>
-    {% include components_of_tlb %}
+    {% include abs_components_of_tlb %}
     Balancer hooks-up with your build-framework and testing-framework to do the actual work, whereas Server is primarily a data-repository that balancer talks to. Data from historical run(s) is used by the balancer to partition/re-order the current run, and in-turn, data from the current run is posted back so it can be used as historical data for future runs.
     <p class="clob_end"/> 
     It actually forms a cycle where historical data is used to partition accurately, and run data is captured to seed future runs so accuracy is maintained(as data is updated with every new run).

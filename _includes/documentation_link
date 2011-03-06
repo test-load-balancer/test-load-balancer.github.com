@@ -1,1 +1,1 @@
-<a href="/doc-latest/documentation.html">Documentation</a>
+<a href="/{{site.latest_release_doc}}/documentation.html">Documentation</a>
