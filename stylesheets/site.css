@@ -132,17 +132,28 @@ table.with_row_deviders tr td {
      margin: .5em;
 }
 
-div.column { 
-     width: 40%;
-     float: left;
-}
-
 .team_member {
      float: left;
 }
 
 ul.wide-items li { 
     margin: .3em 0;
+}
+
+table.recursive_env_var { 
+    width: 100%;
+}
+
+table.recursive_env_var td {
+    padding: 0;
+}
+
+table.recursive_env_var td pre {
+    margin: 0;
+}
+
+.with_inline_pre pre { 
+    display: inline;
 }
 
 .snippet {

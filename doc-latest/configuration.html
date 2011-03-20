@@ -3,7 +3,6 @@ layout: default
 title: Configuration
 keywords: tlb, test-load-balancer
 description: Home page of 'Test Load Balancer(TLB)' project(s).
-js: Popup.hookup_envvar_details_popup(); Popup.hookup_titled_popup('a.variable_interpolation', 'Variable Interpolation');
 ---
 {% include doc_menu %}
   <div>
@@ -16,7 +15,10 @@ js: Popup.hookup_envvar_details_popup(); Popup.hookup_titled_popup('a.variable_i
       <p class="clob_end"/>
       TLB uses <i>Environment Variables</i> for every single configurable parameter it supports/exposes. Usually when configuring something thats an algorithm, we use fully-qualified-java-class-name of the class(which makes it easy for you to write alternate implementations, dump em in the classpath and have TLB load em with just an environment variable value flip).
       <p class="clob_end"/>
-      {% include recursive_variables %}
+      <div class="notice message">
+        Because TLB supports several testing/build tools, its configuration mechanism was written to play well with any execution environment. TLB has an environment variable infrencing mechanism which allows user to define environment variables TLB uses in terms of other environment variables that are set by execution environment or otherwise.
+        Please check <a href="#variable_infrencing"><strong>environment variable infrencing documentation</strong></a> to understand how this feature can be used.
+      </div>
       <p class="clob_end"/>
       <table class="with_row_deviders">
         <thead>
@@ -543,3 +545,69 @@ js: Popup.hookup_envvar_details_popup(); Popup.hookup_titled_popup('a.variable_i
     </ul>
 </div>
   </div>
+<p class="clob_end"/>
+<label id="variable_infrencing"></label>
+<h3>Environment variable infrencing:</h3>
+<div class="scope section">
+  TLB allows variable definition in terms of other variables. 
+  It is often convinient to define TLB variables in terms of other environment variables set by execution environment. For instance, if the CI server promises to set <i>BUILD_NUMBER</i> and <i>PROJECT_NAME</i>, it may make sense to define <u>TLB_JOB_NAME</u> as 'ant-${PROJECT_NAME}' or '${PROJECT_NAME}-test' and <u>TLB_JOB_VERSION</u>(or <u>JOB_VERSION</u> before 0.3) as '${PROJECT_NAME}-${BUILD_NUMBER}' etc.
+  <p class="clob_end"/>
+  <div>
+    TLB supports environment variables that are actually templates that other environment variables can fill. When a variable refers to another, it is recursively interpolated until there are no more templates left to interpolate. The example below attempts to explain how this feature can be used. Please observe how each TLB interpolates variable values as given by the user(on left hand side column) to get actual values to be used by TLB(on right hand side column).
+    <div>
+      <hr/>
+      <table class="recursive_env_var">
+        <thead>
+          <tr>
+            <th>For the following variable values:</th>
+            <th>TLB will interpret the final values(that it uses) as:</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><pre>foo='bar'</pre></td>
+            <td><pre>foo='bar'</pre></td>
+          </tr>
+          <tr>
+            <td><pre>bar='oo'</pre></td>
+            <td><pre>bar='oo'</pre></td>
+          </tr>
+          <tr>
+            <td><pre>baz='baz-${alpha:foo:beta}'</pre></td>
+            <td><pre>baz='baz-bar'</pre></td>
+          </tr>
+          <tr>
+            <td><pre>quux='baz-${f${boo:bar}}'</pre></td>
+            <td><pre>quux='baz-bar'</pre></td>
+          </tr>
+          <tr>
+            <td><pre>complex='${quux}|${q${bang}}'</pre></td>
+            <td><pre>complex='baz-bar|baz-bar'</pre></td>
+          </tr>
+          <tr>
+            <td><pre>bang='u${boom}'</pre></td>
+            <td><pre>bang='uux'</pre></td>
+          </tr>
+          <tr>
+            <td><pre>boom='u${axe}'</pre></td>
+            <td><pre>boom='ux'</pre></td>
+          </tr>
+          <tr>
+            <td><pre>axe='${X}'</pre></td>
+            <td><pre>axe='x'</pre></td>
+          </tr>
+          <tr>
+            <td><pre>X='x'</pre></td>
+            <td><pre>X='x'</pre></td>
+          </tr>
+        </tbody>
+      </table>
+      <hr/>
+      <div class="with_inline_pre">
+        TLB supports defaulting of environemnt variables too. The expression <pre>my_var=${first_var:second_var:third_var}</pre> attempts to use the value of <pre>first_var</pre> and defaults to <pre>second_var</pre> if <pre>first_var</pre> is not defined, and similarly defaults to <pre>third_var</pre> if <pre>second_var</pre> is not defined either. Defaulting can be used along with recursive-interpolation feature to come up with a good and solid variable definition mechanism which plays well with execution environment.
+        <p class="clob_end"/>
+        Variable named <u>baz</u> and <u>quux</u> use variable defaulting feature in the example above.
+      </div>
+    </div>
+  </div>
+</div>
