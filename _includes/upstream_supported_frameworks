@@ -21,12 +21,12 @@
     <tr>
       <td>{% include rspec_1_link %} & {% include rspec_2_link %}</td>
       <td>{% include rake_link %}</td>
-      <td>{% include mri_link %}</td>
+      <td>{% include mri_link %} & {% include jruby_link %}</td>
     </tr>
     <tr>
       <td>{% include testunit_link %}</td>
       <td>{% include rake_link %}</td>
-      <td>{% include mri_link %}</td>
+      <td>{% include mri_link %} & {% include jruby_link %}</td>
     </tr>
   </tbody>
 </table>
