@@ -53,7 +53,7 @@ description: Concepts in 'Test Load Balancer(TLB)'.
           </li>
           <li>
             <strong>Job Version</strong>
-            <p>Typically, more than one instance of the same job can be running simultaneously and TLB needs to give the right partitions to the right instances. Builds 10 and 11 can be running simultaneously with 2 parititions each for example. In this case TLB should not end up using the data posted by build 11 (if it finished faster) to compute partition information for 10. Consider the following example:</p>
+            <p>Typically, more than one instance of the same job can be running simultaneously and TLB needs to give the right partitions to the right instances. Builds 10 and 11 can be running simultaneously with 2 parititions each for example. In this case TLB should not end up using the data posted by build 11 (if it finished faster) to compute partition information for 10. Nor should TLB use the information posted by partition 1 of build 10 in partition 2 of build 10.  Consider the following example:</p>
             <p class="clob_end"/>
             {% include job_version %}
             <p class="clob_end"/>
