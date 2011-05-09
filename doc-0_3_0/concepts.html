@@ -11,7 +11,6 @@ description: Concepts in 'Test Load Balancer(TLB)'.
   <h3>Components</h3>
   <div class="scope section">
     {% include components_of_tlb %}
-    <hr/>
     <div>
       <label id="server">
         <h4>Server</h4>
@@ -35,7 +34,38 @@ description: Concepts in 'Test Load Balancer(TLB)'.
       <p class="clob_end" />
       The Balancer has 2 aspects to it. Splitter and Orderer. Check out the <a href="#balancer_components">Balancer Components</a> to understand them in greater depth. We strongly recommend reading about the Balancer components as they are core to what TLB does.
     </div>
+    <p class="clob_end"/>
+    <hr/>
+    <div>
+      <p>Apart from the 2 components, there is a 3rd concept in TLB called <strong>Job</strong></p>
+      <p class="clob_end"/>
+      <label id="job">
+        <h4>Job</h4>
+      </label>
+      Job represents work that needs to be parallelized using TLB. For example, executing all the unit tests of a project "Foo" is a job as it is work that can be parallized.
+      <p class="clob_end"/>
+      In TLB, a Job has 2 attributes:
+      <p>
+        <ul>
+          <li>
+            <strong>Job Name</strong>
+            <p>This uniquely identifies a job in TLB. TLB uses this to store all test data for a given job. In the above example, "Foo-unit-tests" could be set as the name of the job. Then TLB stores all the test run time, failure status etc for the task of running the unit tests parallely under the name "Foo-iunit-tests".</p>
+          </li>
+          <li>
+            <strong>Job Version</strong>
+            <p>Typically, more than one instance of the same job can be running simultaneously and TLB needs to give the right partitions to the right instances. Builds 10 and 11 can be running simultaneously with 2 parititions each for example. In this case TLB should not end up using the data posted by build 11 (if it finished faster) to compute partition information for 10. Consider the following example:</p>
+            <p class="clob_end"/>
+            {% include job_version %}
+            <p class="clob_end"/>
+            As it can be seen, job versions are important. We advice every Job have an associated job version. Job versioning may be pretty intimidating to understand initially. However, as you start using TLB regularly, you will be able to appreciate the need for Job version.
+          </li>
+        </ul>
+      </p>
+      <p class="clob_end" />
+      You can refer to the {% include config_vars_link %} to see how TLB_JOB_NAME and TLB_JOB_VERSION are configured.
+    </div>
     <p class="clob_end" />
+    <hr/>
     <h4>Interaction between the Server and the Balancer while TLBing</h4>
     {% include interaction_while_tlbing %}
   </div>
