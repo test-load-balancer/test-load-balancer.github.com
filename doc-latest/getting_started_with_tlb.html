@@ -137,6 +137,25 @@ task :bal =&gt; ['tlb:start', :run_balanced]
 </pre>
 	    <!--TLB-DOC-END@rspec2-rake-task@-->
 </div>
+<div>
+  <h4>Cucumber on Rake</h4>
+  <!--TLB-DOC-START@cucumber-rake-task@-->
+<pre>
+require 'rubygems'
+require 'cucumber'
+gem 'tlb-cucumber'
+require 'tlb/cucumber/rake/cucumber_task'
+
+Tlb::Cucumber::Rake::CucumberTask.new(:cucumber_tests) do |t|
+  t.cucumber_opts = ["--format", "pretty"]
+end
+
+load 'tasks/tlb.rake'
+desc "Run Cucumber features in a load-balanced fashion (based on environment variables)"
+task :bal =&gt; ['tlb:start', :cucumber_tests]
+</pre>
+  <!--TLB-DOC-END@cucumber-rake-task@-->
+</div>
     </li>
     <li>Once the necessary build script modifications are made, some TLB configuration environment variables need to be set before TLB can start heavy lifting. Feel free to tweak the value of these variables to what makes sense for your project and environment. These variables need to be set for each partition invocation (for example, if you have chosen to make 2 partitions of your test-suite, these values should be set on each partition before executing). 
       <p class="clob_end"/>
