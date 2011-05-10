@@ -28,5 +28,10 @@
       <td>{% include rake_link %}</td>
       <td>{% include mri_link %} & {% include jruby_link %}</td>
     </tr>
+    <tr>
+      <td>{% include cucumber_link %}</td>
+      <td>{% include rake_link %}</td>
+      <td>{% include mri_link %} & {% include jruby_link %}</td>
+    </tr>
   </tbody>
 </table>
