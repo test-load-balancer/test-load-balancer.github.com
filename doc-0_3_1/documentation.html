@@ -1,0 +1,107 @@
+---
+layout: default
+title: Documentation
+keywords: tlb, test-load-balancer, documentation, configuration, help
+description: Documentation/Help/Starting-up page of 'Test Load Balancer(TLB)' project(s).
+---
+{% include doc_menu %}
+<p>This documentation covers core concepts and all the configuration options of TLB.</p>
+<!--
+<div class="warn notice">
+  This documentation is kept up-to-date with source/upstream. Which means, as features are added or changed, the regular documentation pages will be modified, even if the feature/change has not been released or tagged yet. Please refer to version specific documentation to ensure you see details of only whats shipped in the version you are using.
+  If you find any discripancies, please report the same(here: {% include issue_tracker_link %} ).
+</div>
+<hr/>
+-->
+{% include doc_for_releases %}
+<div class="message notice">
+  {% include covers_doc_of_message %} <strong>bleeding-edge</strong>.
+</div>
+<hr/>
+
+<div>
+  <h3>Upstream Version</h3>
+  <h4>Supported Frameworks</h4>
+  <div class="scope section">
+    <label id="supported_tools_and_environments"></label>
+    <table>
+      <thead>
+        <tr>
+          <th>Testing Tool</th>
+          <th>Build Tool(s)</th>
+          <th>Programming Language(s) or Platform(s)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{% include junit_link %}</td>
+          <td>{% include ant_link %}, {% include buildr_link %}</td>
+          <td>{% include java_link %}</td>
+        </tr>
+        <tr>
+          <td>{% include twist_link %}</td>
+          <td>{% include ant_link %}, {% include buildr_link %}</td>
+          <td>{% include java_link %}</td>
+        </tr>
+        <tr>
+          <td>{% include rspec_1_link %} & {% include rspec_2_link %}</td>
+          <td>{% include rake_link %}</td>
+          <td>{% include mri_link %} & {% include jruby_link %}</td>
+        </tr>
+        <tr>
+          <td>{% include testunit_link %}</td>
+          <td>{% include rake_link %}</td>
+          <td>{% include mri_link %} & {% include jruby_link %}</td>
+        </tr>
+        <tr>
+          <td>{% include cucumber_link %}</td>
+          <td>{% include rake_link %}</td>
+          <td>{% include mri_link %} & {% include jruby_link %}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<hr/>
+
+<div>
+  <h4>Quick Start</h4>
+  <div class="scope section">
+    Use {% include tlb_getting_started %}, get load-balancing in minutes.
+    <p class="clob_end"/>
+    This section takes you through the step by step process to help you configure TLB on your project.
+  </div>
+</div>
+<hr/>
+
+<div>
+  <label id="concepts"></label>
+  <h4>Concepts in TLB</h4>
+  <div class="scope section">
+    {% include concepts_link %} gives details on all the concepts on which TLB is built. This is useful if you want to understand what all you can do with TLB. We strongly suggest that anyone who wants to use TLB in production at least get a hang of this.
+    <p class="clob_end"/>
+    We maintain a project called {% include sample_projects_link %} that has example setups  written for different frameworks and build-tools in their corresponding languages to demonstrate how <i>TLB</i> can be hooked up with your test suite.
+    <p class="clob_end"/>
+    The <i>sample projects</i> repository has one directory per build-tool/testing-tool scenario. For instance, there is a directory named <i>ant_junit</i> which demonstrates [Ant(build tool) + JUnit(testing framework) + TLB] setup and <i>test-unit_example</i> which demonstrates [Rake(build tool) + Test::Unit(testing framework) + TLB] setup.
+    <p class="clob_end"/>
+    {% include documentation_config_vars_link %} explains TLB configuration. Once you have a rough picture of what variables <i>TLB</i> expects and uses, and the possible values, you can start tweaking corresponding values on the <i>sample project</i>  of your interest, and observe how it affects behaviour.
+  </div>
+</div>
+<hr/>
+
+<div>
+  <label id="configuring_tlb">
+    <h4>Configuring TLB</h4>
+  </label>
+  <div class="scope section">
+    TLB exposes all of its configuration parameters (knobs to tweek its behaviour) through environment variables. 
+    <p class="clob_end"/>
+    This means, all it takes to tweak a configuration is setting an environment variable before you start the build (which uses tlb) or TLB Server. This helps decouple TLB from its environment. Since environment variables set for parent process are visible to child processes as well, its possible to say, configure half of these variables in your shell-initialization and set the other half just before executing tests.
+    <p class="clob_end"/>
+    Check the {% include config_link %} page for detailed documentation on all environment variables TLB uses.
+  </div>
+</div>
+<hr/>
+<div class="message notice">
+   If you have any feedback about the tool, documentation or if you find something not explained well enough, please report an issue here: {% include issue_tracker_link %} and we will make sure its addressed.
+</div>
