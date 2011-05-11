@@ -32,23 +32,15 @@ description: Home page of 'Test Load Balancer(TLB)' project(s).
         <tbody>
           <tr>
             <td>
-              <a href="#type_of_server">TYPE_OF_SERVER</a>: governs the type of server to use for partitioning(whether to use TLB Server or Go Server).
+              <a href="#type_of_server">TYPE_OF_SERVER</a>: governs the type of server to use for partitioning(whether to use TLB Server or Go Server). Defaults to <i>tlb.service.TlbServer</i>.
             </td>
-            <td>{% include applicable-required %}</td>
+            <td>{% include applicable %}</td>
             <td>{% include applicable-required %}</td>
             <td>{% include not-applicable %}</td>
           </tr>
           <tr>
             <td>
-              <a href="#tlb_splitter">TLB_SPLITTER</a> is algorithm to use for balancing.
-            </td>
-            <td>{% include applicable-required %}</td>
-            <td>{% include applicable-required %}</td>
-            <td>{% include not-applicable %}</td>
-          </tr>
-          <tr>
-            <td>
-              <a href="#tlb_orderer">TLB_ORDERER</a> is algorithm to use for ordering.
+              <a href="#tlb_splitter">TLB_SPLITTER</a> is algorithm to use for balancing. Defaults to <i>tlb.splitter.DefaultingTestSplitter</i>.
             </td>
             <td>{% include applicable %}</td>
             <td>{% include applicable %}</td>
@@ -56,7 +48,15 @@ description: Home page of 'Test Load Balancer(TLB)' project(s).
           </tr>
           <tr>
             <td>
-              <a href="#tlb_preferred_splitters">TLB_PREFERRED_SPLITTERS</a> is list of algorithms to try(most prefered first), when using DefaultingTestSplitter for balancing.
+              <a href="#tlb_orderer">TLB_ORDERER</a> is algorithm to use for ordering. Defaults to <i>tlb.orderer.FailedFirstOrderer</i>.
+            </td>
+            <td>{% include applicable %}</td>
+            <td>{% include applicable %}</td>
+            <td>{% include not-applicable %}</td>
+          </tr>
+          <tr>
+            <td>
+              <a href="#tlb_preferred_splitters">TLB_PREFERRED_SPLITTERS</a> is list of algorithms to try(most prefered first), and is applicable only when using DefaultingTestSplitter for balancing. Defaults to <i>tlb.splitter.TimeBasedTestSplitter:tlb.splitter.CountBasedTestSplitter</i>.
             </td>
             <td>{% include applicable-conditionally %}</td>
             <td>{% include applicable-conditionally %}</td>
@@ -64,7 +64,7 @@ description: Home page of 'Test Load Balancer(TLB)' project(s).
           </tr>
           <tr>
             <td>
-              <a href="#tlb_tmp_dir">TLB_TMP_DIR</a> directory to use, to store temproary files.
+              <a href="#tlb_tmp_dir">TLB_TMP_DIR</a> directory to use, to store temproary files. Defaults to system tmp-dir.
             </td>
             <td>{% include applicable %}</td>
             <td>{% include applicable %}</td>
@@ -72,15 +72,15 @@ description: Home page of 'Test Load Balancer(TLB)' project(s).
           </tr>
           <tr>
             <td>
-              <a href="#tlb_balancer_port">TLB_BALANCER_PORT</a> is TCP port the balancing server binds to.
+              <a href="#tlb_balancer_port">TLB_BALANCER_PORT</a> is TCP port the balancing server binds to. Defaults to <i>8019</i>.
             </td>
-            <td>{% include applicable-required %}</td>
-            <td>{% include applicable-required %}</td>
+            <td>{% include applicable %}</td>
+            <td>{% include applicable %}</td>
             <td>{% include not-applicable %}</td>
           </tr>
           <tr>
             <td>
-              <a href="#tlb_server_port">TLB_SERVER_PORT</a> is TCP port the TLB Server binds to.
+              <a href="#tlb_server_port">TLB_SERVER_PORT</a> is TCP port the TLB Server binds to. Defaults to <i>7019</i>
             </td>
             <td>{% include not-applicable %}</td>
             <td>{% include not-applicable %}</td>
@@ -88,7 +88,7 @@ description: Home page of 'Test Load Balancer(TLB)' project(s).
           </tr>
           <tr>
             <td>
-              <a href="#tlb_data_dir">TLB_DATA_DIR</a> is the directory used by TLB Server to store test-data posted by partitions.
+              <a href="#tlb_data_dir">TLB_DATA_DIR</a> is the directory used by TLB Server to store test-data posted by partitions. Defaults to <i>tlb_store</i> under working directory.
             </td>
             <td>{% include not-applicable %}</td>
             <td>{% include not-applicable %}</td>
@@ -96,7 +96,7 @@ description: Home page of 'Test Load Balancer(TLB)' project(s).
           </tr>
           <tr>
             <td>
-              <a href="#tlb_version_life_in_days">TLB_VERSION_LIFE_IN_DAYS</a> governs how long test-data version is kept from the time its created.
+              <a href="#tlb_version_life_in_days">TLB_VERSION_LIFE_IN_DAYS</a> governs how long test-data version is kept from the time its created. Defaults to <i>-1</i>, which means 'forever'.
             </td>
             <td>{% include not-applicable %}</td>
             <td>{% include not-applicable %}</td>
@@ -104,7 +104,7 @@ description: Home page of 'Test Load Balancer(TLB)' project(s).
           </tr>
           <tr>
             <td>
-              <a href="#tlb_smoothing_factor">TLB_SMOOTHING_FACTOR</a> controls how aggressively test-time data is smoothened.
+              <a href="#tlb_smoothing_factor">TLB_SMOOTHING_FACTOR</a> controls how aggressively test-time data is smoothened. Defaults to <i>1.0</i> which disables smoothing.
             </td>
             <td>{% include applicable %}</td>
             <td>{% include applicable %}</td>
@@ -168,7 +168,7 @@ description: Home page of 'Test Load Balancer(TLB)' project(s).
           </tr>
           <tr>
             <td>
-              <a href="#go_stage_feed_max_search_depth">GO_STAGE_FEED_MAX_SEARCH_DEPTH</a> limits the number of pages balancer is allowed to crawl to find previous instance of stage on Go Server.
+              <a href="#go_stage_feed_max_search_depth">GO_STAGE_FEED_MAX_SEARCH_DEPTH</a> limits the number of pages balancer is allowed to crawl to find previous instance of stage on Go Server. Defaults to <i>10</i>.
             </td>
             <td>{% include not-applicable %}</td>
             <td>{% include applicable %}</td>
@@ -200,6 +200,8 @@ description: Home page of 'Test Load Balancer(TLB)' project(s).
           In order to split tests into subsets based on data(say based on test time) or order tests based on say the result last time(for instance running tests that failed in the last run first), the test times and test results need to be stored somewhere. While balancing TLB gets this historical data off the storage and decides how to balance and re-order tests based on it and post feedback to the storage(so it can be used to balance test suite next time). This variable controls what server should the balancing instance(the process running tests) talk to in order to get/publish data.
           <p class="clob_end"/>
           TLB loads the class that TYPE_OF_SERVER points to, and uses an instance of that to talk to service. The contract for the class used here is enforced by a java interface called Server
+          <p class="clob_end"/>
+          Defaults to <i>tlb.service.TlbServer</i>.
           <hr/>
           {% include type_class_name %}
           <hr/>
@@ -212,7 +214,7 @@ description: Home page of 'Test Load Balancer(TLB)' project(s).
         <div class="scope section">
           This variable dictates the algorithm that TLB should use to balance the test set. The decision of how to split the test case(say based on time or count) is governed by the class that this variable points to.
           <p class="clob_end"/>
-          Defaults to No-Op Criteria(which means no balancing; will run all tests on all partitions).
+          Defaults to <i>tlb.splitter.DefaultingTestSplitter</i>(the effect of this defaulting is controlled by <a href="#tlb_preferred_splitters">TLB_PREFERRED_SPLITTERS</a> variable.
           <hr/>
           {% include type_class_name %}
           <hr/>
@@ -249,6 +251,8 @@ description: Home page of 'Test Load Balancer(TLB)' project(s).
           which doesn't need any historical data, but doesn't balancer as good as <i>TimeBasedTestSplitter</i> either.
           <p class="clob_end"/>
           The criteria names can be specified delimited by colon(:) character.
+          <p class="clob_end"/>
+          Defaults to <i>tlb.splitter.TimeBasedTestSplitter:tlb.splitter.CountBasedTestSplitter</i> (tries time balancing first. If it can't time-balance, resorts to count-balancing).
           <hr/>
           <strong>Type:</strong> Colon seperated list of fully qualified Java class names (for instance foo.bar.Baz:quux.bar.Foo:baz.quux.Bar).
           <hr/>
@@ -266,6 +270,8 @@ description: Home page of 'Test Load Balancer(TLB)' project(s).
           <p class="clob_end"/>
           You almost never what to set this one. The default here always is the right thing to use. Except on.... any guesses? Hold your breath! Yes thats right, its Windows.
           On some flavours of windows the tmp directory doesn't exist(or is not writable). You want to set it on windows to a directory that you know exists, and the user TLB is running as can write to. 
+          <p class="clob_end"/>
+          Defaults to system tmp-dir.
           <hr/>
           <strong>Type: </strong> Path to an existing directory.
           <hr/>
@@ -282,6 +288,8 @@ description: Home page of 'Test Load Balancer(TLB)' project(s).
           Balancer is actually a very light-weight HTTP server. The actual library that hooks-up with testing-framework or build-tool starts this server before running tests, and shuts it down after all tests finish. 
           <p class="clob_end"/>
           While thats perfect, the http server needs a port to bind to, and this needs to be configured by you as a user, because TLB doesn't want to assume a port and fail a couple tests in turn, that depend on that port being free.
+          <p class="clob_end"/>
+          Defaults to <i>8019</i>.
           <hr/>
           {% include type_tcp_port %}
           <hr/>
@@ -315,7 +323,7 @@ description: Home page of 'Test Load Balancer(TLB)' project(s).
           <p class="clob_end"/>
           You want this directory to survive machine restarts, so using something like <i>/tmp</i> is usually a bad idea.
           <p class="clob_end"/>
-          Defaults to a directory called <i>TLB_DATA_DIR</i> in the tlb-server's working directory.
+          Defaults to a directory called <i>tlb_store</i> in the tlb-server's working directory.
           <hr/>
           <strong>Type: </strong> Path to a directory.
           <hr/>
@@ -337,7 +345,7 @@ description: Home page of 'Test Load Balancer(TLB)' project(s).
           <p class="clob_end"/>
           You want this directory to survive machine restarts, so using something like <i>/tmp</i> is usually a bad idea.
           <p class="clob_end"/>
-          Defaults to <i>1</i> day.
+          Defaults to <i>-1</i> day(s). This means, never it never destroys data versions.
           <hr/>
           <strong>Type: </strong> A whole number(number of days)
           <hr/>
