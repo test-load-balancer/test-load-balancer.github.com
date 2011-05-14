@@ -124,10 +124,10 @@ description: Concepts in 'Test Load Balancer(TLB)'.
     TLB can work against two different server implementations. This means Balancer can run against either of them. One of them comes packaged in TLB distribution which is called "TLB Server" and the other is a well known Continuous-Integration/Release-Management server called "{% include go_link %} Server".
     <p class="clob_end" />
     <h4>TLB server[ {% include tlb_repo_link_link %} ]:</h4>
-    Server is bundled in both tlb-server-gXXX.tar.gz and tlb-complete-gXXX.tar.gz archives and can be obtained from the download page. TLB server comes packaged as tlb-server jar (a java archive that carries all dependencies that server requires). 
+    Server is bundled in both tlb-server-XXX.tar.gz and tlb-complete-XXX.tar.gz archives and can be obtained from the download page. TLB server comes packaged as tlb-server jar (a java archive that carries all dependencies that server requires). 
     You can use the "server.[sh|bat]" scripts to manage the server process(these scripts are bundled in the distribution). Alternatively you can directly invoke:
     <code class="block">
-      $ java -jar tlb-server-gXXX.jar
+      $ java -jar tlb-server-XXX.jar
     </code>(substitute the corresponding version/revision of jar used).
     <p class="clob_end"/>
     TLB server binds to port<sup><a href="#1">[1]</a></sup> 7019. Once the server is up, partitions that are to be balanced(balancer instances), can be pointed to it by setting the environment variable <sup><a href="#2">[2]</a></sup> to the base url of the TLB server. Balancer works using an abstraction called Server, and TlbServer<sup><a href="#3">[3]</a></sup> is an implementation of this contract that comes packaged in TLB.
