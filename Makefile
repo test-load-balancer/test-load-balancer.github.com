@@ -22,6 +22,7 @@ tmp/js: tmp/*.zip
 
 clean:
 	rm -rf tmp/*
+	rm -rf _site
 
 check_zip:
 	ls tmp/ | grep -q jquery-ui
