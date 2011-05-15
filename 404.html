@@ -1,21 +1,29 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
-  {% include layout_head %}
+  <head>
+    <title>unknown page - TLB</title>
+  </head>
   <body>
+    <script type="text/javascript">
+      var version_selector_id = null;
+    </script>
     <div class="container">  
-      {% include header %}
-      <hr/>
-      {% include no_javascript_warning %}
-  
       <h3>You have requested a page that does not exist.</h3>
       
-      If you ended-up on this page by following a link in the project website, please report this as an issue at http://code.google.com/p/tlb/issues/list.
-  
-      {% include footer %}
+      If you ended-up on this page by following a link in the project website, please report the bad link on our <strong><a href="http://code.google.com/p/tlb/issues/list">Issue Tracker</a></strong>.
     </div>
-  
-    {% include layout_js %}
-    
+    <!--GOOGLE-CDN-->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js" type="text/javascript"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.7/jquery-ui.min.js" type="text/javascript"></script>
+    <!--GOOGLE-CDN-END-->
+    <!--LOCAL-DEV--><!--
+    <script src="/tmp/js/jquery-1.4.4.min.js" type="text/javascript"></script>
+    <script src="/tmp/js/jquery-ui-1.8.7.custom.min.js" type="text/javascript"></script>
+    --><!--LOCAL-DEV-END-->
+    <script src="/javascripts/application.js" type="text/javascript"></script>
+    <script src="/javascripts/version_selector.js" type="text/javascript"></script>
+    <script src="/javascripts/diQuery-collapsiblePanel.js" type="text/javascript"></script>
+
     <script type="text/javascript">
       handle_version_404();
     </script>
