@@ -8,3 +8,5 @@
   <li><a href="./developer_documentation.html">Developer</a></li>
 </ul>
 <hr/>
+{% include doc_for_releases %}
+<hr/>

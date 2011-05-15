@@ -1,13 +1,10 @@
 <div>
-  <h3>Documentation for released versions:</h3>
+  <h3>Documentation for version:</h3>
   <div class="scope section">
-    <div id="current_documentation_message"></div>
-    We freeze a copy of the latest documentation section when we release TLB (or any of the sister projects). If you want to look at the documentation of a different version, please choose the version that you are interested in
-    <p class="clob_end" />
-    <select id="documentation_version_selector">
-    </select>
+    <div class="message notice">This documentation directory covers core concepts and all the configuration options of TLB <select id="documentation_version_selector"></select>.</div> 
+    <sub>Should you wish to refer the documentation for a different release, please choose the corresponding version using the selector above.</sub>
   </div>
 </div>
 <script type="text/javascript">
-  var version_selector_id = "documentation_version_selector";
+  version_selector_id = "documentation_version_selector";
 </script>

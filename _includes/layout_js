@@ -1,0 +1,16 @@
+<!--GOOGLE-CDN-->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js" type="text/javascript"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.7/jquery-ui.min.js" type="text/javascript"></script>
+<!--GOOGLE-CDN-END-->
+<!--LOCAL-DEV--><!--
+<script src="/tmp/js/jquery-1.4.4.min.js" type="text/javascript"></script>
+<script src="/tmp/js/jquery-ui-1.8.7.custom.min.js" type="text/javascript"></script>
+--><!--LOCAL-DEV-END-->
+<script src="/javascripts/application.js" type="text/javascript"></script>
+<script src="/javascripts/version_selector.js" type="text/javascript"></script>
+<script src="/javascripts/diQuery-collapsiblePanel.js" type="text/javascript"></script>
+<script type="text/javascript">
+  jQuery(function() {
+    {{ page.js }}
+  });
+</script>

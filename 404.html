@@ -1,2 +1,23 @@
-You have requested a page that does not exist.
-If you ended-up on this page by following a link in the project website, please report this as an issue at http://code.google.com/p/tlb/issues/list.
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+  {% include layout_head %}
+  <body>
+    <div class="container">  
+      {% include header %}
+      <hr/>
+      {% include no_javascript_warning %}
+  
+      <h3>You have requested a page that does not exist.</h3>
+      
+      If you ended-up on this page by following a link in the project website, please report this as an issue at http://code.google.com/p/tlb/issues/list.
+  
+      {% include footer %}
+    </div>
+  
+    {% include layout_js %}
+    
+    <script type="text/javascript">
+      handle_version_404();
+    </script>
+  </body>
+</html>

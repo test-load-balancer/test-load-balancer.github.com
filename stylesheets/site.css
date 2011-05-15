@@ -180,3 +180,7 @@ ul.spaced_out_rows li hr.no_margin {
     font-size: +1;
     font-weight: bold;
 }
+
+select {
+  margin: 0px;
+}
