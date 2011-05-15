@@ -1,7 +1,7 @@
 <div>
   <h3>Documentation for version:</h3>
   <div class="scope section">
-    <div class="message notice">This documentation directory covers core concepts and all the configuration options of TLB <select id="documentation_version_selector"></select>.</div> 
+    <div class="message notice">This documentation directory covers core concepts and all the configuration options for TLB <select id="documentation_version_selector"></select>.</div> 
     <sub>Should you wish to refer the documentation for a different release, please choose the corresponding version using the selector above.</sub>
   </div>
 </div>
