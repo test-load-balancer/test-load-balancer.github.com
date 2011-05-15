@@ -78,7 +78,7 @@ VersionSelector = function() {
         var remaining_url_matcher = new RegExp(version.dir_name + "(.+)$");
         var url = window.location.href;
         var remaining_path = url.match(remaining_url_matcher)[1];
-        url.replace(remaining_path, "/documentation.html");
+        window.location.href = url.replace(remaining_path, "/documentation.html");
       }
     });
   };
