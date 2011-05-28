@@ -21,17 +21,17 @@
     <tr>
       <td>{% include rspec_1_link %} & {% include rspec_2_link %}</td>
       <td>{% include rake_link %}</td>
-      <td>{% include mri_link %} & {% include jruby_link %}</td>
+      <td>{% include mri_link %} & {% include jruby_link %} (both 1.9 and 1.8)</td>
     </tr>
     <tr>
       <td>{% include testunit_link %}</td>
       <td>{% include rake_link %}</td>
-      <td>{% include mri_link %} & {% include jruby_link %}</td>
+      <td>{% include mri_link %} & {% include jruby_link %} (both 1.9 and 1.8)</td>
     </tr>
     <tr>
       <td>{% include cucumber_link %}</td>
       <td>{% include rake_link %}</td>
-      <td>{% include mri_link %} & {% include jruby_link %}</td>
+      <td>{% include mri_link %} & {% include jruby_link %} (both 1.9 and 1.8)</td>
     </tr>
   </tbody>
 </table>

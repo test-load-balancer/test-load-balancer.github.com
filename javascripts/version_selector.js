@@ -60,7 +60,8 @@ VersionSelector = function() {
     return init;
   }();
 
-  init.VERSIONS = [ new init.Version('doc-0_3_1', 'Version - 0.3.1 (latest released version)'),
+  init.VERSIONS = [ new init.Version('doc-0_3_2', 'Version - 0.3.2 (latest released version)'),
+                    new init.Version('doc-0_3_1', 'Version - 0.3.1'),
                     new init.Version('doc-0_3_0', 'Version - 0.3.0'),
                     new init.Version('doc-0_1_1', 'Version - 0.1.1'),
                     new init.Version('doc-latest', 'Unreleased Bleeding edge (under development)') ];
