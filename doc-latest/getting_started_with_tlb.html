@@ -83,7 +83,11 @@ Feel free to copy the build task fragment relevant to the platform and tool-set 
 <pre>
 require 'rake'
 require 'rubygems'
-gem 'tlb-testunit'
+if RUBY_VERSION =~ /^1\.9/
+  gem 'tlb-testunit19'
+else
+  gem 'tlb-testunit18'
+end
 require 'tlb/test_unit/test_task'
 
 Tlb::TestUnit::TestTask.new(:test_balanced) do |t|
@@ -107,7 +111,7 @@ task :bal =&gt; ['tlb:start', :test_balanced]
 #to run.
 require 'rubygems'
 gem 'tlb-rspec1'
-require 'tlb/spec_task'
+require 'tlb/spec/spec_task'
 
 Tlb::SpecTask.new(:balanced_specs) do |t|
   t.spec_files = FileList['spec/**/*_spec.rb']
