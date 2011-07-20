@@ -7,11 +7,11 @@ description: Information about Test Load Balancer to developers to help contribu
 {% include doc_menu %}
 <h3>Enhancing and Contributing to TLB</h3>
 <div class="scope section">
-  TLB was written from ground up to be as very customizable and tweakable. That means you can add new algorithms, add support for new frameworks etc with relatively less work. The idea is TLB takes care of all the boring, plumbing/TLB specific work and lets the end users to write only what matters to them.
+  TLB was written from ground up to be as very customizable and tweakable. That means you can add new algorithms, add support for new frameworks etc with relatively less work. The idea is, TLB takes care of all the boring plumbing or TLB specific kinda work and lets the developers write only the necessary glue-code to get it talking to their language and framework.
   <p class="clob_end" />
   To understand how TLB works, please refer to the {% include concepts_link %}. We strongly recommend going through the whole page so that you get a good understanding of TLB's internals if you intend to customize it.
   <p class="clob_end" />
-  You can may want to peek into the algorithms we are working on. You can find all the spike work under "set-part" in the <a href="/projects.html">Projects</a> listing. That page also lists all the TLB projects. If any of them interest you, you can choose to send us patch hungry developers some tasty bug fixes or features :)
+  You may want to peek into the algorithms we are working on. You can find all the spike work under "set-part" in the <a href="/projects.html">Projects</a> listing. That page also lists all the TLB projects. If any of them interest you, you can choose to send us patch hungry developers some tasty bug fixes or features :)
 </div>
 <hr/>
 <h3>Adding new Splitters and Orderers</h3>
@@ -19,7 +19,7 @@ description: Information about Test Load Balancer to developers to help contribu
   Most of the algorithmic enhancements are in the splitting and reordering area, this sections talks about how to go about attacking these areas.
   <p class="clob_end" />
   <h4>Splitter</h4>
-  You can either extend the <code>tlb.splitter.JobFamilyAwareSplitter</code> or <code>tlb.splitter.TestSplitter</code> class and implement the relevant method(s) using whatever algorithm you want to use. Once you have implemented a splitter, point <code>TLB_SPLITTER</code> to it, or add it to the chain of splitters in the <code>TLB_PREFERRED_SPLITTERS</code> variable(so you can offload to  built in algorithms in case your algorithm fails) to have it used. Do check out the {% include config_link %} to understand how splitter can be configured.
+  You can either extend the <code>tlb.splitter.JobFamilyAwareSplitter</code> or <code>tlb.splitter.TestSplitter</code> class and implement the relevant method(s) using whatever algorithm you want. Once you have implemented a splitter, point <code>TLB_SPLITTER</code> to it, or add it to the chain of splitters in the <code>TLB_PREFERRED_SPLITTERS</code> variable(so you can offload to built in algorithms in case your algorithm fails) to have it used. Do check out the {% include config_link %} to understand how splitter can be configured.
   <p class="clob_end" />
   <strong>NOTE:</strong> Remember that splitters needs to guarentee the contract of mutual exclusion and collective exhaustion. 
   <p class="clob_end" />
@@ -43,9 +43,9 @@ description: Information about Test Load Balancer to developers to help contribu
   <p class="clob_end" />
   <h4>Supporting a new Testing framework</h4>
   <ol>
-    <li>TLB assumes that a test framework provides an option to specify a list of test resources (for example: files, test-case names, shared-libraries(like so(s) or DLL(s)) etc) that get executed. The list is passed (Refer to the next section on how to do this) to the Splitter which prunes the resource list. Post pruning, the list of the resources is passed through the orderer, where it is re-ordered. Orderer's contract is to only change the order and not change(add/remove/replace) the resources themselves.
+    <li>TLB assumes that a test framework provides an option to specify a list of test resources (for example: files, test-case names, shared-libraries(like so(s) or DLL(s)) etc) that get executed. The list is passed (Refer to the next section on how this is done) to the Splitter which prunes the resource list. Post pruning, the list of the resources is passed through the orderer, where it is re-ordered. Orderer's contract is to only change the order and not change(add/remove/replace) the resources themselves.
       <p class="clob_end" />
-      The final list of test resources is what is fed into the test framework for execution.
+      The final list of test resources is what is fed into the testing framework for execution.
     </li>
     <li>
       Once the tests are executed, TLB needs a way to capture the test result and the time taken for execution of each resource in order to report back to the TLB Server. This feedback is used for partitioning/re-ordering tests accurately and sensibly in future invocations. Refer to the next section to find out the details.
@@ -54,21 +54,21 @@ description: Information about Test Load Balancer to developers to help contribu
   <h4>Supporting a new Build tool</h4>
   Supporting build tools is a matter of implementing the end-user interface which delegates to the Splitter and Orderer. It goes a little further than that and does the plumbing work of attaching listeners to the test running framework so the feedback can be posted.
   <p class="clob_end" />
-  For instance, Ant support hooks up at the fileset-filter level for partitioning and re-ordering and attaches a JUnitResultFormatter with the test task, so the feedback gets posted. 
+  For instance, Ant support hooks up at the fileset-filter level for partitioning and re-ordering and attaches a JUnitResultFormatter with the test task, so the feedback gets posted.
 </div>
 <hr />
 <h3>Interacting with TLB in an alien environment</h3>
 <div class="scope section">
   TLB is written in Java. Hence Java is considered to be TLB's native environment. However, it can be used on any platform and any language. We call a non-Java environment "Alien Environment".
   <p class="clob_end"/>
-  TLB's job involves using the balancing and reordering algorithms and posting test data to the TLB server. Since this is something that is common, every platform/language this need not reinvent this. We provide a simple way of reusing, which is implemented in Java.
+  TLB's job involves using the balancing and reordering algorithms and posting test data back to the TLB server. Since this is something that is common, every platform/language this need not reinvent this. We provide a simple way of reusing, which is implemented in Java.
   <p class="clob_end" />
-  TLB has a concept of <strong>Balancing Server</strong>. This is a really light weight HTTP RESTlet server that knows:
+  TLB has a concept of <strong>Balancing Server</strong>. This is a really light-weight HTTP RESTlet server that knows:
   <ul>
+    <li>Fetching test information from the TLB server for splitting and ordering</li>
     <li>Pruning a list of tests (Splitting) </li>
     <li>Reordering the pruned list of tests (Ordering) </li>
-    <li>Posting test information to the TLB server </li>
-    <li>Fetching test information from the TLB server for splitting and ordering</li>
+    <li>Posting test information back to the TLB server </li>
   </ul>
   <p class="clob_end" />
   Given that all these are taken care of, a developer working to implement Test Load Balancing for a given platform or language, just needs to hookup with the subject test framework(s) and build framework(s) as mentioned in the previous section and use the Balancing server to do the actual load balancing.
@@ -91,6 +91,11 @@ description: Information about Test Load Balancer to developers to help contribu
       <p class="clob_end" />
       com/foo/project/test_file1<strong>\n</strong>com/bar/project/test_file2<strong>\n</strong>...com/bar/project/test_filex
       <p class="clob_end" />
+      <div class="message notice">
+        "<strong>\n</strong>" here represents a new-line character. If printed, the equivallent of 'foo<strong>\n</strong>bar' would look like:<br/>
+        foo<br/>
+        bar
+      </div>
       i.e. the body should have the identifier of the test resource (The format of the names is not important. It can be anything. Usually it is either relative path or a logical name(class-name etc)) and each resource name is separated using "\n"(new-line character). Note that this needs to be "\n" irrespective of platform you are on.
     </li>
     <li>The body of response of the aforementioned HTTP POST request will return you the pruned list of tests in the same format(seperated by new-line characters).</li>
@@ -115,5 +120,5 @@ description: Information about Test Load Balancer to developers to help contribu
       Doing so will terminate the Balancing server gracefully.
   </ol>
   <p class="clob_end" />
-  As one can see, the balancing server can be used on any platform and any language as long as you can talk over HTTP to get the splitting and reordering done. This is the exactly how the {% include tlb_rb_link %} - the ruby support is implemented. {% include tlb_dot_net_link %}, which is currently under development also used the same life-cycle.
+  As all the communication is over HTTP using plain-text payloads, the balancing server can be used on any platform and any language as long as you can talk HTTP to get the splitting and reordering done and to pass feedback on. This is the exactly how the {% include tlb_rb_link %} - the ruby support is implemented. {% include tlb_dot_net_link %}, which is currently under development also used the same life-cycle.
 </div>
