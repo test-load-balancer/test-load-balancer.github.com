@@ -104,6 +104,14 @@ description: Home page of 'Test Load Balancer(TLB)' project(s).
           </tr>
           <tr>
             <td>
+              <a href="#tlb_sync_to_disk_interval_in_mins">TLB_SYNC_TO_DISK_INTERVAL_IN_MINS</a> dictates how long should TLB server wait between two consecutive sync(s) of in-memory test-data to disk. 
+            </td>
+            <td>{% include not-applicable %}</td>
+            <td>{% include not-applicable %}</td>
+            <td>{% include applicable %}</td>
+          </tr>
+          <tr>
+            <td>
               <a href="#tlb_smoothing_factor">TLB_SMOOTHING_FACTOR</a> controls how aggressively test-time data is smoothened. Defaults to <i>1.0</i> which disables smoothing.
             </td>
             <td>{% include applicable %}</td>
@@ -350,6 +358,26 @@ description: Home page of 'Test Load Balancer(TLB)' project(s).
           <strong>Type: </strong> A whole number(number of days)
           <hr/>
           <strong>Example:</strong> 3 (means three days)
+        </div>
+        <hr class="no_margin"/>
+      </li>
+      <li>
+        <label id="tlb_sync_to_disk_interval_in_mins">TLB_SYNC_TO_DISK_INTERVAL_IN_MINS</label>
+        <div class="scope section">
+          <strong>if</strong>
+          <code>ON_SERVER_SIDE</code>
+          <hr/>
+          To respond to requests from balancers fast enough, TLB keeps all its recently used test-data in-memory. This means, if the server crashes because of unforseen reasons like power failure or is force-killed, this data may be lost.
+          <p class="clob_end"/>
+          To avoid loss of in-memory data, server maintains a timer which syncs all in-memory test data to disk. This parameter controls the frequency of execution of this timer. This is time-span in minutes between two consecutive sync-to-disk operations.
+          <p class="clob_end"/>
+          While sync-to-disk operation syncs only dirty test-data stores, this operation is concurrency sensitive and executing it too frequently may lead to slight slowness due to lock contention.
+          <p class="clob_end"/>
+          TLB defaults this parameter to <i>60</i> minutes. This means, all in-memory data modifications are synced to disk once an hour.
+          <hr/>
+          <strong>Type: </strong> A whole number(number of minutes)
+          <hr/>
+          <strong>Example:</strong> 30 (means thirty minutes)
         </div>
         <hr class="no_margin"/>
       </li>
