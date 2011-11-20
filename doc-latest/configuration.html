@@ -176,6 +176,22 @@ description: Home page of 'Test Load Balancer(TLB)' project(s).
           </tr>
           <tr>
             <td>
+              <a href="#tlb_out_file">TLB_OUT_FILE</a> The file to which the output stream of the balancer java process launched in an alien environment needs to be writen to. Defaults to a file named <i>tlb_out_file</i> in the test processes working directory.
+            </td>
+            <td>{% include applicable %}</td>
+            <td>{% include applicable %}</td>
+            <td>{% include not-applicable %}</td>
+          </tr>
+          <tr>
+            <td>
+              <a href="#tlb_err_file">TLB_ERR_FILE</a> The file to which the error stream of the balancer java process launched in an alien environment needs to be writen to. Defaults to a file named <i>tlb_err_file</i> in the test processes working directory.
+            </td>
+            <td>{% include applicable %}</td>
+            <td>{% include applicable %}</td>
+            <td>{% include not-applicable %}</td>
+          </tr>
+          <tr>
+            <td>
               <a href="#go_stage_feed_max_search_depth">GO_STAGE_FEED_MAX_SEARCH_DEPTH</a> limits the number of pages balancer is allowed to crawl to find previous instance of stage on Go Server. Defaults to <i>10</i>.
             </td>
             <td>{% include not-applicable %}</td>
