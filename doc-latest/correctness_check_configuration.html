@@ -7,7 +7,7 @@ description: Help for setting-up correctness-checker for a TLB enabled build.
 {% include doc_menu %}
 <h3>Correctness Check Configuration:</h3> 
 <div class="scope section"> 
-  <i>TLB</i>, bundles a correctness check implementation which fails the build when balancing correctness is violated. Balancing correctness in this context means, all tests must have been run(no tests missed out) and no test should have run on more than one partition(because this is a waste of resources).
+  <i>TLB</i>, bundles a correctness check implementation which fails the build when balancing correctness is violated. <i>Balancing correctness</i> in this context means, all tests must have been run(no tests missed out) and no test should have run on more than one partition(because this is a waste of resources).
   <p class="clob_end"/>
   Because such a check comes with marginal to moderate performance penalty, it is disabled by default(configuration variable is initialized to a NoOp implementation). This means, unless user chooses to set variable <a href="./configuration.html#split_correctness_checker">SPLIT_CORRECTNESS_CHECKER</a> to AbortOnFailure no correctness verification is attempted and no overhead is imposed.
   <p class="clob_end"/>
@@ -15,7 +15,7 @@ description: Help for setting-up correctness-checker for a TLB enabled build.
   <p class="clob_end"/>
   A different build task can be invoked to call this assert-all-partitions-executed hook after all partitions for the relevant build finish(or are expected to have finished). Different build tools that TLB supports, expose ways to configure such a task or use a preconfigured one.
   <p class="clob_end"/>
-  The task must get the same job-name and job-version values as the actual partitions, so it can assert that all partitions for the subject build executed.
+  The task must get the same job-name and job-version values(as environment variables) as the actual partitions, so it can assert that all partitions for the subject build executed.
   <p class="clob_end"/>
   Please check the <a href="./getting_started_with_tlb.html">quick-start build script fragments</a> for details.
   <p class="clob_end"/>
