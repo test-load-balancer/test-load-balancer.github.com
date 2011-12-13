@@ -160,6 +160,22 @@ description: Home page of 'Test Load Balancer(TLB)' project(s).
           </tr>
           <tr>
             <td>
+              <a href="#tlb_data_cache_size">TLB_DATA_CACHE_SIZE</a> controls number of data-repositories TLB server is allowed to keep in cache.
+            </td>
+            <td>{% include not-applicable %}</td>
+            <td>{% include not-applicable %}</td>
+            <td>{% include applicable %}</td>
+          </tr>
+          <tr>
+            <td>
+              <a href="#split_correctness_checker">SPLIT_CORRECTNESS_CHECKER</a> controls number of data-repositories TLB server is allowed to keep in cache.
+            </td>
+            <td>{% include applicable %}</td>
+            <td>{% include not-applicable %}</td>
+            <td>{% include not-applicable %}</td>
+          </tr>
+          <tr>
+            <td>
               <a href="#tlb_username">TLB_USERNAME</a> is the username balancer uses to log-on to Go Server.
             </td>
             <td>{% include not-applicable %}</td>
@@ -308,9 +324,7 @@ description: Home page of 'Test Load Balancer(TLB)' project(s).
       <li>
         <label id="tlb_server_port">TLB_SERVER_PORT</label>
         <div class="scope section">
-          <strong>if</strong>
-          <code>ON_SERVER_SIDE</code>
-          <hr/>
+          {% include if_on_server_side %}
           This is the tcp port you want TLB-Server to listen to, changing this to a different value, say 9005, will require change in the value of $TLB_BASE_URL being used on the TLB partitions running against the server.
           <p class="clob_end"/>
           Defaults to <i>7019</i>.
@@ -324,9 +338,7 @@ description: Home page of 'Test Load Balancer(TLB)' project(s).
       <li>
         <label id="tlb_data_dir">TLB_DATA_DIR</label>
         <div class="scope section">
-          <strong>if</strong>
-          <code>ON_SERVER_SIDE</code>
-          <hr/>
+          {% include if_on_server_side %}
           Relevant only for the TLB Server process. This is the directory that TLB Server uses to persist the historical data so it survives restarts/upgrades. 
           <p class="clob_end"/>
           You want this directory to survive machine restarts, so using something like <i>/tmp</i> is usually a bad idea.
@@ -342,9 +354,7 @@ description: Home page of 'Test Load Balancer(TLB)' project(s).
       <li>
         <label id="tlb_version_life_in_days">TLB_VERSION_LIFE_IN_DAYS</label>
         <div class="scope section">
-          <strong>if</strong>
-          <code>ON_SERVER_SIDE</code>
-          <hr/>
+          {% include if_on_server_side %}
           TLB supports a notion of version for test times(and smoothened test times). This is important because while balancing every partition must see the exact same data(else the partition may not turn out to be mutually exclusive and collectively exhaustive, which means the same test suite may run twice(on two different partitions) or some test suites may not run at all. 
           <p class="clob_end"/>
           This variable is relevant on the TLB Server. This governs how long the version is going to stay in the server(after which server will purge it, and if it gets another request for that version after the purge, will create a new version from the latest data snapshot). 
@@ -364,9 +374,7 @@ description: Home page of 'Test Load Balancer(TLB)' project(s).
       <li>
         <label id="tlb_sync_to_disk_interval_in_mins">TLB_SYNC_TO_DISK_INTERVAL_IN_MINS</label>
         <div class="scope section">
-          <strong>if</strong>
-          <code>ON_SERVER_SIDE</code>
-          <hr/>
+          {% include if_on_server_side %}
           To respond to requests from balancers fast enough, TLB keeps all its recently used test-data in-memory. This means, if the server crashes because of unforseen reasons like power failure or is force-killed, this data may be lost.
           <p class="clob_end"/>
           To avoid loss of in-memory data, server maintains a timer which syncs all in-memory test data to disk. This parameter controls the frequency of execution of this timer. This is time-span in minutes between two consecutive sync-to-disk operations.
@@ -482,6 +490,48 @@ description: Home page of 'Test Load Balancer(TLB)' project(s).
           <strong>Type: </strong> Any unique string(that changes across suite runs(and remains same across partitions for any given run)).
           <hr/>
           <strong>Example:</strong> 'foo-bar-&lt;build-number&gt;' (ie. foo-bar-10, foo-bar-11 etc)
+        </div>
+        <hr class="no_margin"/>
+      </li>
+      <li>
+        <label id="tlb_data_cache_size">TLB_DATA_CACHE_SIZE</label>
+        <div class="scope section">
+          {% include if_on_server_side %}
+          When TLB server is requsted(by a build) for any resource (for instance, suite times, suite results) etc by balancer, it attempts to serve the request out of cache before trying to load data from disk.
+          <p class="clob_end"/>
+          There are several such details that TLB captures scoped by job-name and job-version combination. These data-sets can be of different sizes and can be loaded into cache. 
+          <p class="clob_end"/>
+          However, since cache is maintained in memory, only limited amount of caching can be done without hurting system-performance in terms of GC overhead.
+          <p class="clob_end"/>
+          This variable controls number of repositories that TLB Server is allowed to keep in cache. Once cache gets full, TLB Server evicts item(s) on LRU(Last-Recently-Used) policy.
+          <p class="clob_end"/>
+          For instance, for a TLB server with <code> $TLB_DATA_CACHE_SIZE = 2000 </code> being used for multiple medium to large size projects with over ten thousand test-suites each, approximately 4 Gigs of memory allocation may be necessary. Cutting cache-size down to 20 in a similar setup will require only 50 Megs of memory, but will likely do a lot more disk-churn under load.
+          <p class="clob_end"/>
+          TLB uses <i>100</i> as default value of <i>TLB_DATA_CACHE_SIZE</i>, which means it will, at the maximum, keep 100 data-repositories across all repo-types and sizes.
+          <hr/>
+          <strong>Type: </strong> A whole number.
+          <hr/>
+          <strong>Example:</strong> 200
+        </div>
+        <hr class="no_margin"/>
+      </li>
+      <li>
+        <label id="split_correctness_checker">SPLIT_CORRECTNESS_CHECKER</label>
+        <div class="scope section">
+          {% include if_on_balancer_side_against_tlb_server %}
+          When working on new balancing or re-ordering algorithms, it is essential to ensure that mutual-exclusion and collective-exhaustion of tests is not violated, so as to ensure that every test is executed on a maximum of only one partition and no tests are missed out.
+          <p class="clob_end"/>
+          To help implementers reason and verify correctness, TLB exposes a way to enable correctness checker. This is an optional configuration which can be used to fail the build in the event of correctness issues.
+          <p class="clob_end"/>
+          Not setting this variable keeps correctness check disabled. It can be set to value 'tlb.splitter.correctness.AbortOnFailure' to enable correctness check(which would fail the build in case of either mutual-exclusion or collective-exhaustion being violated).
+          <p class="clob_end"/>
+          <i>Important:</i> Please check {% include correctness_check_configuration_link %} for details.
+          <p class="clob_end"/>
+          TLB uses value 'tlb.splitter.correctness.NoOp' as default if not set. NoOp implementation performs no correctness check and incures no performance penalty.
+          <hr/>
+          {% include type_class_name %}
+          <hr/>
+          <strong>Example:</strong> tlb.splitter.correctness.AbortOnFailure
         </div>
         <hr class="no_margin"/>
       </li>

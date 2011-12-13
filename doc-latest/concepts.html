@@ -33,7 +33,9 @@ description: Concepts in 'Test Load Balancer(TLB)'.
       <p class="clob_end"/>
       For instance: the Ant JUnit support uses Ant FileSets(Build) and JUnit task(Test Runner). This task obtains historical test data from the TLB Server and uses that data to split and order tests. The pruned list is then handed over to JUnit. JUnit in turn provides call back on test completion with <i>time the test took(test-time)</i> and <i>outcome of the test(test-result)</i>. This data is then posted back to the Server, where it is stored to be downloaded during future runs.
       <p class="clob_end" />
-      The Balancer has 2 aspects to it. Splitter and Orderer. Check out the <a href="#balancer_components">Balancer Components</a> to understand them in greater depth. We strongly recommend reading about the Balancer components as they are core to what TLB does.
+      The Balancer has 2 major aspects to it. Splitter and Orderer. Check out the <a href="#balancer_components">Balancer Components</a> to understand them in greater depth. We strongly recommend reading about the Balancer components as they are core to what TLB does.
+      <p class="clob_end" />
+      The Balancer also bundles a relatively small(in terms of implication) and non-functional component called <a href="#correctness_checker">Correctness Checker</a>. Correctness check feature is disabled by default. This is usually relevant to people using custom balancing or reordering algorithms. Please refer to <a href="#correctness_checker">Correctness Checker</a> section for details.
     </div>
     <p class="clob_end" />
     <hr/>
@@ -190,6 +192,17 @@ description: Concepts in 'Test Load Balancer(TLB)'.
 	      <p class="clob_end"/>
 	      Most test runners provide a mechanism for hooking up listeners that are notified of test-state as tests execute. The glue-code library uses test-listeners to capture test run times and result and posts it to the Balancing Server, which in-turn, pushes it to the actual TLB Server(or equivalent).</li>
     </ol>
+  </div>
+
+  <label id="correctness_checker">
+    <h3>Asserting Partitioning Correctness</h3>
+  </label>
+  <div class="scope section">
+    TLB is written from ground up to allow users to plug in custom algorithms for performing various services. TLB does this by exposing every tweekable option as environment variable which captures implementation name. Implementation is expected to adhere to an interface(implement an interface) and TLB takes care of plugging it in and using it.
+    <p class="clob_end" />
+    This flexibility allows people to customize/rewrite core services like balancing or reordering etc. To help ensure correctness(so user of TLB doesn't pay the price for balancing inconsistencies and algorithmic flaws), TLB bundles a notion of <strong>Correctness Checking</strong>.
+    <p class="clob_end" />
+    Please read the {% include correctness_check_configuration_link %} for details.
   </div>
 </div>
 <hr/>

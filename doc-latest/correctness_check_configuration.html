@@ -1,0 +1,25 @@
+---
+layout: default
+title: Setting-up test partitioning correctness-checker
+keywords: tlb, test-load-balancer, correctness check, assertion, correctness, verification, mutual exclusion, collective exhaustion, setup, balancer accuracy, balancer verification
+description: Help for setting-up correctness-checker for a TLB enabled build.
+---
+{% include doc_menu %}
+<h3>Correctness Check Configuration:</h3> 
+<div class="scope section"> 
+  <i>TLB</i>, bundles a correctness check implementation which fails the build when balancing correctness is violated. Balancing correctness in this context means, all tests must have been run(no tests missed out) and no test should have run on more than one partition(because this is a waste of resources).
+  <p class="clob_end"/>
+  Because such a check comes with marginal to moderate performance penalty, it is disabled by default(configuration variable is initialized to a NoOp implementation). This means, unless user chooses to set variable <a href="./configuration.html#split_correctness_checker">SPLIT_CORRECTNESS_CHECKER</a> to AbortOnFailure no correctness verification is attempted and no overhead is imposed.
+  <p class="clob_end"/>
+  When enabled, TLB needs an additional hook which is guaranteed to be invoked after all partitions complete(let us refer to it as assert-all-partitions-executed hook), so it can identify missing partitions or tests that no partition picked.
+  <p class="clob_end"/>
+  A different build task can be invoked to call this assert-all-partitions-executed hook after all partitions for the relevant build finish(or are expected to have finished). Different build tools that TLB supports, expose ways to configure such a task or use a preconfigured one.
+  <p class="clob_end"/>
+  The task must get the same job-name and job-version values as the actual partitions, so it can assert that all partitions for the subject build executed.
+  <p class="clob_end"/>
+  Please check the <a href="./getting_started_with_tlb.html">quick-start build script fragments</a> for details.
+  <p class="clob_end"/>
+  When enabing correctness check on multi-module projects, please remember to set module-name on the relevant task definition or equivallent.
+  <p class="clob_end"/>
+  Also, when executing assert-all-partitions-executed build task, the all module-names must be passed in. Build tool support libraries can choose different ways of capturing this information, for instance, ant task allows setting an attribute which captures all module-names in a comma seperated string, whereas Rake task(Ruby support lib) expects an environment variable named 'tlb_module_name' to be set to the module-name(note, its name and not names, unlike ant-task).
+</div> 
