@@ -5,6 +5,11 @@ keywords: tlb, test-load-balancer, how to use, usage examples, snippets, tlb exa
 description: Information about Test Load Balancer to developers to help contribute
 ---
 {% include doc_menu %}
+<h3>Building TLB from source</h3>
+<div class="scope section">
+  To see how to build TLB from source, please clone the project you care about from <a href="http://github.com/test-load-balancer" target="about:blank">github</a> and checkout README.
+</div>
+<hr/>
 <h3>Enhancing and Contributing to TLB</h3>
 <div class="scope section">
   TLB was written from ground up to be as very customizable and tweakable. That means you can add new algorithms, add support for new frameworks etc with relatively less work. The idea is, TLB takes care of all the boring plumbing or TLB specific kinda work and lets the developers write only the necessary glue-code to get it talking to their language and framework.
@@ -72,53 +77,51 @@ description: Information about Test Load Balancer to developers to help contribu
   </ul>
   <p class="clob_end" />
   Given that all these are taken care of, a developer working to implement Test Load Balancing for a given platform or language, just needs to hookup with the subject test framework(s) and build framework(s) as mentioned in the previous section and use the Balancing server to do the actual load balancing.
-</div>
-<hr/>
-<h3>Using the Balancing Server</h3>
-<div class="section scope">
-  The life-cycle of balancer process is:
-  <ol>
-    <li>Start the balancing server. This is done using:
-      <div class="code">
-	      <code>java -jar tlb-alien-XXX.jar</code>
-      </div>
-      A few environment variables must be set before this invocation is made. Please refer to the <i>"Balancer against TLB Server"</i> column in {% include config_link  %} to get the list of the variables that it needs.
-    </li>
-    <li>Obtain the list of tests that need to be run from the test framework</li>
-    <li>Pass this list along to the Balancing server. It needs to be an HTTP POST to URL: <strong>http://localhost:${TLB_BALANCER_PORT}/balance</strong>
-      <p class="clob_end" />
-      The post body should be of the format:
-      <p class="clob_end" />
-      com/foo/project/test_file1<strong>\n</strong>com/bar/project/test_file2<strong>\n</strong>...com/bar/project/test_filex
-      <p class="clob_end" />
-      <div class="message notice">
-        "<strong>\n</strong>" here represents a new-line character. If printed, the equivallent of 'foo<strong>\n</strong>bar' would look like:<br/>
-        foo<br/>
-        bar
-      </div>
-      i.e. the body should have the identifier of the test resource (The format of the names is not important. It can be anything. Usually it is either relative path or a logical name(class-name etc)) and each resource name is separated using "\n"(new-line character). Note that this needs to be "\n" irrespective of platform you are on.
-    </li>
-    <li>The body of response of the aforementioned HTTP POST request will return you the pruned list of tests in the same format(seperated by new-line characters).</li>
-    <li>After these tests are finished, you need to pass along the test run time to the balancing server. You can do this by performing an HTTP POST to the URL: <strong>http://localhost:${TLB_BALANCER_PORT}/suite_time</strong>
-      <p class="clob_end" />
-      The post body should be of the format:
-      <p class="clob_end" />
-      com/foo/project/test_file1<strong>:</strong>123<strong>\n</strong>com/bar/project/test_file2<strong>:</strong>20<strong>\n</strong>...com/bar/project/test_filex<strong>:</strong>344
-      <p class="clob_end" />
-      i.e. the body should have the name(identifier) for the test resource and time taken (a valid integer) separated by a colon (":") and each entry must be separated by "\n" character. The name(identifier) should be the exact same as the one you send across for pruning/reordering.
-    </li>
-    <li>The results of the tests too, must be posted, if re-order functionality is used. This can be done by performing HTTP POST to the URL: <strong>http://localhost:${TLB_BALANCER_PORT}/suite_result</strong>
-      <p class="clob_end" />
-      The post body should be of the format:
-      <p class="clob_end" />
-      com/foo/project/test_file1<strong>:</strong>false<strong>\n</strong>com/bar/project/test_file2<strong>:</strong>false<strong>\n</strong>...com/bar/project/test_filex<strong>:</strong>true
-      <p class="clob_end" />
-      i.e. the body should have the name(identifier) of the test resource and the result of the test separated by a colon(":") and each entry separated by "\n" character. The value of the result must be either "false" or "true".
-    </li>
-    <li>Once all the tests are executed, terminate the balancing server. This can be done by shooting an HTTP GET to the URL: <strong>http://localhost:${TLB_BALANCER_PORT}/control/suicide</strong>
-      <p class="clob_end" />
-      Doing so will terminate the Balancing server gracefully.
-  </ol>
-  <p class="clob_end" />
-  As all the communication is over HTTP using plain-text payloads, the balancing server can be used on any platform and any language as long as you can talk HTTP to get the splitting and reordering done and to pass feedback on. This is the exactly how the {% include tlb_rb_link %} - the ruby support is implemented. {% include tlb_dot_net_link %}, which is currently under development also used the same life-cycle.
+  <hr/>
+  <h4>Using the Balancing Server</h3>
+The life-cycle of balancer process is:
+<ol>
+  <li>Start the balancing server. This is done using:
+    <div class="code">
+	    <code>java -jar tlb-alien-XXX.jar</code>
+    </div>
+    A few environment variables must be set before this invocation is made. Please refer to the <i>"Balancer against TLB Server"</i> column in {% include config_link  %} to get the list of the variables that it needs.
+  </li>
+  <li>Obtain the list of tests that need to be run from the test framework</li>
+  <li>Pass this list along to the Balancing server. It needs to be an HTTP POST to URL: <strong>http://localhost:${TLB_BALANCER_PORT}/balance</strong>
+    <p class="clob_end" />
+    The post body should be of the format:
+    <p class="clob_end" />
+    com/foo/project/test_file1<strong>\n</strong>com/bar/project/test_file2<strong>\n</strong>...com/bar/project/test_filex
+    <p class="clob_end" />
+    <div class="message notice">
+      "<strong>\n</strong>" here represents a new-line character. If printed, the equivallent of 'foo<strong>\n</strong>bar' would look like:<br/>
+      foo<br/>
+      bar
+    </div>
+    i.e. the body should have the identifier of the test resource (The format of the names is not important. It can be anything. Usually it is either relative path or a logical name(class-name etc)) and each resource name is separated using "\n"(new-line character). Note that this needs to be "\n" irrespective of platform you are on.
+  </li>
+  <li>The body of response of the aforementioned HTTP POST request will return you the pruned list of tests in the same format(seperated by new-line characters).</li>
+  <li>After these tests are finished, you need to pass along the test run time to the balancing server. You can do this by performing an HTTP POST to the URL: <strong>http://localhost:${TLB_BALANCER_PORT}/suite_time</strong>
+    <p class="clob_end" />
+    The post body should be of the format:
+    <p class="clob_end" />
+    com/foo/project/test_file1<strong>:</strong>123<strong>\n</strong>com/bar/project/test_file2<strong>:</strong>20<strong>\n</strong>...com/bar/project/test_filex<strong>:</strong>344
+    <p class="clob_end" />
+    i.e. the body should have the name(identifier) for the test resource and time taken (a valid integer) separated by a colon (":") and each entry must be separated by "\n" character. The name(identifier) should be the exact same as the one you send across for pruning/reordering.
+  </li>
+  <li>The results of the tests too, must be posted, if re-order functionality is used. This can be done by performing HTTP POST to the URL: <strong>http://localhost:${TLB_BALANCER_PORT}/suite_result</strong>
+    <p class="clob_end" />
+    The post body should be of the format:
+    <p class="clob_end" />
+    com/foo/project/test_file1<strong>:</strong>false<strong>\n</strong>com/bar/project/test_file2<strong>:</strong>false<strong>\n</strong>...com/bar/project/test_filex<strong>:</strong>true
+    <p class="clob_end" />
+    i.e. the body should have the name(identifier) of the test resource and the result of the test separated by a colon(":") and each entry separated by "\n" character. The value of the result must be either "false" or "true".
+  </li>
+  <li>Once all the tests are executed, terminate the balancing server. This can be done by shooting an HTTP GET to the URL: <strong>http://localhost:${TLB_BALANCER_PORT}/control/suicide</strong>
+    <p class="clob_end" />
+    Doing so will terminate the Balancing server gracefully.
+</ol>
+<p class="clob_end" />
+As all the communication is over HTTP using plain-text payloads, the balancing server can be used on any platform and any language as long as you can talk HTTP to get the splitting and reordering done and to pass feedback on. This is the exactly how the {% include tlb_rb_link %} - the ruby support is implemented. {% include tlb_dot_net_link %}, which is currently under development also used the same life-cycle.
 </div>

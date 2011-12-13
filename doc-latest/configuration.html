@@ -20,6 +20,34 @@ description: Home page of 'Test Load Balancer(TLB)' project(s).
         Please check <a href="#variable_infrencing"><strong>environment variable infrencing documentation</strong></a> to understand how this feature can be used.
       </div>
       <p class="clob_end"/>
+      <h4>Legend for the icons</h4>
+      <table class="with_row_deviders">
+        <thead>
+          <tr>
+            <th>Icon</th>
+            <th>Meaning</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{% include applicable-required %}</td>
+            <td>Mandatory. TLB will not work if this configuration variable is not set. </td>
+          </tr>
+          <tr>
+            <td>{% include applicable %}</td>
+            <td>Applicable, but not mandatory. TLB will use some default for this variable.</td>
+          </tr>
+          <tr>
+            <td>{% include applicable-conditionally %}</td>
+            <td>Applicable, but conditionally. TLB will use this based on the value of some other configuration varibale.</td>
+          </tr>
+          <tr>
+            <td>{% include not-applicable %}</td>
+            <td>Not applicable. TLB will ignore this variable.</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="clob_end"/>
       <table class="with_row_deviders">
         <thead>
           <tr>
@@ -30,94 +58,6 @@ description: Home page of 'Test Load Balancer(TLB)' project(s).
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>
-              <a href="#type_of_server">TYPE_OF_SERVER</a>: governs the type of server to use for partitioning(whether to use TLB Server or Go Server). Defaults to <i>tlb.service.TlbServer</i>.
-            </td>
-            <td>{% include applicable %}</td>
-            <td>{% include applicable-required %}</td>
-            <td>{% include not-applicable %}</td>
-          </tr>
-          <tr>
-            <td>
-              <a href="#tlb_splitter">TLB_SPLITTER</a> is algorithm to use for balancing. Defaults to <i>tlb.splitter.DefaultingTestSplitter</i>.
-            </td>
-            <td>{% include applicable %}</td>
-            <td>{% include applicable %}</td>
-            <td>{% include not-applicable %}</td>
-          </tr>
-          <tr>
-            <td>
-              <a href="#tlb_orderer">TLB_ORDERER</a> is algorithm to use for ordering. Defaults to <i>tlb.orderer.FailedFirstOrderer</i>.
-            </td>
-            <td>{% include applicable %}</td>
-            <td>{% include applicable %}</td>
-            <td>{% include not-applicable %}</td>
-          </tr>
-          <tr>
-            <td>
-              <a href="#tlb_preferred_splitters">TLB_PREFERRED_SPLITTERS</a> is list of algorithms to try(most prefered first), and is applicable only when using DefaultingTestSplitter for balancing. Defaults to <i>tlb.splitter.TimeBasedTestSplitter:tlb.splitter.CountBasedTestSplitter</i>.
-            </td>
-            <td>{% include applicable-conditionally %}</td>
-            <td>{% include applicable-conditionally %}</td>
-            <td>{% include not-applicable %}</td>
-          </tr>
-          <tr>
-            <td>
-              <a href="#tlb_tmp_dir">TLB_TMP_DIR</a> directory to use, to store temproary files. Defaults to system tmp-dir.
-            </td>
-            <td>{% include applicable %}</td>
-            <td>{% include applicable %}</td>
-            <td>{% include not-applicable %}</td>
-          </tr>
-          <tr>
-            <td>
-              <a href="#tlb_balancer_port">TLB_BALANCER_PORT</a> is TCP port the balancing server binds to. Defaults to <i>8019</i>.
-            </td>
-            <td>{% include applicable %}</td>
-            <td>{% include applicable %}</td>
-            <td>{% include not-applicable %}</td>
-          </tr>
-          <tr>
-            <td>
-              <a href="#tlb_server_port">TLB_SERVER_PORT</a> is TCP port the TLB Server binds to. Defaults to <i>7019</i>
-            </td>
-            <td>{% include not-applicable %}</td>
-            <td>{% include not-applicable %}</td>
-            <td>{% include applicable %}</td>
-          </tr>
-          <tr>
-            <td>
-              <a href="#tlb_data_dir">TLB_DATA_DIR</a> is the directory used by TLB Server to store test-data posted by partitions. Defaults to <i>tlb_store</i> under working directory.
-            </td>
-            <td>{% include not-applicable %}</td>
-            <td>{% include not-applicable %}</td>
-            <td>{% include applicable %}</td>
-          </tr>
-          <tr>
-            <td>
-              <a href="#tlb_version_life_in_days">TLB_VERSION_LIFE_IN_DAYS</a> governs how long test-data version is kept from the time its created. Defaults to <i>-1</i>, which means 'forever'.
-            </td>
-            <td>{% include not-applicable %}</td>
-            <td>{% include not-applicable %}</td>
-            <td>{% include applicable %}</td>
-          </tr>
-          <tr>
-            <td>
-              <a href="#tlb_sync_to_disk_interval_in_mins">TLB_SYNC_TO_DISK_INTERVAL_IN_MINS</a> dictates how long should TLB server wait between two consecutive sync(s) of in-memory test-data to disk. 
-            </td>
-            <td>{% include not-applicable %}</td>
-            <td>{% include not-applicable %}</td>
-            <td>{% include applicable %}</td>
-          </tr>
-          <tr>
-            <td>
-              <a href="#tlb_smoothing_factor">TLB_SMOOTHING_FACTOR</a> controls how aggressively test-time data is smoothened. Defaults to <i>1.0</i> which disables smoothing.
-            </td>
-            <td>{% include applicable %}</td>
-            <td>{% include applicable %}</td>
-            <td>{% include not-applicable %}</td>
-          </tr>
           <tr>
             <td>
               <a href="#tlb_total_partitions">TLB_TOTAL_PARTITIONS</a> declares number of partitions to be made.
@@ -160,6 +100,94 @@ description: Home page of 'Test Load Balancer(TLB)' project(s).
           </tr>
           <tr>
             <td>
+              <a href="#tlb_splitter">TLB_SPLITTER</a> is algorithm to use for balancing. Defaults to <i>tlb.splitter.DefaultingTestSplitter</i>.
+            </td>
+            <td>{% include applicable %}</td>
+            <td>{% include applicable %}</td>
+            <td>{% include not-applicable %}</td>
+          </tr>
+          <tr>
+            <td>
+              <a href="#tlb_orderer">TLB_ORDERER</a> is algorithm to use for ordering. Defaults to <i>tlb.orderer.FailedFirstOrderer</i>.
+            </td>
+            <td>{% include applicable %}</td>
+            <td>{% include applicable %}</td>
+            <td>{% include not-applicable %}</td>
+          </tr>
+          <tr>
+            <td>
+              <a href="#tlb_preferred_splitters">TLB_PREFERRED_SPLITTERS</a> is list of algorithms to try (most prefered first), and is applicable only when using tlb.splitter.DefaultingTestSplitter is used for <a href="#tlb_splitter">TLB_SPLITTER</a>. Defaults to <i>tlb.splitter.TimeBasedTestSplitter:tlb.splitter.CountBasedTestSplitter</i>.
+            </td>
+            <td>{% include applicable-conditionally %}</td>
+            <td>{% include applicable-conditionally %}</td>
+            <td>{% include not-applicable %}</td>
+          </tr>
+          <tr>
+            <td>
+              <a href="#type_of_server">TYPE_OF_SERVER</a>: governs the type of server to use for partitioning(whether to use TLB Server or Go Server). Defaults to <i>tlb.service.TlbServer</i>.
+            </td>
+            <td>{% include applicable %}</td>
+            <td>{% include applicable-required %}</td>
+            <td>{% include not-applicable %}</td>
+          </tr>
+          <tr>
+            <td>
+              <a href="#tlb_server_port">TLB_SERVER_PORT</a> is TCP port the TLB Server binds to. Defaults to <i>7019</i>
+            </td>
+            <td>{% include not-applicable %}</td>
+            <td>{% include not-applicable %}</td>
+            <td>{% include applicable %}</td>
+          </tr>
+          <tr>
+            <td>
+              <a href="#tlb_balancer_port">TLB_BALANCER_PORT</a> is TCP port the balancing server binds to. Defaults to <i>8019</i>.
+            </td>
+            <td>{% include applicable %}</td>
+            <td>{% include applicable %}</td>
+            <td>{% include not-applicable %}</td>
+          </tr>
+          <tr>
+            <td>
+              <a href="#tlb_data_dir">TLB_DATA_DIR</a> is the directory used by TLB Server to store test-data posted by partitions. Defaults to <i>tlb_store</i> under working directory.
+            </td>
+            <td>{% include not-applicable %}</td>
+            <td>{% include not-applicable %}</td>
+            <td>{% include applicable %}</td>
+          </tr>
+          <tr>
+            <td>
+              <a href="#tlb_version_life_in_days">TLB_VERSION_LIFE_IN_DAYS</a> governs how long test-data version is kept from the time its created. Defaults to <i>-1</i>, which means 'forever'.
+            </td>
+            <td>{% include not-applicable %}</td>
+            <td>{% include not-applicable %}</td>
+            <td>{% include applicable %}</td>
+          </tr>
+          <tr>
+            <td>
+              <a href="#tlb_sync_to_disk_interval_in_mins">TLB_SYNC_TO_DISK_INTERVAL_IN_MINS</a> dictates how long should TLB server wait between two consecutive sync(s) of in-memory test-data to disk. 
+            </td>
+            <td>{% include not-applicable %}</td>
+            <td>{% include not-applicable %}</td>
+            <td>{% include applicable %}</td>
+          </tr>
+          <tr>
+            <td>
+              <a href="#tlb_tmp_dir">TLB_TMP_DIR</a> directory to use, to store temproary files. Defaults to system tmp-dir.
+            </td>
+            <td>{% include applicable %}</td>
+            <td>{% include applicable %}</td>
+            <td>{% include not-applicable %}</td>
+          </tr>
+          <tr>
+            <td>
+              <a href="#tlb_smoothing_factor">TLB_SMOOTHING_FACTOR</a> controls how aggressively test-time data is smoothened. Defaults to <i>1.0</i> which disables smoothing.
+            </td>
+            <td>{% include applicable %}</td>
+            <td>{% include applicable %}</td>
+            <td>{% include not-applicable %}</td>
+          </tr>
+          <tr>
+            <td>
               <a href="#tlb_data_cache_size">TLB_DATA_CACHE_SIZE</a> controls number of data-repositories TLB server is allowed to keep in cache.
             </td>
             <td>{% include not-applicable %}</td>
@@ -187,6 +215,22 @@ description: Home page of 'Test Load Balancer(TLB)' project(s).
               <a href="#tlb_password">TLB_PASSWORD</a> is the password balancer uses to log-on to Go Server.
             </td>
             <td>{% include not-applicable %}</td>
+            <td>{% include applicable %}</td>
+            <td>{% include not-applicable %}</td>
+          </tr>
+          <tr>
+            <td>
+              <a href="#tlb_out_file">TLB_OUT_FILE</a> The file to which the output stream of the balancer java process launched in an alien environment needs to be writen to. Defaults to a file named <i>tlb_out_file</i> in the test processes working directory.
+            </td>
+            <td>{% include applicable %}</td>
+            <td>{% include applicable %}</td>
+            <td>{% include not-applicable %}</td>
+          </tr>
+          <tr>
+            <td>
+              <a href="#tlb_err_file">TLB_ERR_FILE</a> The file to which the error stream of the balancer java process launched in an alien environment needs to be writen to. Defaults to a file named <i>tlb_err_file</i> in the test processes working directory.
+            </td>
+            <td>{% include applicable %}</td>
             <td>{% include applicable %}</td>
             <td>{% include not-applicable %}</td>
           </tr>
@@ -558,6 +602,32 @@ description: Home page of 'Test Load Balancer(TLB)' project(s).
           <strong>Type: </strong> String(password)
           <hr/>
           <strong>Example:</strong> tlb-password
+        </div>
+        <hr class="no_margin"/>
+      </li>
+      <li>
+        <label id="tlb_out_file">TLB_OUT_FILE</label>
+        <div class="scope section">
+          When in an alien environment, like Ruby, TLB uses a balancing server which is a RESTful server written in java, to do all the balancing. This gets launched as a sub-process by the test process using TLB. The server process' output stream needs to be consumed by the parent. The stream once consumed will be written to a file. This variable gives the path to the file where the stream will be written to.
+          <p class="clob_end"/>
+          Defaults to <i>tlb_out_file</i> in the working directory of the test process.
+          <hr/>
+          <strong>Type: </strong> A valid file path
+          <hr/>
+          <strong>Example:</strong> <i>/tmp/some_file_path</i> or <i>tlb/out/path</i>
+        </div>
+        <hr class="no_margin"/>
+      </li>
+      <li>
+        <label id="tlb_err_file">TLB_ERR_FILE</label>
+        <div class="scope section">
+          When in an alien environment, like Ruby, TLB uses a balancing server which is a RESTful server written in java, to do all the balancing. This gets launched as a sub-process by the test process using TLB. The server process' error stream needs to be consumed by the parent. The stream once consumed will be written to a file. This variable gives the path to the file where the stream will be written to.
+          <p class="clob_end"/>
+          Defaults to <i>tlb_err_file</i> in the working directory of the test process.
+          <hr/>
+          <strong>Type: </strong> A valid file path
+          <hr/>
+          <strong>Example:</strong> <i>/tmp/some_file_path</i> or <i>tlb/err/path</i>
         </div>
         <hr class="no_margin"/>
       </li>
