@@ -178,6 +178,9 @@ require 'tlb/cucumber/rake/cucumber_task'
 
 Tlb::Cucumber::Rake::CucumberTask.new(:cucumber_tests) do |t|
   t.cucumber_opts = ["--format", "pretty"]
+  #t.features_dir = 'my/features-dir' #if using a features directory other than default 'features'
+  #When ENV['CUCUMBER_OPTS'] is set to override configuration, override value must declare the features directory as well, for instance &lt; CUCUMBER_OPTS='--format progress -r features_dir features_dir' rake bal &gt;
+
   #t.tlb_module_name = 'my-cucumber-module'
   #NOTE: Comment out previous line if your project has multiple modules(or test modules) each having its own test task. Set module name appropriately for each test-task in a multiple-module setup.
   #You can verify that all partitions executed by invoking `tlb_module_name='my-cucumber-module' rake tlb:ensure_all_partitions_executed` (where environment variable 'tlb_module_name' is set to comma seperated list of all/some module names).
