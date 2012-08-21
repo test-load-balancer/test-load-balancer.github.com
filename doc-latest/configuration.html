@@ -293,9 +293,9 @@ description: Home page of 'Test Load Balancer(TLB)' project(s).
       <li>
         <label id="tlb_orderer">TLB_ORDERER</label>
         <div class="scope section">
-          This variable dictates the algorithm that TLB should use to reorder the test set.
+          This variable dictates the algorithm that TLB should use to reorder the test set. As of now, TLB has only one canned ordering algorithm called falied-first orderer, which ensures tests that failed in a build run first in the next build. 
           <p class="clob_end"/>
-          Defaults to No-Op orderer.
+          Defaults to <i>tlb.orderer.FailedFirstOrderer</i> orderer.
           <hr/>
           {% include type_class_name %}
           <hr/>
